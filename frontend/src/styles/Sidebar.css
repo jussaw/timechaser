@@ -1,0 +1,11 @@
+.sidebar-button {
+  @apply mb-2 flex h-14 w-full items-center rounded-full px-6 hover:shadow-md;
+}
+
+.sidebar-button-dark {
+  @apply sidebar-button bg-gray-900 text-gray-100;
+}
+
+.sidebar-button-icon {
+  @apply pl-2 font-semibold;
+}
