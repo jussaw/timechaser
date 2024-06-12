@@ -22,8 +22,6 @@ export default function App() {
             />
             <Route path="/timesheet" element={<Timesheet />} />
             <Route path="/profile" element={<Profile />} />
-            {/* TODO: Delete Later. Only for Sandboxing */}
-            <Route path="/sandbox" element={<Sandbox />} />
           </Routes>
         </div>
       </div>
