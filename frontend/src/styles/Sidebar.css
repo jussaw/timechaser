@@ -3,7 +3,7 @@
 }
 
 .sidebar-button-dark {
-  @apply sidebar-button bg-gray-900 text-gray-100;
+  @apply sidebar-button bg-blue-900 text-gray-100;
 }
 
 .sidebar-button-icon {

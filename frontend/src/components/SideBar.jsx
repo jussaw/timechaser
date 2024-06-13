@@ -13,7 +13,7 @@ import "../styles/Sidebar.css";
 
 export default function SideBar({ className }) {
   const location = useLocation();
-  const renderSidebar = !["/", "/register"].includes(location.pathname);
+  const renderSidebar = !["/"].includes(location.pathname);
   const renderDarkDashboard = location.pathname === "/dashboard";
   const renderDarkTimesheet = location.pathname === "/timesheet";
   const renderDarkProfile = location.pathname === "/profile";
@@ -67,7 +67,5 @@ export default function SideBar({ className }) {
         <div className="sidebar-button-icon"> Logout</div>
       </Link>
     </div>
-  ) : (
-    <></>
-  );
+  ) : null;
 }
