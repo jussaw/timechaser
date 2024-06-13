@@ -51,3 +51,6 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
+
+# Vite cache files
+.vite
