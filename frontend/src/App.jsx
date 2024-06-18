@@ -16,10 +16,7 @@ export default function App() {
           <SideBar className="sidebar-component" />
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route
-              path="/dashboard"
-              element={<Dashboard className="flex-grow" />}
-            />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/timesheet" element={<Timesheet />} />
             <Route path="/profile" element={<Profile />} />
             {/* TODO: Delete Later. Only for Sandboxing */}

@@ -2,9 +2,9 @@ import React from "react";
 import PlaceholderComponent from "../components/PlaceholderComponent";
 import "../styles/UniversalComponent.css";
 
-export default function Dashboard({ className }) {
+export default function Dashboar() {
   return (
-    <div className={`${className} mb-2 mr-2 mt-2 grid grid-rows-2`}>
+    <div className="mb-2 mr-2 mt-2 grid flex-grow grid-rows-2">
       <div className="grid grid-cols-2">
         <div className="grid grid-rows-2">
           <PlaceholderComponent className="dashboard-component" />
