@@ -4,7 +4,7 @@ import "../styles/UniversalComponent.css";
 
 export default function Dashboard() {
   return (
-    <div className="m-4 ml-4 flex flex-grow flex-row space-x-4">
+    <div className="flex flex-grow flex-row space-x-4">
       <div className="flex w-7/12 flex-col space-y-4">
         <div className="flex h-full w-full flex-row space-x-4">
           <PlaceholderComponent />
