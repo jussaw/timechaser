@@ -2,7 +2,7 @@
   @apply rounded-3xl bg-gray-100 shadow-xl;
 }
 .dashboard-component {
-  @apply universal-component-style m-2;
+  @apply universal-component-style;
 }
 .sidebar-component {
   @apply universal-component-style m-4 mr-2;
