@@ -8,7 +8,7 @@ import {
 
 export default function Timesheet() {
   return (
-    <div className="ml-2 flex h-full flex-col items-center">
+    <div className="ml-4 flex h-full flex-col items-center">
       <div className="universal-component-style my-4 flex items-center justify-center space-x-7 p-10 text-center text-3xl font-bold">
         <button>
           <FontAwesomeIcon
