@@ -5,8 +5,8 @@
   @apply universal-component-style;
 }
 .sidebar-component {
-  @apply universal-component-style m-4 mr-2;
+  @apply universal-component-style m-4 mr-0;
 }
 .full-page-component {
-  @apply universal-component-style m-4 ml-2;
+  @apply universal-component-style m-4 ml-4;
 }
