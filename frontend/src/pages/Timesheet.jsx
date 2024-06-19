@@ -8,8 +8,8 @@ import {
 
 export default function Timesheet() {
   return (
-    <div className="ml-4 flex h-full flex-col items-center">
-      <div className="universal-component-style my-4 flex items-center justify-center space-x-7 p-10 text-center text-3xl font-bold">
+    <div className="flex h-full flex-col items-center">
+      <div className="universal-component-style mb-4 flex items-center justify-center space-x-7 p-10 text-center text-3xl font-bold">
         <button>
           <FontAwesomeIcon
             className="text-blue-500 hover:text-blue-800"
@@ -24,15 +24,16 @@ export default function Timesheet() {
           />
         </button>
       </div>
-      <div className="universal-component-style mb-4 mr-4 flex h-full flex-col items-center rounded-xl p-4">
+      <div className="universal-component-style flex h-full flex-col items-center rounded-xl p-4">
         <div className="flex h-full space-x-2">
+          <TimesheetDay date="1/1/2024" day="Sunday" projects={[]} />
           <TimesheetDay
-            date="1/1/2024"
-            day="Sunday"
+            date="1/2/2024"
+            day="Monday"
             projects={[
               {
                 project: "project1",
-                hours: 2,
+                hours: 2.3,
               },
               {
                 project: "project2",
@@ -49,20 +50,6 @@ export default function Timesheet() {
               {
                 project: "project5",
                 hours: 1,
-              },
-            ]}
-          />
-          <TimesheetDay
-            date="1/2/2024"
-            day="Monday"
-            projects={[
-              {
-                project: "project1",
-                hours: 1,
-              },
-              {
-                project: "project2",
-                hours: 7,
               },
             ]}
           />
@@ -126,16 +113,7 @@ export default function Timesheet() {
               },
             ]}
           />
-          <TimesheetDay
-            date="1/7/2024"
-            day="Saturday"
-            projects={[
-              {
-                project: "project2",
-                hours: 8,
-              },
-            ]}
-          />
+          <TimesheetDay date="1/7/2024" day="Saturday" projects={[]} />
         </div>
         <div className="mt-4 flex w-full justify-center space-x-4">
           <button className="w-1/5 rounded-full bg-orange-400 py-1 text-gray-100 hover:bg-orange-600">
