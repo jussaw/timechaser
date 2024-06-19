@@ -1,0 +1,12 @@
+.universal-component-style {
+  @apply rounded-3xl bg-gray-100 shadow-xl;
+}
+.dashboard-component {
+  @apply universal-component-style;
+}
+.sidebar-component {
+  @apply universal-component-style mr-4;
+}
+.full-page-component {
+  @apply universal-component-style;
+}
