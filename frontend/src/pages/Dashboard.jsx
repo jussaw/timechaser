@@ -2,27 +2,26 @@ import React from "react";
 import PlaceholderComponent from "../components/PlaceholderComponent";
 import "../styles/UniversalComponent.css";
 
-export default function Dashboar() {
+export default function Dashboard() {
   return (
-    <div className="mb-2 mr-2 mt-2 grid flex-grow grid-rows-2">
-      <div className="grid grid-cols-2">
-        <div className="grid grid-rows-2">
-          <PlaceholderComponent className="dashboard-component" />
-          <PlaceholderComponent className="dashboard-component" />
+    <div className="m-4 ml-2 flex flex-grow flex-row space-x-4">
+      <div className="flex w-7/12 flex-col space-y-4">
+        <div className="flex h-full w-full flex-row space-x-4">
+          <PlaceholderComponent />
+          <PlaceholderComponent />
         </div>
-        <div className="grid grid-rows-2">
-          <PlaceholderComponent className="dashboard-component" />
-          <PlaceholderComponent className="dashboard-component" />
+        <div className="flex h-full w-full flex-row space-x-4">
+          <PlaceholderComponent />
         </div>
       </div>
-      <div className="grid grid-cols-2">
-        <div className="grid grid-rows-2">
-          <PlaceholderComponent className="dashboard-component" />
-          <PlaceholderComponent className="dashboard-component" />
+      <div className="flex w-5/12 flex-col space-y-4">
+        <div className="flex h-full w-full flex-col space-y-4">
+          <PlaceholderComponent />
+          <PlaceholderComponent />
         </div>
-        <div className="grid grid-rows-2">
-          <PlaceholderComponent className="dashboard-component" />
-          <PlaceholderComponent className="dashboard-component" />
+        <div className="flex h-full w-full flex-col space-y-4">
+          <PlaceholderComponent />
+          <PlaceholderComponent />
         </div>
       </div>
     </div>
