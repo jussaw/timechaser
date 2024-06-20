@@ -52,11 +52,11 @@ export default function TimesheetDay(props) {
         <div className="">
           <div className="mb-2 flex">
             <input
-              className="mr-1 w-4/5 rounded-lg border border-blue-500 px-2"
+              className="mr-1 w-9/12 rounded-lg border border-blue-500 px-2 py-1"
               placeholder="Hours"
             />
             <input
-              className="ml-1 w-full rounded-lg border border-blue-500 px-2"
+              className="ml-1 w-full rounded-lg border border-blue-500 px-2 py-1"
               placeholder="Project"
             />
           </div>
