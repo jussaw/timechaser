@@ -26,94 +26,14 @@ export default function Timesheet() {
       </div>
       <div className="universal-component-style flex h-full flex-col items-center rounded-xl p-4">
         <div className="flex h-full space-x-2">
-          <TimesheetDay date="1/1/2024" day="Sunday" projects={[]} />
-          <TimesheetDay
-            date="1/2/2024"
-            day="Monday"
-            projects={[
-              {
-                project: "project1",
-                hours: 2.3,
-              },
-              {
-                project: "project2",
-                hours: 1,
-              },
-              {
-                project: "project3",
-                hours: 3,
-              },
-              {
-                project: "project4",
-                hours: 1,
-              },
-              {
-                project: "project5",
-                hours: 1,
-              },
-            ]}
-          />
-          <TimesheetDay
-            date="1/3/2024"
-            day="Tuesday"
-            projects={[
-              {
-                project: "project1",
-                hours: 6,
-              },
-              {
-                project: "project2",
-                hours: 1,
-              },
-              {
-                project: "project3",
-                hours: 1,
-              },
-            ]}
-          />
-          <TimesheetDay
-            date="1/4/2024"
-            day="Wednesday"
-            projects={[
-              {
-                project: "project3",
-                hours: 8,
-              },
-            ]}
-          />
-          <TimesheetDay
-            date="1/5/2024"
-            day="Thursday"
-            projects={[
-              {
-                project: "project2",
-                hours: 2,
-              },
-              {
-                project: "project3",
-                hours: 6,
-              },
-            ]}
-          />
-          <TimesheetDay
-            date="1/6/2024"
-            day="Friday"
-            projects={[
-              {
-                project: "project1",
-                hours: 3,
-              },
-              {
-                project: "project2",
-                hours: 3,
-              },
-              {
-                project: "project3",
-                hours: 2,
-              },
-            ]}
-          />
-          <TimesheetDay date="1/7/2024" day="Saturday" projects={[]} />
+          {timesheet.map((timesheetDay, index) => (
+            <TimesheetDay
+              date={timesheetDay.date}
+              day={timesheetDay.day}
+              projects={timesheetDay.projects}
+              key={index}
+            />
+          ))}
         </div>
         <div className="mt-4 flex w-full justify-center space-x-4">
           <button className="w-1/5 rounded-full bg-orange-400 py-1 text-gray-100 hover:bg-orange-600">
@@ -127,3 +47,103 @@ export default function Timesheet() {
     </div>
   );
 }
+
+// TODO: Replace hardcoded timesheet with API call
+const timesheet = [
+  {
+    date: "1/1/2024",
+    day: "Sunday",
+    projects: [],
+  },
+  {
+    date: "1/2/2024",
+    day: "Monday",
+    projects: [
+      {
+        project: "project1",
+        hours: 2.3,
+      },
+      {
+        project: "project2",
+        hours: 1,
+      },
+      {
+        project: "project3",
+        hours: 3,
+      },
+      {
+        project: "project4",
+        hours: 1,
+      },
+      {
+        project: "project5",
+        hours: 1,
+      },
+    ],
+  },
+  {
+    date: "1/3/2024",
+    day: "Tuesday",
+    projects: [
+      {
+        project: "project1",
+        hours: 6,
+      },
+      {
+        project: "project2",
+        hours: 1,
+      },
+      {
+        project: "project3",
+        hours: 1,
+      },
+    ],
+  },
+  {
+    date: "1/4/2024",
+    day: "Wednesday",
+    projects: [
+      {
+        project: "project3",
+        hours: 8,
+      },
+    ],
+  },
+  {
+    date: "1/5/2024",
+    day: "Thursday",
+    projects: [
+      {
+        project: "project2",
+        hours: 2,
+      },
+      {
+        project: "project3",
+        hours: 6,
+      },
+    ],
+  },
+  {
+    date: "1/6/2024",
+    day: "Friday",
+    projects: [
+      {
+        project: "project1",
+        hours: 3,
+      },
+      {
+        project: "project2",
+        hours: 3,
+      },
+      {
+        project: "project3",
+        hours: 2,
+      },
+    ],
+  },
+  {
+    date: "1/7/2024",
+    day: "Saturday",
+    projects: [],
+  },
+];

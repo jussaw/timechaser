@@ -9,7 +9,7 @@ import {
 
 export default function TimesheetDay(props) {
   return (
-    <div className="border-1 flex min-h-full flex-col items-center justify-between rounded-xl shadow-lg">
+    <div className="flex min-h-full flex-col items-center justify-between rounded-xl shadow-lg">
       <div className="flex w-full flex-col items-center">
         <div className="flex w-full flex-col justify-center rounded-t-xl bg-blue-500 py-2 text-gray-100">
           <h1 className="text-center">{props.day}</h1>
