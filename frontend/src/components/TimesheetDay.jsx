@@ -12,23 +12,20 @@ export default function TimesheetDay(props) {
     <div className="flex min-h-full flex-col items-center justify-between rounded-xl shadow-lg">
       <div className="flex w-full flex-col items-center">
         <div className="flex w-full flex-col justify-center rounded-t-xl bg-blue-500 py-2 text-gray-100">
-          <h1 className="text-center">{props.day}</h1>
-          <h1 className="text-center">{props.date}</h1>
+          <h2 className="text-center text-lg">{props.day}</h2>
+          <h2 className="text-center text-lg">{props.date}</h2>
+          <hr className="border-t-1 m-1 border-gray-100" />
           <div className="flex flex-row justify-between p-2 pb-0">
             <FontAwesomeIcon icon={faClock} />
             <FontAwesomeIcon icon={faClipboard} />
             <FontAwesomeIcon icon={faTrash} />
           </div>
         </div>
-        {/* <div className="w-full border-b-2 border-gray-800"></div> */}
-        <hr className="flex bg-gray-400" />
         <div className="h-full w-full">
           {props.projects.map((project, index) => (
             <div>
               <div
                 className="flex w-full flex-row justify-between p-2"
-                // className="grid-row w-full p-2"
-                // className="grid grid-cols-3 p-2"
                 key={index}
               >
                 <div key={index} className="w-1/12 text-start">
@@ -42,7 +39,9 @@ export default function TimesheetDay(props) {
                 </div>
               </div>
               {index < props.projects.length - 1 && (
-                <hr className="border-t-2 border-gray-500" />
+                <div className="flex justify-center">
+                  <hr className="w-10/12 border-t-2 bg-gradient-to-r from-gray-100 via-gray-900 to-transparent px-2" />
+                </div>
               )}
             </div>
           ))}
