@@ -8,7 +8,8 @@ const axiosInstance = axios.create({
   },
 });
 
-// Request interceptor for adding authorization token
+// TODO: Add JWT to request
+// Request interceptor for adding JWT
 // axiosInstance.interceptors.request.use(
 //   (config) => {
 //     // Retrieve token from localStorage, cookies, or wherever you store it
@@ -23,6 +24,7 @@ const axiosInstance = axios.create({
 //   }
 // );
 
+// TODO: implement
 // Response interceptor for refreshing token on 401 responses
 // axiosInstance.interceptors.response.use(
 //   (response) => {
