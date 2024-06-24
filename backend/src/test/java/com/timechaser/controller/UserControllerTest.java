@@ -82,7 +82,54 @@ public class UserControllerTest {
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
-		// Asserting the response expectations
+	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+	}
+	
+	@Test
+	public void UserController_CreateUser_NoUsername_400() throws Exception{
+		
+		request.setUsername(null);;
+		ResultActions response = mockMvc.perform(post("/user")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+	}
+	
+	@Test
+	public void UserController_CreateUser_NoPassword_400() throws Exception{
+		
+		request.setPassword(null);;
+		ResultActions response = mockMvc.perform(post("/user")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+	}
+	
+	@Test
+	public void UserController_CreateUser_NoFirstName_400() throws Exception{
+		
+		request.setFirstName(null);;
+		ResultActions response = mockMvc.perform(post("/user")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+	}
+	
+	@Test
+	public void UserController_CreateUser_NoLastName_400() throws Exception{
+		
+		request.setLastName(null);;
+		ResultActions response = mockMvc.perform(post("/user")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
 	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 	}
