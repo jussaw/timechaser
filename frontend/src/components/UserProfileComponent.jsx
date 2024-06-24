@@ -9,6 +9,7 @@ export default function Profile() {
     firstName: "",
     lastName: "",
   });
+  //TO-DO: get fields from API
   const [formValues, setFormValues] = useState({
     username: "e400",
     firstName: "Jonah",
@@ -16,14 +17,14 @@ export default function Profile() {
   });
   const [timeZone, setTimeZone] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
+  //TO-DO: split apart supervisor name? Depends on API
   const [supervisor, setSupervisor] = useState({
     name: "Emperor Pennoni",
   });
 
+  //states used for buttons
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
   const [isEditingLastName, setIsEditingLastName] = useState(false);
-
-  //state for button changing from greyed out to clickable
   const [isFormChanged, setIsFormChanged] = useState(false);
 
   //name should come from backend, but for now stubbed to be formValues.name
@@ -35,14 +36,13 @@ export default function Profile() {
   useEffect(() => {
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-      // const tz = 2;
       setTimeZone(tz);
       console.log(tz);
     } catch (error) {
       console.error("Can't get the time zone", error);
       setTimeZone("Unknown");
     }
+    //update clock every second
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -53,8 +53,6 @@ export default function Profile() {
   //update view when editing the form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name);
-    console.log(value);
     //need an anonymous function here to update view immediately instead of next react refresh
     setFormValues((prevValues) => {
       const updatedFormValues = {
@@ -69,12 +67,13 @@ export default function Profile() {
     });
   };
 
-  //business logic for submitting form
+  /*TO-DO: send info to backend
+  business logic for submitting form*/
   const handleSubmit = (event) => {
     //stop page from reloading on submit
     event.preventDefault();
     setDisplayName(formValues);
-    //If username was being edited, disable edit mode after saving
+    //If fields were being edited, disable edit mode after saving
     if (isEditingFirstName || isEditingLastName) {
       setIsEditingFirstName(false);
       setIsEditingLastName(false);
@@ -82,6 +81,7 @@ export default function Profile() {
     }
   };
 
+  //update first name field
   const toggleEditFirstName = () => {
     setFormValues((prevFormValues) => {
       const updatedFormValues = {
@@ -99,6 +99,7 @@ export default function Profile() {
     setIsEditingFirstName((prevIsEditingFirstName) => !prevIsEditingFirstName);
   };
 
+  //update last name field
   const toggleEditLastName = () => {
     setFormValues((prevFormValues) => {
       const updatedFormValues = {
