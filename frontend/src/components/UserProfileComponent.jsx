@@ -6,11 +6,13 @@ import { faXmark, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 export default function Profile() {
   //Separate display from form values so they can update independently
   const [displayName, setDisplayName] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
   });
   const [formValues, setFormValues] = useState({
     username: "e400",
-    name: "Jonah Leung",
+    firstName: "Jonah",
+    lastName: "Leung",
   });
   const [timeZone, setTimeZone] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -18,7 +20,9 @@ export default function Profile() {
     name: "Emperor Pennoni",
   });
 
-  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingFirstName, setIsEditingFirstName] = useState(false);
+  const [isEditingLastName, setIsEditingLastName] = useState(false);
+
   //state for button changing from greyed out to clickable
   const [isFormChanged, setIsFormChanged] = useState(false);
 
@@ -49,6 +53,8 @@ export default function Profile() {
   //update view when editing the form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(name);
+    console.log(value);
     //need an anonymous function here to update view immediately instead of next react refresh
     setFormValues((prevValues) => {
       const updatedFormValues = {
@@ -56,8 +62,8 @@ export default function Profile() {
         [name]: value,
       };
       setIsFormChanged(
-        updatedFormValues.username != displayName.username ||
-          updatedFormValues.name != displayName.name,
+        updatedFormValues.firstName != displayName.firstName ||
+          updatedFormValues.lastName != displayName.lastName,
       );
       return updatedFormValues;
     });
@@ -69,60 +75,100 @@ export default function Profile() {
     event.preventDefault();
     setDisplayName(formValues);
     //If username was being edited, disable edit mode after saving
-    if (isEditingName) {
-      setIsEditingName(false);
+    if (isEditingFirstName || isEditingLastName) {
+      setIsEditingFirstName(false);
+      setIsEditingLastName(false);
       setIsFormChanged(false);
     }
   };
 
-  const toggleEditName = () => {
+  const toggleEditFirstName = () => {
     setFormValues((prevFormValues) => {
       const updatedFormValues = {
         ...prevFormValues,
-        name: isEditingName ? displayName.name : prevFormValues.name,
+        firstName: isEditingFirstName
+          ? displayName.firstName
+          : prevFormValues.firstName,
       };
-      setIsFormChanged(updatedFormValues.name !== displayName.name);
+      setIsFormChanged(
+        updatedFormValues.firstName !== displayName.firstName ||
+          updatedFormValues.lastName !== displayName.lastName,
+      );
       return updatedFormValues;
     });
-    setIsEditingName((prevIsEditingName) => !prevIsEditingName);
+    setIsEditingFirstName((prevIsEditingFirstName) => !prevIsEditingFirstName);
+  };
 
-    // setIsEditingName(!isEditingName);
-    // if (isEditingName) {
-    //   setFormValues({
-    //     ...formValues,
-    //     name: displayName.name,
-    //   });
-    //   setIsEditingName(isEditingName);
+  const toggleEditLastName = () => {
+    setFormValues((prevFormValues) => {
+      const updatedFormValues = {
+        ...prevFormValues,
+        lastName: isEditingLastName
+          ? displayName.lastName
+          : prevFormValues.lastName,
+      };
+      setIsFormChanged(
+        updatedFormValues.firstName !== displayName.firstName ||
+          updatedFormValues.lastName !== displayName.lastName,
+      );
+      return updatedFormValues;
+    });
+    setIsEditingLastName((prevIsEditingLastName) => !prevIsEditingLastName);
   };
 
   return (
     <div className="user-info">
       <div className="welcome-display">
         <h1 className="items-center justify-center pb-5 text-2xl">
-          Welcome, {displayName.name}
+          Welcome, {displayName.firstName} {displayName.lastName}
         </h1>
       </div>
       <div className="supervisor pb-10">Reports to: {supervisor.name}</div>
       <form onSubmit={handleSubmit} className="form">
         <div className="entry">
-          <label htmlFor="name">
-            <strong>Name: </strong>
+          <label htmlFor="firstName">
+            <strong>First Name: </strong>
           </label>
           <input
-            className={`input ${isEditingName ? "editing border-2 border-solid border-custom-brown" : ""}`}
+            className={`input bg-custom-white ${isEditingFirstName ? "editing border-2 border-solid border-custom-brown" : ""}`}
             type="text"
-            id="name"
-            name="name"
-            value={formValues.name}
+            id="firstName"
+            name="firstName"
+            value={formValues.firstName}
             onChange={handleInputChange}
-            readOnly={!isEditingName}
+            readOnly={!isEditingFirstName}
           ></input>
           <button
             type="button"
-            onClick={toggleEditName}
+            onClick={toggleEditFirstName}
             className="edit-button"
           >
-            <FontAwesomeIcon icon={isEditingName ? faXmark : faPenToSquare} />
+            <FontAwesomeIcon
+              icon={isEditingFirstName ? faXmark : faPenToSquare}
+            />
+          </button>
+        </div>
+        <div className="entry">
+          <label htmlFor="lastName">
+            <strong>Last Name: </strong>
+          </label>
+          <input
+            className={`input bg-custom-white ${isEditingLastName ? "editing border-2 border-solid border-custom-brown" : ""}`}
+            type="text"
+            id="lastName"
+            name="lastName"
+            value={formValues.lastName}
+            onChange={handleInputChange}
+            readOnly={!isEditingLastName}
+          ></input>
+          <button
+            type="button"
+            onClick={toggleEditLastName}
+            className="edit-button"
+          >
+            <FontAwesomeIcon
+              icon={isEditingLastName ? faXmark : faPenToSquare}
+            />
           </button>
         </div>
         <div className="entry">
@@ -154,7 +200,7 @@ export default function Profile() {
         </div>
         <button
           type="submit"
-          className={`submit-button ${isFormChanged ? "active bg-custom-blue" : "inactive bg-custom-gray"}`}
+          className={`submit-button rounded-md p-2 text-custom-white ${isFormChanged ? "active bg-custom-blue" : "inactive bg-custom-gray"}`}
           disabled={!isFormChanged}
         >
           Save
