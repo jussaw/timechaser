@@ -25,7 +25,7 @@ export default function Login() {
   useEffect(() => {
     const usernameRegex = /^[a-zA-Z0-9._-]{4,}$/;
     const passwordRegex =
-      /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+      /^(?=.*[0-9])(?=.*[!@#$%^&!@*])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,}$/;
     const isUsernameValid = usernameRegex.test(formData.username);
     const isPasswordValid = passwordRegex.test(formData.password);
 
@@ -34,7 +34,7 @@ export default function Login() {
 
     if (!isUsernameValid) {
       setUsernameError(
-        "Username must be at least 4 characters long and contain only letters, numbers, and certain special characters.",
+        "Username must be at least 4 characters long and contain only letters, numbers, and !@#$%^&*()-=[]~_+{}.",
       );
     } else {
       setUsernameError("");
@@ -42,7 +42,7 @@ export default function Login() {
 
     if (!isPasswordValid) {
       setPasswordError(
-        "Password must be at least 8 characters long and contain at least one number, one special character, and one uppercase letter.",
+        "Password must be at least 8 characters long and contain at least one number, one uppercase letter, and one !@#$%^&*()-=[]~_+{}.",
       );
     } else {
       setPasswordError("");
@@ -71,9 +71,8 @@ export default function Login() {
   };
 
   return (
-    // TODO: Add Login Business Logic
     <div className="flex flex-grow items-center justify-center">
-      <div className="dashboard-component w-4/12 p-16 pb-2">
+      <div className="dashboard-component w-2/12 p-16 pb-2">
         <div className="flex h-full w-full flex-col items-center justify-between">
           <h1 className="mb-8 flex w-full items-center justify-center">
             <FontAwesomeIcon
@@ -82,8 +81,8 @@ export default function Login() {
             />
             <label className="auth-greeting-label">Welcome!</label>
           </h1>
-          <div className="flex h-full w-full flex-col items-center justify-between pb-5">
-            <form className="flex flex-col">
+          <div className="w-12/12 flex h-full flex-col items-center justify-between pb-5">
+            <form onSubmit={handleSubmit} className="flex w-full flex-col">
               <label className="auth-input-label">Username</label>
               <input
                 type="text"
@@ -122,7 +121,6 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={!usernameValid || !passwordValid}
-                onSubmit={handleSubmit}
                 className={
                   usernameValid && passwordValid
                     ? "auth-submit"
