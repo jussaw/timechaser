@@ -18,6 +18,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 	
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException e, WebRequest request){
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleException(Exception e, WebRequest request){
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
