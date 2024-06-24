@@ -39,10 +39,15 @@ public class UserServiceTest {
 		createUserRequest = new CreateUserRequest();
 		createUserRequest.setUsername("testuser");
 		createUserRequest.setPassword("password");
+		createUserRequest.setFirstName("First");
+		createUserRequest.setLastName("Last");
 		
 		user = new User();
 		user.setUsername(createUserRequest.getUsername());
 		user.setPassword(createUserRequest.getPassword());
+		user.setId(1L);
+		user.setFirstName(createUserRequest.getFirstName());
+		user.setLastName(createUserRequest.getLastName());
 		
 		userService = new UserService(userRepository, passwordEncoder);
 	}
@@ -55,7 +60,10 @@ public class UserServiceTest {
 		CreateUserResponse response = userService.create(createUserRequest);
 		
 		assertNotNull(response);
-		assertEquals(createUserRequest.getUsername(), response.getUsername());
+		assertEquals(user.getUsername(), response.getUsername());
+		assertEquals(user.getLastName(), response.getLastName());
+		assertEquals(user.getUsername(), response.getUsername());
+		assertEquals(user.getId(), response.getId());
 		verify(passwordEncoder, times(1)).encode(createUserRequest.getPassword());
 		verify(userRepository, times(1)).save(any(User.class));
 	}
