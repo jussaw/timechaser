@@ -25,11 +25,9 @@ public class Auditable {
 	private boolean deleted;
 	
 	@CreatedDate
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)
 	protected Instant createdAt;
 	
 	@LastModifiedDate
-	@Temporal(TemporalType.TIMESTAMP)
 	protected Instant updatedAt;
 }
