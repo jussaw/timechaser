@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import TimesheetDay from "../components/TimesheetDay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,6 +7,37 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Timesheet() {
+  const [timesheetInput, setTime] = useState({
+    Sunday: {
+      Hours: null,
+      Project: null,
+    },
+    Monday: {
+      Hours: null,
+      Project: null,
+    },
+    Tuesday: {
+      Hours: null,
+      Project: null,
+    },
+    Wednesday: {
+      Hours: null,
+      Project: null,
+    },
+    Thursday: {
+      Hours: null,
+      Project: null,
+    },
+    Friday: {
+      Hours: null,
+      Project: null,
+    },
+    Saturday: {
+      Hours: null,
+      Project: null,
+    },
+  });
+
   return (
     <div className="flex h-full flex-col items-center">
       <div className="universal-component-style mb-4 flex items-center justify-center space-x-7 p-10 text-center text-3xl font-bold">
@@ -61,11 +92,11 @@ const timesheet = [
     projects: [
       {
         project: "project1",
-        hours: 2.3,
+        hours: "2:30",
       },
       {
         project: "project2",
-        hours: 1,
+        hours: "1:00",
       },
       {
         project: "project3",

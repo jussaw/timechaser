@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMinus,
@@ -21,20 +21,14 @@ export default function TimesheetDay(props) {
             <FontAwesomeIcon icon={faTrash} />
           </div>
         </div>
-        <div className="h-full w-full">
+        <ul className="h-full w-full">
+          {console.log("length", props.projects.length)}
           {props.projects.map((project, index) => (
-            <div>
-              <div
-                className="flex w-full flex-row justify-between p-2"
-                key={index}
-              >
-                <div key={index} className="w-1/12 text-start">
-                  {project.hours}
-                </div>
-                <div key={index} className="w-10/12 text-center">
-                  {project.project}
-                </div>
-                <div key={index} className="w-1/12 text-end text-red-500">
+            <li key={index}>
+              <div className="flex w-full flex-row justify-between p-2">
+                <div className="w-1/12 text-start">{project.hours}</div>
+                <div className="w-10/12 text-center">{project.project}</div>
+                <div className="w-1/12 text-end text-red-500">
                   <FontAwesomeIcon icon={faMinus} />
                 </div>
               </div>
@@ -43,9 +37,9 @@ export default function TimesheetDay(props) {
                   <hr className="w-10/12 border-t-2 bg-gradient-to-r from-gray-100 via-gray-900 to-transparent px-2" />
                 </div>
               )}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
       <form className="mb-2 w-full px-2">
         <div className="">
