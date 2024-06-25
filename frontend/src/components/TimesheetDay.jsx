@@ -22,7 +22,6 @@ export default function TimesheetDay(props) {
           </div>
         </div>
         <ul className="h-full w-full">
-          {console.log("length", props.projects.length)}
           {props.projects.map((project, index) => (
             <li key={index}>
               <div className="flex w-full flex-row justify-between p-2">
