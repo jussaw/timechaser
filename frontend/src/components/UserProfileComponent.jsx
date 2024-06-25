@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import "../styles/UserProfileComponent.css";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
@@ -26,6 +25,9 @@ export default function Profile() {
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
   const [isEditingLastName, setIsEditingLastName] = useState(false);
   const [isFormChanged, setIsFormChanged] = useState(false);
+
+  const firstNameInputRef = useRef(null);
+  const lastNameInputRef = useRef(null);
 
   //name should come from backend, but for now stubbed to be formValues.name
   useEffect(() => {
@@ -83,55 +85,36 @@ export default function Profile() {
 
   //update first name field
   const toggleEditFirstName = () => {
-    setFormValues((prevFormValues) => {
-      const updatedFormValues = {
-        ...prevFormValues,
-        firstName: isEditingFirstName
-          ? displayName.firstName
-          : prevFormValues.firstName,
-      };
-      setIsFormChanged(
-        updatedFormValues.firstName !== displayName.firstName ||
-          updatedFormValues.lastName !== displayName.lastName,
-      );
-      return updatedFormValues;
-    });
+    if (!isEditingFirstName) {
+      setTimeout(() => firstNameInputRef.current.focus(), 0);
+    }
     setIsEditingFirstName((prevIsEditingFirstName) => !prevIsEditingFirstName);
   };
 
   //update last name field
   const toggleEditLastName = () => {
-    setFormValues((prevFormValues) => {
-      const updatedFormValues = {
-        ...prevFormValues,
-        lastName: isEditingLastName
-          ? displayName.lastName
-          : prevFormValues.lastName,
-      };
-      setIsFormChanged(
-        updatedFormValues.firstName !== displayName.firstName ||
-          updatedFormValues.lastName !== displayName.lastName,
-      );
-      return updatedFormValues;
-    });
+    if (!isEditingFirstName) {
+      setTimeout(() => lastNameInputRef.current.focus(), 0);
+    }
     setIsEditingLastName((prevIsEditingLastName) => !prevIsEditingLastName);
   };
 
   return (
-    <div className="user-info">
+    <div className="user-info flex h-full w-full flex-col">
       <div className="welcome-display">
         <h1 className="items-center justify-center pb-5 text-2xl">
           Welcome, {displayName.firstName} {displayName.lastName}
         </h1>
       </div>
       <div className="supervisor pb-10">Reports to: {supervisor.name}</div>
-      <form onSubmit={handleSubmit} className="form">
-        <div className="entry">
+      <form onSubmit={handleSubmit} className="form h-full w-6/12 space-y-12">
+        <div className="entry item-center spacin flex w-full items-center">
           <label htmlFor="firstName">
             <strong>First Name: </strong>
           </label>
           <input
-            className={`input bg-custom-white ${isEditingFirstName ? "editing border-2 border-solid border-custom-brown" : ""}`}
+            ref={firstNameInputRef}
+            className={`input mx-1 w-7/12 rounded-xl border-2 border-solid bg-custom-white px-1 ${isEditingFirstName ? "border-custom-brown" : "border-custom-white"}`}
             type="text"
             id="firstName"
             name="firstName"
@@ -142,19 +125,20 @@ export default function Profile() {
           <button
             type="button"
             onClick={toggleEditFirstName}
-            className="edit-button"
+            className="edit-button items-end"
           >
             <FontAwesomeIcon
               icon={isEditingFirstName ? faXmark : faPenToSquare}
             />
           </button>
         </div>
-        <div className="entry">
+        <div className="entry item-center flex w-full items-center">
           <label htmlFor="lastName">
             <strong>Last Name: </strong>
           </label>
           <input
-            className={`input bg-custom-white ${isEditingLastName ? "editing border-2 border-solid border-custom-brown" : ""}`}
+            ref={lastNameInputRef}
+            className={`input mx-1 w-7/12 rounded-xl border-2 border-solid bg-custom-white px-1 ${isEditingLastName ? "border-custom-brown" : "border-custom-white"}`}
             type="text"
             id="lastName"
             name="lastName"
@@ -165,7 +149,7 @@ export default function Profile() {
           <button
             type="button"
             onClick={toggleEditLastName}
-            className="edit-button"
+            className="edit-button items-end"
           >
             <FontAwesomeIcon
               icon={isEditingLastName ? faXmark : faPenToSquare}
@@ -201,7 +185,7 @@ export default function Profile() {
         </div>
         <button
           type="submit"
-          className={`submit-button rounded-md p-2 text-custom-white ${isFormChanged ? "active bg-custom-blue" : "inactive bg-custom-gray"}`}
+          className={`submit-button rounded-full p-2 px-4 text-custom-white ${isFormChanged ? "active bg-custom-blue" : "inactive bg-custom-gray"}`}
           disabled={!isFormChanged}
         >
           Save
