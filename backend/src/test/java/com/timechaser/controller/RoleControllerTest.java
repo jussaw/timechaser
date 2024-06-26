@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -150,5 +151,13 @@ public class RoleControllerTest {
                 .content(objectMapper.writeValueAsString(roleDto)));
 
         response.andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void RoleController_DeleteRoleById_ReturnNoContent() throws Exception {
+        ResultActions response = mockMvc.perform(delete("/role/1")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(status().isNoContent());
     }
 }
