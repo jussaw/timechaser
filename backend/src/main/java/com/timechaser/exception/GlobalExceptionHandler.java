@@ -2,6 +2,7 @@ package com.timechaser.exception;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,11 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(UserNotFoundException.class)
 	public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException e, WebRequest request){
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(EmptyResultDataAccessException.class)
+	public ResponseEntity<?> handleEmptyResultException(EmptyResultDataAccessException e, WebRequest request){
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 	

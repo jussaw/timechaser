@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.timechaser.dto.CreateUserRequest;
@@ -88,27 +90,10 @@ public class UserServiceTest {
 
 	@Test
 	public void deleteSuccess() {
-		when(userRepository.findById(anyLong())).thenReturn(optionalUser);
+		doNothing().when(userRepository).deleteById(4L);
 		
-		userService.delete(6L);
+		userService.delete(4L);
 		
-		assertEquals("testuser", optionalUser.get().getUsername()); 
-	}
-
-	@Test
-	public void deleteUserNotFound() {
-		when(userRepository.findById(anyLong())).thenReturn(null);
-		
-		assertThatThrownBy(() -> userService.delete(5L))
-			.isInstanceOf(UserNotFoundException.class);
-		
-	}
-
-	@Test
-	public void deleteException() {
-		when(userRepository.findById(anyLong())).thenReturn(optionalUser);
-		
-		assertThatThrownBy(() -> userService.delete(null))
-			.isInstanceOf(Exception.class);
+		verify(userRepository, times(1)).deleteById(4L);
 	}
 }

@@ -1,9 +1,8 @@
 package com.timechaser.service;
 
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +11,6 @@ import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.entity.User;
 import com.timechaser.exception.UserCreationException;
-import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.repository.UserRepository;
 
 @Service
@@ -45,17 +43,10 @@ public class UserService {
 	}
 
 	@Transactional
-	public Optional<User> delete(Long id) throws UserNotFoundException {
+	public void delete(Long id) throws EmptyResultDataAccessException {
 		logger.info("Deleting user with id {}", id);
 
-		Optional<User> user = userRepository.findById(id);
-
-		if (user == null)
-			throw new UserNotFoundException("User was not found");
-
 		userRepository.deleteById(id);
-
-		return user;
 	}
 
 }

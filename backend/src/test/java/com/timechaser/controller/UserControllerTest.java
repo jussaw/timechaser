@@ -52,9 +52,6 @@ public class UserControllerTest {
 		request.setLastName("Last");
 		request.setPassword("password");
 		request.setUsername("username");
-		
-		
-	
 	}
 	
 	@Test
@@ -142,22 +139,11 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void deleteUserSuccess() throws Exception {
-		when(userService.delete(anyLong())).thenReturn(any());
-		
-		ResultActions response = mockMvc.perform(delete("/user/8"));
+	public void deleteUserSuccess() throws Exception {	
+		ResultActions response = mockMvc.perform(delete("/user/8")
+			.contentType(MediaType.APPLICATION_JSON));
 		
 	    response.andExpect(MockMvcResultMatchers.status().isNoContent());
-		
-	}
-	
-	@Test
-	public void deleteUserNotFound() throws Exception {
-		when(userService.delete(anyLong())).thenThrow(new UserNotFoundException("User was not found"));
-		
-		ResultActions response = mockMvc.perform(delete("/user/8"));
-		
-		response.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
 	
 }
