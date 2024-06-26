@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +14,6 @@ import com.timechaser.entity.User;
 import com.timechaser.exception.UserCreationException;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.repository.UserRepository;
-
-import net.bytebuddy.asm.Advice.Thrown;
 
 @Service
 public class UserService {
@@ -53,14 +50,10 @@ public class UserService {
 
 		Optional<User> user = userRepository.findById(id);
 
-		if (user.get() == null)
+		if (user == null)
 			throw new UserNotFoundException("User was not found");
 
-		try {
-			userRepository.deleteById(id);
-		} catch (Exception e) {
-			logger.info("Error occured while deleting user with id {}", id);
-		}
+		userRepository.deleteById(id);
 
 		return user;
 	}

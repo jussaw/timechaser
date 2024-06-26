@@ -1,8 +1,12 @@
 package com.timechaser.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.longThat;
+import static org.mockito.Mockito.description;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +27,7 @@ import com.timechaser.configuration.WebSecurityConfig;
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +52,8 @@ public class UserControllerTest {
 		request.setLastName("Last");
 		request.setPassword("password");
 		request.setUsername("username");
+		
+		
 	
 	}
 	
@@ -89,7 +96,7 @@ public class UserControllerTest {
 	@Test
 	public void UserController_CreateUser_NoUsername_400() throws Exception{
 		
-		request.setUsername(null);;
+		request.setUsername(null);
 		ResultActions response = mockMvc.perform(post("/user")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
@@ -101,7 +108,7 @@ public class UserControllerTest {
 	@Test
 	public void UserController_CreateUser_NoPassword_400() throws Exception{
 		
-		request.setPassword(null);;
+		request.setPassword(null);
 		ResultActions response = mockMvc.perform(post("/user")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
@@ -113,7 +120,7 @@ public class UserControllerTest {
 	@Test
 	public void UserController_CreateUser_NoFirstName_400() throws Exception{
 		
-		request.setFirstName(null);;
+		request.setFirstName(null);
 		ResultActions response = mockMvc.perform(post("/user")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
@@ -125,7 +132,7 @@ public class UserControllerTest {
 	@Test
 	public void UserController_CreateUser_NoLastName_400() throws Exception{
 		
-		request.setLastName(null);;
+		request.setLastName(null);
 		ResultActions response = mockMvc.perform(post("/user")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
@@ -133,5 +140,24 @@ public class UserControllerTest {
 	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 	}
-
+	
+	@Test
+	public void deleteUserSuccess() throws Exception {
+		when(userService.delete(anyLong())).thenReturn(any());
+		
+		ResultActions response = mockMvc.perform(delete("/user/8"));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isNoContent());
+		
+	}
+	
+	@Test
+	public void deleteUserNotFound() throws Exception {
+		when(userService.delete(anyLong())).thenThrow(new UserNotFoundException("User was not found"));
+		
+		ResultActions response = mockMvc.perform(delete("/user/8"));
+		
+		response.andExpect(MockMvcResultMatchers.status().isNotFound());
+	}
+	
 }

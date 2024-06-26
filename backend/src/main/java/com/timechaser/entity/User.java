@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.timechaser.dto.CreateUserRequest;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +19,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@SQLDelete(sql = "UPDATE user SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class User {
 	@Id
 	@GeneratedValue(strategy  = GenerationType.IDENTITY)
