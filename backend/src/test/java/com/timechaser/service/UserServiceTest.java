@@ -57,7 +57,7 @@ public class UserServiceTest {
 
 		userService = new UserService(userRepository, passwordEncoder);
 
-		optionalUser = Optional.of(new User(4L, "testuser", "password", "First", "Last", false));
+		optionalUser = Optional.of(new User(createUserRequest));
 
 	}
 
@@ -92,7 +92,7 @@ public class UserServiceTest {
 		
 		userService.delete(6L);
 		
-		assertEquals(4L, optionalUser.get().getId()); 
+		assertEquals("testuser", optionalUser.get().getUsername()); 
 	}
 
 	@Test
