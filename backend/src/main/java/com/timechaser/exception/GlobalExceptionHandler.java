@@ -35,5 +35,10 @@ public class GlobalExceptionHandler {
 	    } 
 		return new ResponseEntity<>(builder.toString(), HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(RoleNotFoundException.class)
+	public ResponseEntity<?> handleRoleNotFoundException(RoleNotFoundException e, WebRequest request){
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	}
 
 }

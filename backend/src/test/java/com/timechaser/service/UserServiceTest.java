@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +30,7 @@ public class UserServiceTest {
 	@Mock
 	private PasswordEncoder passwordEncoder;
 	
+    @InjectMocks
 	private UserService userService;
 	
 	private CreateUserRequest createUserRequest;
@@ -47,9 +49,7 @@ public class UserServiceTest {
 		user.setPassword(createUserRequest.getPassword());
 		user.setId(1L);
 		user.setFirstName(createUserRequest.getFirstName());
-		user.setLastName(createUserRequest.getLastName());
-		
-		userService = new UserService(userRepository, passwordEncoder);
+		user.setLastName(createUserRequest.getLastName());		
 	}
 	
 	@Test

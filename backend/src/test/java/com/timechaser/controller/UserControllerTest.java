@@ -27,7 +27,6 @@ import com.timechaser.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = UserController.class)
-@Import(WebSecurityConfig.class)
 public class UserControllerTest {
 	@Autowired
 	MockMvc mockMvc;
@@ -47,7 +46,6 @@ public class UserControllerTest {
 		request.setLastName("Last");
 		request.setPassword("password");
 		request.setUsername("username");
-	
 	}
 	
 	@Test
