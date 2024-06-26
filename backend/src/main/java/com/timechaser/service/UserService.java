@@ -43,7 +43,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public void delete(Long id) throws EmptyResultDataAccessException {
+	public void deleteById(Long id) {
 		logger.info("Deleting user with id {}", id);
 
 		userRepository.deleteById(id);

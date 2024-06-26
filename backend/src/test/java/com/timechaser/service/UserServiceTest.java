@@ -89,10 +89,8 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void deleteSuccess() {
-		doNothing().when(userRepository).deleteById(4L);
-		
-		userService.delete(4L);
+	public void UserService_Delete_Success() {
+		userService.deleteById(4L);
 		
 		verify(userRepository, times(1)).deleteById(4L);
 	}

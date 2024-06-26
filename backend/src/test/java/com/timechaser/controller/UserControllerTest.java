@@ -1,12 +1,9 @@
 package com.timechaser.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.longThat;
-import static org.mockito.Mockito.description;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,23 +13,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.timechaser.configuration.WebSecurityConfig;
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.exception.UserCreationException;
-import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(controllers = UserController.class)
-@Import(WebSecurityConfig.class)
 public class UserControllerTest {
 	@Autowired
 	MockMvc mockMvc;
@@ -139,7 +132,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void deleteUserSuccess() throws Exception {	
+	public void UserController_Delete_User_Success() throws Exception {	
 		ResultActions response = mockMvc.perform(delete("/user/8")
 			.contentType(MediaType.APPLICATION_JSON));
 		

@@ -44,7 +44,7 @@ public class UserController {
 
 		logger.info("Received request to delete user with id {}", id);
 		
-		userService.delete(id);
+		userService.deleteById(id);
 		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

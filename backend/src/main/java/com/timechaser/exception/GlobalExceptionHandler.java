@@ -24,11 +24,6 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(EmptyResultDataAccessException.class)
-	public ResponseEntity<?> handleEmptyResultException(EmptyResultDataAccessException e, WebRequest request){
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-	}
-	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleException(Exception e, WebRequest request){
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
