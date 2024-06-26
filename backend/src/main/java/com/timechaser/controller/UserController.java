@@ -40,13 +40,13 @@ public class UserController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
+	public ResponseEntity deleteUser(@PathVariable("id") Long id) {
 
 		logger.info("Received request to delete user with id {}", id);
 		
 		userService.delete(id);
 		
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User has been removed");
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 }
