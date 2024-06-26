@@ -50,7 +50,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void RoleService_testFindById() {
+    void RoleService_FindById_Success() {
         when(roleRepository.findById(1L)).thenReturn(Optional.of(role));
         
         Optional<Role> result = roleService.findById(1L);
@@ -61,7 +61,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void RoleService_testFindByName() {
+    void RoleService_FindByName_Success() {
         when(roleRepository.findByName("Admin")).thenReturn(Optional.of(role));
         
         Optional<Role> result = roleService.findByName("Admin");
@@ -72,7 +72,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void RoleService_testFindAll() {
+    void RoleService_FindAll_Success() {
         List<Role> roles = Arrays.asList(role);
         when(roleRepository.findAll()).thenReturn(roles);
         
@@ -85,7 +85,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void RoleService_testCreate() {
+    void RoleService_Create_Success() {
         when(roleRepository.save(any(Role.class))).thenReturn(role);
         
         RoleDto result = roleService.create(roleDto);
@@ -96,7 +96,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void RoleService_testUpdate() {
+    void RoleService_UpdateRole_Success() {
         when(roleRepository.findById(1L)).thenReturn(Optional.of(role));
         when(roleRepository.save(any(Role.class))).thenReturn(role);
         
@@ -108,7 +108,7 @@ public class RoleServiceTest {
     }
     
     @Test
-    void testUpdateRoleNotFound() {
+    void RoleService_UpdateRole_RoleNotFound() {
         when(roleRepository.findById(1L)).thenReturn(Optional.empty());
         
         Exception exception = assertThrows(RoleNotFoundException.class, () -> {
@@ -122,7 +122,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void RoleService_testDeleteById() {
+    void RoleService_DeleteById_Success() {
         doNothing().when(roleRepository).deleteById(1L);
         
         roleService.deleteById(1L);
