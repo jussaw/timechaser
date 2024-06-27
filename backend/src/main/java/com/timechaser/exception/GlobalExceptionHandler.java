@@ -19,6 +19,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 	
+	@ExceptionHandler(UserUpdateDetailsException.class)
+	public ResponseEntity<?> handleUpdateUserDetailsException(UserUpdateDetailsException e, WebRequest request){
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+	
 	@ExceptionHandler(UserNotFoundException.class)
 	public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException e, WebRequest request){
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -28,6 +33,11 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<?> handleException(Exception e, WebRequest request){
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
+        return new ResponseEntity<>("Must be user or admin to make changes", HttpStatus.FORBIDDEN);
+    }
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<?> validationError(MethodArgumentNotValidException ex) {
