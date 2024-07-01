@@ -11,5 +11,5 @@
 }
 
 .auth-submit {
-  @apply mb-4 mt-6 rounded-full bg-blue-500 p-2 text-gray-100 hover:bg-blue-900;
+  @apply mb-6 mt-7 rounded-full bg-blue-500 p-2 text-gray-100 hover:bg-blue-900;
 }
