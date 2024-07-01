@@ -20,6 +20,8 @@ import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserDetailsResponse;
 import com.timechaser.entity.User;
+import com.timechaser.exception.AccessDeniedException;
+import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.repository.UserRepository;
 import com.timechaser.service.UserService;
 
@@ -53,14 +55,15 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
-	//not sure what values will be assigned to admin or user
 	@PutMapping("/{id}")
-	@PreAuthorize("hasRole('2') or hasRole('1')")
-	public ResponseEntity<UpdateUserDetailsResponse> updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) throws Exception{
+	public ResponseEntity<UpdateUserDetailsResponse> updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
 		logger.info("Received request to update user with {}", id);
-
-		UpdateUserDetailsResponse response = userService.updateDetails(id, request);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		try {
+			UpdateUserDetailsResponse response = userService.updateDetails(id, request);
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+		} catch (Exception e) {
+			logger.error("Access Denied", e);
+			throw new AccessDeniedException("Failed to update user", e);
+		}
 	}
 }

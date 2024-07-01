@@ -57,8 +57,9 @@ public class UserService {
 	
 	@Transactional
 	public UpdateUserDetailsResponse updateDetails(Long id, UpdateUserDetailsRequest request) {
+		logger.info("Updating user with id {}", id);
 		try {
-			User user = findById(id);
+			User user = findById(id).get();
 			user.setUsername(request.getUsername());
 			user.setFirstName(request.getFirstName());
 			user.setLastName(request.getLastName());
@@ -68,19 +69,14 @@ public class UserService {
 			return new UpdateUserDetailsResponse(user);
 	
 		} catch (Exception e) {
-			logger.error("Error while updating user details");
+			logger.error("Error while updating user details", e);
 			throw new UserUpdateDetailsException("Failed to update user");
 		} 
 	}
 	
-	public User findById(Long id) {
-		try {
-			User user = userRepository.findById(id).get();
-			return user;
-		}
-		catch (Exception e) {
-			logger.error("Cannot find user with id {}", id);
-			throw new UserNotFoundException("Failed to update user");
-		}
+	public Optional<User> findById(Long id) {
+		logger.info("Finding user with id {}", id);
+		Optional<User> user = userRepository.findById(id);
+		return user;
 	}
 }

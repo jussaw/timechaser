@@ -172,6 +172,7 @@ public class UserControllerTest {
 		
 		ResultActions response = mockMvc.perform(put("/user/1")
 		        .contentType(MediaType.APPLICATION_JSON)
+		        .with(csrf())
 		        .content(objectMapper.writeValueAsString(request)));
 		
 	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());

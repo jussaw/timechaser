@@ -108,7 +108,7 @@ public class UserServiceTest {
 	public void UserService_findById_Success() {
 		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 		
-		User result = userService.findById(user.getId());
+		User result = userService.findById(user.getId()).get();
 		
 		assertNotNull(result);
 		assertEquals(user.getUsername(), result.getUsername());
@@ -129,7 +129,7 @@ public class UserServiceTest {
 	
 	@Test
 	public void UserService_Update_Success() {
-		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenReturn(user);
 		
 		UpdateUserDetailsResponse response = userService.updateDetails(1L, updateUserDetailsRequest);
@@ -145,7 +145,7 @@ public class UserServiceTest {
 	
 	@Test
 	public void UserService_Update_Failure() {
-		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenThrow(new IllegalArgumentException());
 		
 		assertThatThrownBy(() ->  userService.updateDetails(user.getId(), updateUserDetailsRequest))
