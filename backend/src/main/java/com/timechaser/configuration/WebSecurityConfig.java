@@ -16,6 +16,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.httpBasic().disable() //Disable log in page
 			.authorizeRequests(auth -> auth.anyRequest().permitAll())
 			.csrf().disable();
+		
+		http.headers().frameOptions().disable();
     }
 	
 	@Bean
