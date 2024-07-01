@@ -9,53 +9,13 @@ export default function Login() {
     username: "",
     password: "",
   });
-  const [usernameValid, setUsernameValid] = useState(false);
-  const [passwordValid, setPasswordValid] = useState(false);
-  const [usernameError, setUsernameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [focusedField, setFocusedField] = useState(null);
 
-  const usernameInputRef = useRef(null);
+  const usernameRef = useRef(null);
 
   useEffect(() => {
-    usernameInputRef.current = document.getElementById("username");
-    usernameInputRef.current.focus();
+    usernameRef.current = document.getElementById("username");
+    usernameRef.current.focus();
   }, []);
-
-  useEffect(() => {
-    const usernameRegex = /^[a-zA-Z0-9._-]{4,}$/;
-    const passwordRegex =
-      /^(?=.*[0-9])(?=.*[!@#$%^&!@*])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,}$/;
-    const isUsernameValid = usernameRegex.test(formData.username);
-    const isPasswordValid = passwordRegex.test(formData.password);
-
-    setUsernameValid(isUsernameValid);
-    setPasswordValid(isPasswordValid);
-
-    if (!isUsernameValid) {
-      setUsernameError(
-        "Username must be at least 4 characters long and contain only letters, numbers, and !@#$%^&*()-=[]~_+{}.",
-      );
-    } else {
-      setUsernameError("");
-    }
-
-    if (!isPasswordValid) {
-      setPasswordError(
-        "Password must be at least 8 characters long and contain at least one number, one uppercase letter, and one !@#$%^&*()-=[]~_+{}.",
-      );
-    } else {
-      setPasswordError("");
-    }
-  }, [formData]);
-
-  const handleFocus = (e) => {
-    setFocusedField(e.target.name);
-  };
-
-  const handleBlur = () => {
-    setFocusedField(null);
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -72,7 +32,7 @@ export default function Login() {
 
   return (
     <div className="flex flex-grow items-center justify-center">
-      <div className="dashboard-component w-2/12 p-16 pb-2">
+      <div className="dashboard-component p-16 pb-2">
         <div className="flex h-full w-full flex-col items-center justify-between">
           <h1 className="mb-8 flex w-full items-center justify-center">
             <FontAwesomeIcon
@@ -90,17 +50,10 @@ export default function Login() {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 autoComplete="true"
                 required
-                className={
-                  usernameValid ? "auth-input-box" : "auth-input-box-disabled"
-                }
+                className="auth-input-box"
               />
-              {focusedField === "username" && usernameError && (
-                <div className="auth-input-error">{usernameError}</div>
-              )}
               <label className="auth-input-label">Password</label>
               <input
                 type="password"
@@ -108,25 +61,10 @@ export default function Login() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 required
-                className={
-                  passwordValid ? "auth-input-box" : "auth-input-box-disabled"
-                }
+                className="auth-input-box"
               />
-              {focusedField === "password" && passwordError && (
-                <div className="auth-input-error">{passwordError}</div>
-              )}
-              <button
-                type="submit"
-                disabled={!usernameValid || !passwordValid}
-                className={
-                  usernameValid && passwordValid
-                    ? "auth-submit"
-                    : "auth-submit-disabled"
-                }
-              >
+              <button type="submit" className="auth-submit">
                 Log in
               </button>
             </form>
