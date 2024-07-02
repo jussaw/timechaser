@@ -18,8 +18,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException e, WebRequest request){
+	@ExceptionHandler({
+		UserNotFoundException.class, 
+		RoleNotFoundException.class
+	})
+	public ResponseEntity<?> handleNotFoundException(UserNotFoundException e, WebRequest request){
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
 	
@@ -40,10 +43,4 @@ public class GlobalExceptionHandler {
 	    } 
 		return new ResponseEntity<>(builder.toString(), HttpStatus.BAD_REQUEST);
 	}
-	
-	@ExceptionHandler(RoleNotFoundException.class)
-	public ResponseEntity<?> handleRoleNotFoundException(RoleNotFoundException e, WebRequest request){
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-	}
-
 }

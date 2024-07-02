@@ -19,7 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.timechaser.dto.CreateUserRequest;
@@ -29,6 +28,7 @@ import com.timechaser.entity.Role;
 import com.timechaser.entity.User;
 import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.repository.RoleRepository;
 import com.timechaser.repository.UserRepository;
 
@@ -128,7 +128,7 @@ public class UserServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.addRoleToUser(1L, 1L))
-                .isInstanceOf(UsernameNotFoundException.class)
+                .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("User with ID: 1 was not found.");
     }
 
@@ -161,7 +161,7 @@ public class UserServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.removeRoleFromUser(1L, 1L))
-                .isInstanceOf(UsernameNotFoundException.class)
+                .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("User with ID: 1 was not found.");
     }
 
@@ -192,7 +192,7 @@ public class UserServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.findRolesForUser(1L))
-                .isInstanceOf(UsernameNotFoundException.class)
+                .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("User with ID: 1 was not found.");
     }
 }

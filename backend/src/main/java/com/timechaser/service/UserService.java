@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +16,7 @@ import com.timechaser.entity.Role;
 import com.timechaser.entity.User;
 import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.mapper.RoleMapper;
 import com.timechaser.repository.RoleRepository;
 import com.timechaser.repository.UserRepository;
@@ -30,7 +30,6 @@ public class UserService {
 	private final RoleRepository roleRepository;
 
 	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
-		super();
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.roleRepository = roleRepository;
@@ -65,7 +64,7 @@ public class UserService {
 		logger.info("Adding roleID: {} to userID: {}", roleId, userId);
 		
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User with ID: " + userId + " was not found."));
+                .orElseThrow(() -> new UserNotFoundException("User with ID: " + userId + " was not found."));
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new RoleNotFoundException("Role with ID: " + roleId + " was not found."));
 
@@ -78,7 +77,7 @@ public class UserService {
 		logger.info("Removing roleID: {} from userID: {}", roleId, userId);
 		
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User with ID: " + userId + " was not found."));
+                .orElseThrow(() -> new UserNotFoundException("User with ID: " + userId + " was not found."));
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new RoleNotFoundException("Role with ID: " + roleId + " was not found."));
 
@@ -90,12 +89,11 @@ public class UserService {
 		logger.info("Finding roles for user ID: {}", userId);
 		
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User with ID: " + userId + " was not found."));
+                .orElseThrow(() -> new UserNotFoundException("User with ID: " + userId + " was not found."));
 
         return user.getRoles()
         		.stream()
         		.map(RoleMapper::toDto)
         		.collect(Collectors.toList());
     }
-
 }

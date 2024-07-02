@@ -187,8 +187,5 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(roles.size())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", CoreMatchers.is(roleDto.getId().intValue())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", CoreMatchers.is(roleDto.getName())));
-    }
-	
+    }	
 }
-
-

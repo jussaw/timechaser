@@ -48,7 +48,7 @@ public class RoleService {
 	
 	@Transactional
 	public RoleDto create(RoleDto roleDto) {
-		logger.info("Create role with name: {}", roleDto.getName());
+		logger.info("Creating role with name: {}", roleDto.getName());
 		
 		Role role = RoleMapper.toEntity(roleDto);
 		
