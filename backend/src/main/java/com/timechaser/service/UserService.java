@@ -58,8 +58,14 @@ public class UserService {
 	@Transactional
 	public UpdateUserDetailsResponse updateDetails(Long id, UpdateUserDetailsRequest request) {
 		logger.info("Updating user with id {}", id);
+		
+		Optional<User> checkUser = findById(id);
+		if (checkUser == null) {
+			throw new UserNotFoundException("Unable to find user");
+		}
+		
 		try {
-			User user = findById(id).get();
+			User user = checkUser.get();
 			user.setUsername(request.getUsername());
 			user.setFirstName(request.getFirstName());
 			user.setLastName(request.getLastName());

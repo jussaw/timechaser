@@ -120,14 +120,6 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void UserService_findById_Failure() {
-		when(userRepository.findById(anyLong())).thenThrow(new UserNotFoundException("testing123"));
-		
-		assertThatThrownBy(() ->  userService.findById(2L))
-		.isInstanceOf(UserNotFoundException.class);
-	}
-	
-	@Test
 	public void UserService_Update_Success() {
 		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenReturn(user);
@@ -144,11 +136,19 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void UserService_Update_Failure() {
+	public void UserService_Update_400() {
 		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenThrow(new IllegalArgumentException());
 		
 		assertThatThrownBy(() ->  userService.updateDetails(user.getId(), updateUserDetailsRequest))
 		.isInstanceOf(UserUpdateDetailsException.class);
+	}
+	
+	@Test
+	public void UserService_Update_404() {
+		when(userService.findById(anyLong())).thenThrow(new UserNotFoundException("testing123"));
+		
+		assertThatThrownBy(() ->  userService.findById(2L))
+		.isInstanceOf(UserNotFoundException.class);
 	}
 }
