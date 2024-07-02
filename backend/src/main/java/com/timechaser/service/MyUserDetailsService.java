@@ -1,12 +1,18 @@
 package com.timechaser.service;
 
+import java.util.Optional;
+
+import javax.swing.text.html.Option;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.Service;
 
 import com.timechaser.entity.User;
 import com.timechaser.repository.UserRepository;
 import com.timechaser.security.MyUserDetails;
 
+@Service
 public class MyUserDetailsService implements UserDetailsService {
     
     @Autowired
@@ -14,12 +20,12 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.getUserByUsername(username);
+        Optional<User> user = userRepo.findByUsername(username);
 
-        if (user == null) {
+        if (!user.isPresent()) {
             throw new UsernameNotFoundException("Could not find user!");
         }
 
-        return new MyUserDetails(user);
+        return new MyUserDetails(user.get());
     }
 }
