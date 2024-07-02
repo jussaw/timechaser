@@ -34,11 +34,6 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
-        return new ResponseEntity<>("Must be user or admin to make changes", HttpStatus.FORBIDDEN);
-    }
-	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<?> validationError(MethodArgumentNotValidException ex) {
 	    StringBuilder builder = new StringBuilder();

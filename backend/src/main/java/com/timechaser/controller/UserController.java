@@ -38,6 +38,7 @@ public class UserController {
 
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
+		
 		logger.info("Received request to create user with username {}", request.getUsername());
 
 		CreateUserResponse response = userService.create(request);
@@ -57,13 +58,12 @@ public class UserController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<UpdateUserDetailsResponse> updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
+		
 		logger.info("Received request to update user with {}", id);
-		try {
-			UpdateUserDetailsResponse response = userService.updateDetails(id, request);
-			return ResponseEntity.status(HttpStatus.OK).body(response);
-		} catch (Exception e) {
-			logger.error("Access Denied", e);
-			throw new AccessDeniedException("Failed to update user", e);
-		}
+		
+		UpdateUserDetailsResponse response = userService.updateDetails(id, request);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+		
 	}
 }

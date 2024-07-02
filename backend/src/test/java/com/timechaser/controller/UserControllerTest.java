@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,7 @@ import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserDetailsResponse;
+import com.timechaser.exception.AccessDeniedException;
 import com.timechaser.exception.UserCreationException;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.service.UserService;
@@ -166,13 +168,12 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_Update_User_Details_Failure() throws Exception{
+	public void UserController_Update_User_Details_400() throws Exception{
 		
 		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserUpdateDetailsException("testing123"));
 		
 		ResultActions response = mockMvc.perform(put("/user/1")
 		        .contentType(MediaType.APPLICATION_JSON)
-		        .with(csrf())
 		        .content(objectMapper.writeValueAsString(request)));
 		
 	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
