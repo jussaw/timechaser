@@ -54,6 +54,3 @@ typings/
 
 # Vite cache files
 .vite
-
-# pnpm
-pnpm-lock.yaml
