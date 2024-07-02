@@ -15,14 +15,18 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.MappedSuperclass;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.timechaser.dto.CreateUserRequest;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@MappedSuperclass
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE user SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 @Setter
 @Getter
 @Entity
