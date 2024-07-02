@@ -67,7 +67,6 @@ public class UserServiceTest {
 		optionalUser = Optional.of(new User(createUserRequest));
 
 		updateUserDetailsRequest = new UpdateUserDetailsRequest();
-		updateUserDetailsRequest.setUsername("newuser");
 		updateUserDetailsRequest.setFirstName("newfirst");
 		updateUserDetailsRequest.setLastName("newlast");
 	}
@@ -127,7 +126,6 @@ public class UserServiceTest {
 		UpdateUserDetailsResponse response = userService.updateDetails(1L, updateUserDetailsRequest);
 		
 		assertNotNull(response);
-        assertEquals(user.getUsername(), response.getUsername());
         assertEquals(user.getFirstName(), response.getFirstName());
         assertEquals(user.getLastName(), response.getLastName());
         

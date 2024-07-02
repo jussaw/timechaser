@@ -62,7 +62,6 @@ public class UserService {
 		try {
 			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
 			
-			user.setUsername(request.getUsername());
 			user.setFirstName(request.getFirstName());
 			user.setLastName(request.getLastName());
 			

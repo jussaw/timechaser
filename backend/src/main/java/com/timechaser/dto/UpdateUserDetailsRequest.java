@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateUserDetailsRequest {
-	@NotBlank(message = "Username cannot be empty.")
-	private String username;
 	@NotBlank(message = "First Name cannot be empty.")
 	private String firstName;
 	@NotBlank(message = "Last Name cannot be empty.")

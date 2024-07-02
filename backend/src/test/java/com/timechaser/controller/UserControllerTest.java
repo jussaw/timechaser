@@ -152,7 +152,6 @@ public class UserControllerTest {
 		UpdateUserDetailsResponse responseDto = new UpdateUserDetailsResponse();
 		responseDto.setFirstName("newfirst");
 		responseDto.setLastName("newlast");
-		responseDto.setUsername("newuser");
 		
 		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenReturn(responseDto);
 		
@@ -163,15 +162,14 @@ public class UserControllerTest {
 		// Asserting the response expectations
 	    response.andExpect(MockMvcResultMatchers.status().isOk())
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(responseDto.getFirstName())))
-	            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(responseDto.getLastName())))
-	            .andExpect(MockMvcResultMatchers.jsonPath("$.username", CoreMatchers.is(responseDto.getUsername())));
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(responseDto.getLastName())));
 
 	}
 	
 	@Test
 	public void UserController_Update_User_Details_500() throws Exception{
 		
-		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserUpdateDetailsException("testing123"));
+		when(userService.updateDetails(anyLong(), any(UpdateUsersDetailsRequest.class))).thenThrow(new UserUpdateDetailsException("testing123"));
 		
 		ResultActions response = mockMvc.perform(put("/user/1")
 		        .contentType(MediaType.APPLICATION_JSON)
@@ -191,18 +189,6 @@ public class UserControllerTest {
 		        .content(objectMapper.writeValueAsString(request)));
 		
 	    response.andExpect(MockMvcResultMatchers.status().isNotFound());
-
-	}
-	
-	@Test
-	public void UserController_Update_User_Details_NoUsername() throws Exception{
-		
-		request.setUsername(null);
-		ResultActions response = mockMvc.perform(put("/user/1")
-		        .contentType(MediaType.APPLICATION_JSON)
-		        .content(objectMapper.writeValueAsString(request)));
-		
-	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 	}
 	
