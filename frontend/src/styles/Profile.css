@@ -1,0 +1,18 @@
+.left-label {
+  @apply w-24;
+}
+.right-label {
+  @apply w-32;
+}
+.entry {
+  @apply flex;
+  @apply items-center;
+}
+
+.data {
+  @apply rounded-xl;
+  @apply border-2;
+  @apply border-solid;
+  @apply bg-custom-white;
+  @apply px-2;
+}
