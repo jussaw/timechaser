@@ -8,4 +8,6 @@ import com.timechaser.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    public User getUserByUsername(String username);
+
 }
