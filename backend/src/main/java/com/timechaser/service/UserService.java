@@ -1,5 +1,7 @@
 package com.timechaser.service;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -9,8 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
+import com.timechaser.dto.UpdateUserDetailsRequest;
+import com.timechaser.dto.UpdateUserDetailsResponse;
 import com.timechaser.entity.User;
 import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.UserNotFoundException;
+import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.repository.UserRepository;
 
 @Service
@@ -48,5 +54,33 @@ public class UserService {
 
 		userRepository.deleteById(id);
 	}
-
+	
+	@Transactional
+	public UpdateUserDetailsResponse updateDetails(Long id, UpdateUserDetailsRequest request) {
+		logger.info("Updating user with id {}", id);
+		
+		try {
+			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
+			
+			user.setFirstName(request.getFirstName());
+			user.setLastName(request.getLastName());
+			
+			user = userRepository.save(user);
+			
+			return new UpdateUserDetailsResponse(user);
+	
+		} catch (UserNotFoundException e) {
+			throw e;
+		} catch (Exception e) {
+			logger.error("Error while updating user details", e);
+			throw new UserUpdateDetailsException("Failed to update user");
+		} 
+		
+	}
+	
+	public Optional<User> findById(Long id) {
+		logger.info("Finding user with id {}", id);
+		Optional<User> user = userRepository.findById(id);
+		return user;
+	}
 }
