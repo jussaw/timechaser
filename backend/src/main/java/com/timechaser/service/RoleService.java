@@ -59,6 +59,7 @@ public class RoleService {
 	
 	@Transactional
 	public RoleDto update(RoleDto roleDto, Long id) {
+		
 		logger.info("Updating role with ID: {}", id);
 		
 		Role existingRole = roleRepository.findById(id)

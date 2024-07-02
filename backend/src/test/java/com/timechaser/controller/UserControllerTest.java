@@ -4,6 +4,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import java.util.Collections;
+import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +23,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.timechaser.dto.AddRoleDto;
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
+import com.timechaser.dto.RoleDto;
 import com.timechaser.exception.UserCreationException;
 import com.timechaser.service.UserService;
 
@@ -38,14 +44,25 @@ public class UserControllerTest {
 
 	private CreateUserRequest request;
 	
-	@BeforeEach
-	void setup() {
-		request = new CreateUserRequest();
-		request.setFirstName("First");
-		request.setLastName("Last");
-		request.setPassword("password");
-		request.setUsername("username");
-	}
+    private AddRoleDto addRoleDto;
+    private RoleDto roleDto;
+
+    @BeforeEach
+    void setup() {
+        request = new CreateUserRequest();
+        request.setFirstName("First");
+        request.setLastName("Last");
+        request.setPassword("password");
+        request.setUsername("username");
+        
+        addRoleDto = new AddRoleDto();
+        addRoleDto.setRoleId(1L);
+        
+        roleDto = new RoleDto();
+        roleDto.setId(1L);
+        roleDto.setName("Admin");
+    }
+
 	
 	@Test
 	public void UserController_CreateUser_ReturnCreated() throws Exception{
@@ -139,4 +156,39 @@ public class UserControllerTest {
 	    response.andExpect(MockMvcResultMatchers.status().isNoContent());
 	}
 	
+	@Test
+    public void UserController_AddRoleToUser_Success() throws Exception {
+
+        ResultActions response = mockMvc.perform(post("/user/1/role")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(addRoleDto)));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk());
+    }
+    
+    @Test
+    public void UserController_RemoveRoleFromUser_Success() throws Exception {
+
+        ResultActions response = mockMvc.perform(delete("/user/1/role/1")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+    
+    @Test
+    public void UserController_GetRolesForUser_Success() throws Exception {
+        List<RoleDto> roles = Collections.singletonList(roleDto);
+        when(userService.findRolesForUser(1L)).thenReturn(roles);
+
+        ResultActions response = mockMvc.perform(get("/user/1/role")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(roles.size())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", CoreMatchers.is(roleDto.getId().intValue())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", CoreMatchers.is(roleDto.getName())));
+    }
+	
 }
+
+
