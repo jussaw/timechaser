@@ -28,6 +28,7 @@ import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserDetailsResponse;
 import com.timechaser.exception.AccessDeniedException;
 import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.service.UserService;
 
@@ -168,7 +169,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_Update_User_Details_400() throws Exception{
+	public void UserController_Update_User_Details_500() throws Exception{
 		
 		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserUpdateDetailsException("testing123"));
 		
@@ -176,7 +177,20 @@ public class UserControllerTest {
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
-	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+	    response.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+
+	}
+	
+	@Test
+	public void UserController_Update_User_Details_404() throws Exception{
+		
+		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserNotFoundException("testing123"));
+		
+		ResultActions response = mockMvc.perform(put("/user/1")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isNotFound());
 
 	}
 	

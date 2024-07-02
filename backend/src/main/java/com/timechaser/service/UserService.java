@@ -59,13 +59,9 @@ public class UserService {
 	public UpdateUserDetailsResponse updateDetails(Long id, UpdateUserDetailsRequest request) {
 		logger.info("Updating user with id {}", id);
 		
-		Optional<User> checkUser = findById(id);
-		if (checkUser == null) {
-			throw new UserNotFoundException("Unable to find user");
-		}
-		
 		try {
-			User user = checkUser.get();
+			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
+			
 			user.setUsername(request.getUsername());
 			user.setFirstName(request.getFirstName());
 			user.setLastName(request.getLastName());
@@ -74,10 +70,13 @@ public class UserService {
 			
 			return new UpdateUserDetailsResponse(user);
 	
+		} catch (UserNotFoundException e) {
+			throw e;
 		} catch (Exception e) {
 			logger.error("Error while updating user details", e);
 			throw new UserUpdateDetailsException("Failed to update user");
 		} 
+		
 	}
 	
 	public Optional<User> findById(Long id) {

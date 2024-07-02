@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(UserUpdateDetailsException.class)
 	public ResponseEntity<?> handleUpdateUserDetailsException(UserUpdateDetailsException e, WebRequest request){
-		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ExceptionHandler(UserNotFoundException.class)

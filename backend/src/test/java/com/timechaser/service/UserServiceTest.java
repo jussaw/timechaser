@@ -138,7 +138,7 @@ public class UserServiceTest {
 	@Test
 	public void UserService_Update_400() {
 		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
-		when(userRepository.save(any(User.class))).thenThrow(new IllegalArgumentException());
+		when(userRepository.save(any(User.class))).thenThrow(new UserUpdateDetailsException("testing123"));
 		
 		assertThatThrownBy(() ->  userService.updateDetails(user.getId(), updateUserDetailsRequest))
 		.isInstanceOf(UserUpdateDetailsException.class);
