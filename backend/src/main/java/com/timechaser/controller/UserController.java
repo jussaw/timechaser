@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,8 @@ import com.timechaser.dto.AddRoleDto;
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
+import com.timechaser.dto.UpdateUserDetailsRequest;
+import com.timechaser.dto.UpdateUserDetailsResponse;
 import com.timechaser.service.UserService;
 
 @RestController
@@ -35,6 +38,7 @@ public class UserController {
 
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
+		
 		logger.info("Received request to create user with username {}", request.getUsername());
 
 		CreateUserResponse response = userService.create(request);
@@ -78,4 +82,15 @@ public class UserController {
         
         return ResponseEntity.ok().body(roles);
     }
+
+	@PutMapping("/{id}")
+	public ResponseEntity<UpdateUserDetailsResponse> updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
+		
+		logger.info("Received request to update user with {}", id);
+		
+		UpdateUserDetailsResponse response = userService.updateDetails(id, request);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+		
+	}
 }

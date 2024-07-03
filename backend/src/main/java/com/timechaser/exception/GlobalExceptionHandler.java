@@ -13,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+	
 	@ExceptionHandler(UserCreationException.class)
 	public ResponseEntity<?> handleUserCreationException(UserCreationException e, WebRequest request){
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -22,11 +23,15 @@ public class GlobalExceptionHandler {
 		UserNotFoundException.class, 
 		RoleNotFoundException.class
 	})
-	public ResponseEntity<?> handleNotFoundException(UserNotFoundException e, WebRequest request){
+	public ResponseEntity<?> handleNotFoundException(Exception e, WebRequest request){
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		
 	}
 	
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler({
+		UserUpdateDetailsException.class, 
+		Exception.class
+	})	
 	public ResponseEntity<?> handleException(Exception e, WebRequest request){
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}

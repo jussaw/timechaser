@@ -1,10 +1,13 @@
 package com.timechaser.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +30,12 @@ import com.timechaser.dto.AddRoleDto;
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
+import com.timechaser.dto.UpdateUserDetailsRequest;
+import com.timechaser.dto.UpdateUserDetailsResponse;
+import com.timechaser.exception.AccessDeniedException;
 import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.UserNotFoundException;
+import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
@@ -188,4 +196,73 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", CoreMatchers.is(roleDto.getId().intValue())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", CoreMatchers.is(roleDto.getName())));
     }	
+    
+	@Test
+	public void UserController_Update_User_Details_Success() throws Exception {
+		UpdateUserDetailsResponse responseDto = new UpdateUserDetailsResponse();
+		responseDto.setFirstName("newfirst");
+		responseDto.setLastName("newlast");
+		
+		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenReturn(responseDto);
+		
+		ResultActions response = mockMvc.perform(put("/user/1")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+		// Asserting the response expectations
+	    response.andExpect(MockMvcResultMatchers.status().isOk())
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(responseDto.getFirstName())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(responseDto.getLastName())));
+
+	}
+	
+	@Test
+	public void UserController_Update_User_Details_500() throws Exception{
+		
+		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserUpdateDetailsException("testing123"));
+		
+		ResultActions response = mockMvc.perform(put("/user/1")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+
+	}
+	
+	@Test
+	public void UserController_Update_User_Details_404() throws Exception{
+		
+		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserNotFoundException("testing123"));
+		
+		ResultActions response = mockMvc.perform(put("/user/1")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isNotFound());
+
+	}
+	
+	@Test
+	public void UserController_Update_User_Details_NoFirstName() throws Exception{
+		
+		request.setFirstName(null);
+		ResultActions response = mockMvc.perform(put("/user/1")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+	}
+	
+	@Test
+	public void UserController_Update_User_Details_NoLastName() throws Exception{
+		
+		request.setLastName(null);
+		ResultActions response = mockMvc.perform(put("/user/1")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+	}
 }

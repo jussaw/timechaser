@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,11 +26,14 @@ import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
+import com.timechaser.dto.UpdateUserDetailsRequest;
+import com.timechaser.dto.UpdateUserDetailsResponse;
 import com.timechaser.entity.User;
 import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.exception.UserCreationException;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.repository.RoleRepository;
+import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +51,7 @@ public class UserServiceTest {
 	private UserService userService;
 
 	private CreateUserRequest createUserRequest;
+	private UpdateUserDetailsRequest updateUserDetailsRequest;
 	private User user;
 	private Role role;
 	private Optional<User> optionalUser;
@@ -76,6 +81,9 @@ public class UserServiceTest {
         optionalUser = Optional.of(user);
         optionalRole = Optional.of(role);
 
+		updateUserDetailsRequest = new UpdateUserDetailsRequest();
+		updateUserDetailsRequest.setFirstName("newfirst");
+		updateUserDetailsRequest.setLastName("newlast");
 	}
 
 	@Test
@@ -195,4 +203,50 @@ public class UserServiceTest {
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("User with ID: 1 was not found.");
     }
+    @Test
+	public void UserService_findById_Success() {
+		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+		
+		User result = userService.findById(user.getId()).get();
+		
+		assertNotNull(result);
+		assertEquals(user.getUsername(), result.getUsername());
+		assertEquals(user.getLastName(), result.getLastName());
+		assertEquals(user.getUsername(), result.getUsername());
+		assertEquals(user.getId(), result.getId());
+		
+		verify(userRepository, times(1)).findById(user.getId());
+	}
+	
+	@Test
+	public void UserService_Update_Success() {
+		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
+		when(userRepository.save(any(User.class))).thenReturn(user);
+		
+		UpdateUserDetailsResponse response = userService.updateDetails(1L, updateUserDetailsRequest);
+		
+		assertNotNull(response);
+        assertEquals(user.getFirstName(), response.getFirstName());
+        assertEquals(user.getLastName(), response.getLastName());
+        
+        verify(userRepository, times(1)).findById(user.getId());
+        verify(userRepository, times(1)).save(user);
+	}
+	
+	@Test
+	public void UserService_Update_400() {
+		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
+		when(userRepository.save(any(User.class))).thenThrow(new UserUpdateDetailsException("testing123"));
+		
+		assertThatThrownBy(() ->  userService.updateDetails(user.getId(), updateUserDetailsRequest))
+		.isInstanceOf(UserUpdateDetailsException.class);
+	}
+	
+	@Test
+	public void UserService_Update_404() {
+		when(userService.findById(anyLong())).thenThrow(new UserNotFoundException("testing123"));
+		
+		assertThatThrownBy(() ->  userService.findById(2L))
+		.isInstanceOf(UserNotFoundException.class);
+	}
 }
