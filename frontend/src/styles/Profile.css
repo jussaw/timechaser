@@ -1,7 +1,7 @@
-.left-label {
+.user-label {
   @apply w-24;
 }
-.right-label {
+.password-label {
   @apply w-40;
 }
 .entry {

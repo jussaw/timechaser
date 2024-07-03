@@ -37,7 +37,7 @@ export default function Profile() {
   //states used for buttons
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
   const [isEditingLastName, setIsEditingLastName] = useState(false);
-  const [isLeftFormChanged, setIsLeftFormChanged] = useState(false);
+  const [isUserFormChanged, setIsUserFormChanged] = useState(false);
 
   //states for focus on input fields
   const firstNameInputRef = useRef(null);
@@ -91,7 +91,7 @@ export default function Profile() {
     if (isEditingFirstName || isEditingLastName) {
       setIsEditingFirstName(false);
       setIsEditingLastName(false);
-      setIsLeftFormChanged(false);
+      setIsUserFormChanged(false);
     }
   };
 
@@ -125,7 +125,7 @@ export default function Profile() {
         ...prevValues,
         [name]: value.trim(),
       };
-      setIsLeftFormChanged(
+      setIsUserFormChanged(
         updatedFormValues.firstName != displayName.firstName ||
           updatedFormValues.lastName != displayName.lastName,
       );
@@ -170,7 +170,7 @@ export default function Profile() {
         <div className="pb-10">Reports to: {supervisor.name}</div>
         <form onSubmit={handleUserSubmit} className="w-full space-y-9">
           <div className="entry">
-            <label htmlFor="firstName" className="left-label">
+            <label htmlFor="firstName" className="user-label">
               <strong>First Name: </strong>
             </label>
             <input
@@ -198,7 +198,7 @@ export default function Profile() {
             </button>
           </div>
           <div className="entry">
-            <label htmlFor="lastName" className="left-label">
+            <label htmlFor="lastName" className="user-label">
               <strong>Last Name: </strong>
             </label>
             <input
@@ -225,13 +225,13 @@ export default function Profile() {
             </button>
           </div>
           <div className="entry">
-            <label htmlFor="username" className="left-label">
+            <label htmlFor="username" className="user-label">
               <strong>Username: </strong>
             </label>
             <span className="data border-custom-white">{username}</span>
           </div>
           <div className="entry">
-            <label className="left-label">
+            <label className="user-label">
               <strong>Time: </strong>
             </label>
             <span className="data border-custom-white">
@@ -239,14 +239,14 @@ export default function Profile() {
             </span>
           </div>
           <div className="entry">
-            <label className="left-label">
+            <label className="user-label">
               <strong>Time zone: </strong>
             </label>
             <span className="data border-custom-white">{timeZone}</span>
           </div>
           <button
             type="submit"
-            className={`rounded-full p-2 px-4 text-custom-white ${isLeftFormChanged && validateUser() ? "bg-custom-blue hover:bg-custom-blue-dark" : "bg-custom-gray"}`}
+            className={`rounded-full p-2 px-4 text-custom-white ${isUserFormChanged && validateUser() ? "bg-custom-blue hover:bg-custom-blue-dark" : "bg-custom-gray"}`}
             disabled={!validateUser()}
           >
             Save
@@ -254,7 +254,7 @@ export default function Profile() {
         </form>
       </div>
 
-      <div className="right flex-1">
+      <div className="flex-1">
         <h1 className="items-center pb-5 text-2xl font-semibold">
           Password Reset
         </h1>
@@ -265,7 +265,7 @@ export default function Profile() {
 
         <form onSubmit={handlePasswordSubmit} className="w-full space-y-9">
           <div className="entry">
-            <label htmlFor="currentPassword" className="right-label">
+            <label htmlFor="currentPassword" className="password-label">
               <strong>Current Password: </strong>
             </label>
             <input
@@ -277,7 +277,7 @@ export default function Profile() {
             ></input>
           </div>
           <div className="entry">
-            <label htmlFor="newPassword" className="right-label">
+            <label htmlFor="newPassword" className="password-label">
               <strong>New Password: </strong>
             </label>
             <input
@@ -292,7 +292,7 @@ export default function Profile() {
           </div>
 
           <div className="entry">
-            <label htmlFor="confirmPassword" className="right-label">
+            <label htmlFor="confirmPassword" className="password-label">
               <strong>Confirm Password: </strong>
             </label>
             <input
