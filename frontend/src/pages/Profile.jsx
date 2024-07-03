@@ -232,7 +232,7 @@ export default function Profile() {
           </div>
           <button
             type="submit"
-            className={`submit-button rounded-full p-2 px-4 text-custom-white ${isLeftFormChanged ? "active bg-custom-blue" : "inactive bg-custom-gray"}`}
+            className={`submit-button rounded-full p-2 px-4 text-custom-white ${isLeftFormChanged ? "active bg-custom-blue hover:bg-custom-blue-dark" : "inactive bg-custom-gray"}`}
             disabled={!isLeftFormChanged}
           >
             Save
@@ -292,7 +292,7 @@ export default function Profile() {
 
           <button
             type="submit"
-            className={`submit-button rounded-full p-2 px-4 text-custom-white ${newPasswordValid && rightFormValues.newPassword === rightFormValues.confirmPassword ? "active bg-custom-blue" : "inactive bg-custom-gray"}`}
+            className={`submit-button rounded-full p-2 px-4 text-custom-white ${newPasswordValid && rightFormValues.newPassword === rightFormValues.confirmPassword ? "active bg-custom-blue hover:bg-custom-blue-dark" : "inactive bg-custom-gray"}`}
           >
             Reset
           </button>
