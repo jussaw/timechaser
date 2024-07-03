@@ -2,7 +2,7 @@
   @apply w-24;
 }
 .right-label {
-  @apply w-32;
+  @apply w-40;
 }
 .entry {
   @apply flex;
