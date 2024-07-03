@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
-import com.timechaser.entity.User;
-import com.timechaser.repository.UserRepository;
 import com.timechaser.service.UserService;
 
 @RestController
