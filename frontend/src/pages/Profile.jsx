@@ -10,10 +10,10 @@ export default function Profile() {
   });
   //TO-DO: get fields from API
   const [userFormValues, setuserFormValues] = useState({
-    username: "e40040000",
     firstName: "John",
     lastName: "Doe",
   });
+  const [username, setUsername] = useState("e40040000");
   const [isUserValid, setIsUserValid] = useState(false);
 
   //time/timezone fields
@@ -164,7 +164,7 @@ export default function Profile() {
   return (
     <div className="full-page-component user-info flex h-full w-full flex-grow px-28 py-20">
       <div className="w-half flex-1">
-        <h1 className="items-center pb-5 text-2xl">
+        <h1 className="items-center pb-5 text-2xl font-semibold">
           Welcome, {displayName.firstName} {displayName.lastName}
         </h1>
         <div className="pb-10">Reports to: {supervisor.name}</div>
@@ -228,9 +228,7 @@ export default function Profile() {
             <label htmlFor="username" className="left-label">
               <strong>Username: </strong>
             </label>
-            <span className="data border-custom-white">
-              {userFormValues.username}
-            </span>
+            <span className="data border-custom-white">{username}</span>
           </div>
           <div className="entry">
             <label className="left-label">
@@ -257,7 +255,9 @@ export default function Profile() {
       </div>
 
       <div className="right flex-1">
-        <h1 className="items-center pb-5 text-2xl">Password Reset</h1>
+        <h1 className="items-center pb-5 text-2xl font-semibold">
+          Password Reset
+        </h1>
         <div className="pb-10">
           Password must be at least 8 characters long and contain at least one
           number, one special character, and one uppercase letter.
