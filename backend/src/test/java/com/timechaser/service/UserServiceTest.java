@@ -16,16 +16,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.entity.User;
 import com.timechaser.exception.UserCreationException;
-import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
