@@ -3,32 +3,36 @@ package com.timechaser.service;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
+import com.timechaser.dto.RoleDto;
+import com.timechaser.entity.Role;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserDetailsResponse;
 import com.timechaser.entity.User;
+import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.exception.UserCreationException;
 import com.timechaser.exception.UserNotFoundException;
+import com.timechaser.repository.RoleRepository;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.repository.UserRepository;
 
@@ -39,13 +43,19 @@ public class UserServiceTest {
 
 	@Mock
 	private PasswordEncoder passwordEncoder;
+	
+	@Mock
+	private RoleRepository roleRepository;
 
+    @InjectMocks
 	private UserService userService;
 
 	private CreateUserRequest createUserRequest;
 	private UpdateUserDetailsRequest updateUserDetailsRequest;
 	private User user;
+	private Role role;
 	private Optional<User> optionalUser;
+	private Optional<Role> optionalRole;
 
 	@BeforeEach
 	void setUp() {
@@ -60,11 +70,16 @@ public class UserServiceTest {
 		user.setPassword(createUserRequest.getPassword());
 		user.setId(1L);
 		user.setFirstName(createUserRequest.getFirstName());
-		user.setLastName(createUserRequest.getLastName());
-
-		userService = new UserService(userRepository, passwordEncoder);
+		user.setLastName(createUserRequest.getLastName());		
 
 		optionalUser = Optional.of(new User(createUserRequest));
+
+        role = new Role();
+        role.setId(1L);
+        role.setName("Admin");
+
+        optionalUser = Optional.of(user);
+        optionalRole = Optional.of(role);
 
 		updateUserDetailsRequest = new UpdateUserDetailsRequest();
 		updateUserDetailsRequest.setFirstName("newfirst");
@@ -97,14 +112,99 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void UserService_Delete_Success() {
+	void UserService_Delete_Success() {
 		userService.deleteById(4L);
 		
 		verify(userRepository, times(1)).deleteById(4L);
 	}
 	
 	@Test
-	public void UserService_findById_Success() {
+    void UserService_addRoleToUser_Success() {
+        when(userRepository.findById(1L)).thenReturn(optionalUser);
+        when(roleRepository.findById(1L)).thenReturn(optionalRole);
+
+        userService.addRoleToUser(1L, 1L);
+
+        verify(userRepository, times(1)).findById(1L);
+        verify(roleRepository, times(1)).findById(1L);
+        verify(userRepository, times(1)).save(user);
+        assertTrue(user.getRoles().contains(role));
+    }
+
+    @Test
+    void UserService_addRoleToUser_UserNotFound() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> userService.addRoleToUser(1L, 1L))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("User with ID: 1 was not found.");
+    }
+
+    @Test
+    void UserService_addRoleToUser_RoleNotFound() {
+        when(userRepository.findById(1L)).thenReturn(optionalUser);
+        when(roleRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> userService.addRoleToUser(1L, 1L))
+                .isInstanceOf(RoleNotFoundException.class)
+                .hasMessage("Role with ID: 1 was not found.");
+    }
+
+    @Test
+    void UserService_removeRoleFromUser_Success() {
+        user.getRoles().add(role);
+        when(userRepository.findById(1L)).thenReturn(optionalUser);
+        when(roleRepository.findById(1L)).thenReturn(optionalRole);
+
+        userService.removeRoleFromUser(1L, 1L);
+
+        verify(userRepository, times(1)).findById(1L);
+        verify(roleRepository, times(1)).findById(1L);
+        verify(userRepository, times(1)).save(user);
+        assertFalse(user.getRoles().contains(role));
+    }
+
+    @Test
+    void UserService_removeRoleFromUser_UserNotFound() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> userService.removeRoleFromUser(1L, 1L))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("User with ID: 1 was not found.");
+    }
+
+    @Test
+    void UserService_removeRoleFromUser_RoleNotFound() {
+        when(userRepository.findById(1L)).thenReturn(optionalUser);
+        when(roleRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> userService.removeRoleFromUser(1L, 1L))
+                .isInstanceOf(RoleNotFoundException.class)
+                .hasMessage("Role with ID: 1 was not found.");
+    }
+
+    @Test
+    void UserService_findRolesForUser_Success() {
+        user.getRoles().add(role);
+        when(userRepository.findById(1L)).thenReturn(optionalUser);
+
+        List<RoleDto> roles = userService.findRolesForUser(1L);
+
+        verify(userRepository, times(1)).findById(1L);
+        assertEquals(1, roles.size());
+        assertEquals("Admin", roles.get(0).getName());
+    }
+
+    @Test
+    void UserService_findRolesForUser_UserNotFound() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> userService.findRolesForUser(1L))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("User with ID: 1 was not found.");
+    }
+    @Test
+	void UserService_findById_Success() {
 		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 		
 		User result = userService.findById(user.getId()).get();
@@ -119,7 +219,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void UserService_Update_Success() {
+	void UserService_Update_Success() {
 		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenReturn(user);
 		
@@ -134,7 +234,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void UserService_Update_400() {
+	void UserService_Update_400() {
 		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenThrow(new UserUpdateDetailsException("testing123"));
 		
@@ -143,7 +243,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void UserService_Update_404() {
+	void UserService_Update_404() {
 		when(userService.findById(anyLong())).thenThrow(new UserNotFoundException("testing123"));
 		
 		assertThatThrownBy(() ->  userService.findById(2L))
