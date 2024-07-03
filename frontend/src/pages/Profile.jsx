@@ -145,20 +145,20 @@ export default function Profile() {
     });
   };
 
-  function validateUser() {
+  const validateUser = () => {
     if (
       userFormValues.firstName.trim() !== "" &&
       userFormValues.lastName.trim() !== ""
     )
       return true;
     return false;
-  }
-  function validatePasswords() {
+  };
+  const validatePasswords = () => {
     return (
       newPasswordValid &&
       passwordFormValues.newPassword === passwordFormValues.confirmPassword
     );
-  }
+  };
 
   //TODO: refactor all colors to fit palette
   return (
