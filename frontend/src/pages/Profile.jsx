@@ -11,15 +11,15 @@ export default function Profile() {
   //TO-DO: get fields from API
   const [leftFormValues, setLeftFormValues] = useState({
     username: "e40040000",
-    firstName: "Jonah",
-    lastName: "Leung",
+    firstName: "John",
+    lastName: "Doe",
   });
   //time/timezone fields
   const [timeZone, setTimeZone] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   //TO-DO: split apart supervisor name? Depends on API
   const [supervisor, setSupervisor] = useState({
-    name: "Emperor Pennoni",
+    name: "Jane Doe",
   });
   //password reset fields
   const [rightFormValues, setRightFormValues] = useState({
