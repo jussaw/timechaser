@@ -9,11 +9,13 @@ export default function Profile() {
     lastName: "",
   });
   //TO-DO: get fields from API
-  const [leftFormValues, setLeftFormValues] = useState({
+  const [userFormValues, setuserFormValues] = useState({
     username: "e40040000",
     firstName: "John",
     lastName: "Doe",
   });
+  const [isUserValid, setIsUserValid] = useState(false);
+
   //time/timezone fields
   const [timeZone, setTimeZone] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -21,8 +23,9 @@ export default function Profile() {
   const [supervisor, setSupervisor] = useState({
     name: "Jane Doe",
   });
+
   //password reset fields
-  const [rightFormValues, setRightFormValues] = useState({
+  const [passwordFormValues, setpasswordFormValues] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -42,7 +45,7 @@ export default function Profile() {
 
   //TODO: get name values from API
   useEffect(() => {
-    setDisplayName(leftFormValues);
+    setDisplayName(userFormValues);
   }, []);
   //getting time zone from device
   useEffect(() => {
@@ -78,21 +81,23 @@ export default function Profile() {
   };
 
   //TO-DO: send info to backend business logic for submitting form
-  const handleSubmitLeft = (event) => {
+  const handleUserSubmit = (e) => {
     //stop page from reloading on submit
-    event.preventDefault();
-    setDisplayName(leftFormValues);
+    e.preventDefault();
+    userFormValues.firstName = userFormValues.firstName.trim();
+    userFormValues.lastName = userFormValues.lastName.trim();
+    setDisplayName(userFormValues);
     //If fields were being edited, disable edit mode after saving
     if (isEditingFirstName || isEditingLastName) {
       setIsEditingFirstName(false);
       setIsEditingLastName(false);
-      setLeftIsFormChanged(false);
+      setIsLeftFormChanged(false);
     }
   };
 
   //TODO: implement business logic for sending new password to backend
-  const handleSubmitRight = (event) => {
-    event.preventDefault();
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
     //currentPasswordValid used here
   };
 
@@ -100,7 +105,7 @@ export default function Profile() {
   useEffect(() => {
     const passwordRegex =
       /^(?=.*[0-9])(?=.*[!@#$%^&!@*])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,}$/;
-    const isPasswordValid = passwordRegex.test(rightFormValues.newPassword);
+    const isPasswordValid = passwordRegex.test(passwordFormValues.newPassword);
 
     setNewPasswordValid(isPasswordValid);
 
@@ -111,14 +116,14 @@ export default function Profile() {
     } else {
       setPasswordError("");
     }
-  }, [rightFormValues]);
+  }, [passwordFormValues]);
 
-  const handleInputChange = (e) => {
+  const handleUserChange = (e) => {
     const { name, value } = e.target;
-    setLeftFormValues((prevValues) => {
+    setuserFormValues((prevValues) => {
       const updatedFormValues = {
         ...prevValues,
-        [name]: value,
+        [name]: value.trim(),
       };
       setIsLeftFormChanged(
         updatedFormValues.firstName != displayName.firstName ||
@@ -130,7 +135,7 @@ export default function Profile() {
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
-    setRightFormValues((prevValues) => {
+    setpasswordFormValues((prevValues) => {
       const updatedFormValues = {
         ...prevValues,
         [name]: value,
@@ -140,15 +145,30 @@ export default function Profile() {
     });
   };
 
+  function validateUser() {
+    if (
+      userFormValues.firstName.trim() !== "" &&
+      userFormValues.lastName.trim() !== ""
+    )
+      return true;
+    return false;
+  }
+  function validatePasswords() {
+    return (
+      newPasswordValid &&
+      passwordFormValues.newPassword === passwordFormValues.confirmPassword
+    );
+  }
+
   //TODO: refactor all colors to fit palette
   return (
     <div className="full-page-component user-info flex h-full w-full flex-grow px-28 py-20">
-      <div className="left w-half flex-1">
-        <h1 className="block items-center pb-5 text-2xl">
+      <div className="w-half flex-1">
+        <h1 className="items-center pb-5 text-2xl">
           Welcome, {displayName.firstName} {displayName.lastName}
         </h1>
         <div className="pb-10">Reports to: {supervisor.name}</div>
-        <form onSubmit={handleSubmitLeft} className="form w-full space-y-9">
+        <form onSubmit={handleUserSubmit} className="w-full space-y-9">
           <div className="entry">
             <label htmlFor="firstName" className="left-label">
               <strong>First Name: </strong>
@@ -159,8 +179,8 @@ export default function Profile() {
               type="text"
               id="firstName"
               name="firstName"
-              value={leftFormValues.firstName}
-              onChange={handleInputChange}
+              value={userFormValues.firstName}
+              onChange={handleUserChange}
               readOnly={!isEditingFirstName}
               autoComplete="off"
               required
@@ -172,9 +192,7 @@ export default function Profile() {
             >
               {/* TODO change colors to custom color palette */}
               <FontAwesomeIcon
-                className={
-                  isEditingFirstName ? "text-red-500" : "text-custom-blue"
-                }
+                className={`w-4 ${isEditingFirstName ? "text-red-500" : "text-custom-blue"}`}
                 icon={isEditingFirstName ? faXmark : faPenToSquare}
               />
             </button>
@@ -189,8 +207,8 @@ export default function Profile() {
               type="text"
               id="lastName"
               name="lastName"
-              value={leftFormValues.lastName}
-              onChange={handleInputChange}
+              value={userFormValues.lastName}
+              onChange={handleUserChange}
               readOnly={!isEditingLastName}
               autoComplete="off"
               required
@@ -201,9 +219,7 @@ export default function Profile() {
               className="edit-button mr-56"
             >
               <FontAwesomeIcon
-                className={
-                  isEditingLastName ? "text-red-500" : "text-custom-blue"
-                }
+                className={`w-4 ${isEditingLastName ? "text-red-500" : "text-custom-blue"}`}
                 icon={isEditingLastName ? faXmark : faPenToSquare}
               />
             </button>
@@ -213,7 +229,7 @@ export default function Profile() {
               <strong>Username: </strong>
             </label>
             <span className="data border-custom-white">
-              {leftFormValues.username}
+              {userFormValues.username}
             </span>
           </div>
           <div className="entry">
@@ -232,8 +248,8 @@ export default function Profile() {
           </div>
           <button
             type="submit"
-            className={`submit-button rounded-full p-2 px-4 text-custom-white ${isLeftFormChanged ? "active bg-custom-blue hover:bg-custom-blue-dark" : "inactive bg-custom-gray"}`}
-            disabled={!isLeftFormChanged}
+            className={`rounded-full p-2 px-4 text-custom-white ${isLeftFormChanged && validateUser() ? "bg-custom-blue hover:bg-custom-blue-dark" : "bg-custom-gray"}`}
+            disabled={!validateUser()}
           >
             Save
           </button>
@@ -241,20 +257,20 @@ export default function Profile() {
       </div>
 
       <div className="right flex-1">
-        <h1 className="block items-center pb-5 text-2xl">Password Reset</h1>
-        <div className="supervisor pb-10">
+        <h1 className="items-center pb-5 text-2xl">Password Reset</h1>
+        <div className="pb-10">
           Password must be at least 8 characters long and contain at least one
           number, one special character, and one uppercase letter.
         </div>
 
-        <form onSubmit={handleSubmitRight} className="form w-full space-y-9">
+        <form onSubmit={handlePasswordSubmit} className="w-full space-y-9">
           <div className="entry">
             <label htmlFor="currentPassword" className="right-label">
               <strong>Current Password: </strong>
             </label>
             <input
               className="data w-32 border-gray-800"
-              type="text"
+              type="password"
               id="currentPassword"
               name="currentPassword"
               required
@@ -292,19 +308,25 @@ export default function Profile() {
 
           <button
             type="submit"
-            className={`submit-button rounded-full p-2 px-4 text-custom-white ${newPasswordValid && rightFormValues.newPassword === rightFormValues.confirmPassword ? "active bg-custom-blue hover:bg-custom-blue-dark" : "inactive bg-custom-gray"}`}
+            className={`rounded-full p-2 px-4 text-custom-white ${
+              validatePasswords()
+                ? "bg-custom-blue hover:bg-custom-blue-dark"
+                : "bg-custom-gray"
+            }`}
+            disabled={!validatePasswords()}
           >
             Reset
           </button>
-          <div className="block text-red-500">
-            {rightFormValues.newPassword.length > 0 && !newPasswordValid && (
+          <div className="text-red-500">
+            {passwordFormValues.newPassword.length > 0 && !newPasswordValid && (
               <>
                 <span>Invalid Password</span>
                 <br />
               </>
             )}
             {!(
-              rightFormValues.newPassword === rightFormValues.confirmPassword
+              passwordFormValues.newPassword ===
+              passwordFormValues.confirmPassword
             ) && <span>Passwords do not match</span>}
           </div>
         </form>

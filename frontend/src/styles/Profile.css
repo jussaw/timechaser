@@ -5,14 +5,8 @@
   @apply w-40;
 }
 .entry {
-  @apply flex;
-  @apply items-center;
+  @apply flex items-center;
 }
-
 .data {
-  @apply rounded-xl;
-  @apply border-2;
-  @apply border-solid;
-  @apply bg-custom-white;
-  @apply px-2;
+  @apply rounded-xl border-2 border-solid bg-custom-white px-2;
 }
