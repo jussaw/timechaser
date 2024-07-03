@@ -73,7 +73,7 @@ public class UserControllerTest {
 
 	
 	@Test
-	public void UserController_CreateUser_ReturnCreated() throws Exception{
+	void UserController_CreateUser_ReturnCreated() throws Exception{
 		CreateUserResponse responseDto = new CreateUserResponse();
 		responseDto.setFirstName("First");
 		responseDto.setLastName("Last");
@@ -96,7 +96,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_CreateUser_UserCreationFailure() throws Exception{
+	void UserController_CreateUser_UserCreationFailure() throws Exception{
 		
 		when(userService.create(any(CreateUserRequest.class))).thenThrow(new UserCreationException("Faiied to create user", new Exception()));
 		
@@ -109,7 +109,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_CreateUser_NoUsername_400() throws Exception{
+	void UserController_CreateUser_NoUsername_400() throws Exception{
 		
 		request.setUsername(null);
 		ResultActions response = mockMvc.perform(post("/user")
@@ -121,7 +121,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_CreateUser_NoPassword_400() throws Exception{
+	void UserController_CreateUser_NoPassword_400() throws Exception{
 		
 		request.setPassword(null);
 		ResultActions response = mockMvc.perform(post("/user")
@@ -133,7 +133,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_CreateUser_NoFirstName_400() throws Exception{
+	void UserController_CreateUser_NoFirstName_400() throws Exception{
 		
 		request.setFirstName(null);
 		ResultActions response = mockMvc.perform(post("/user")
@@ -145,7 +145,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_CreateUser_NoLastName_400() throws Exception{
+	void UserController_CreateUser_NoLastName_400() throws Exception{
 		
 		request.setLastName(null);
 		ResultActions response = mockMvc.perform(post("/user")
@@ -157,7 +157,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_Delete_User_Success() throws Exception {	
+	void UserController_Delete_User_Success() throws Exception {	
 		ResultActions response = mockMvc.perform(delete("/user/8")
 			.contentType(MediaType.APPLICATION_JSON));
 		
@@ -165,7 +165,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-    public void UserController_AddRoleToUser_Success() throws Exception {
+    void UserController_AddRoleToUser_Success() throws Exception {
 
         ResultActions response = mockMvc.perform(post("/user/1/role")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -175,7 +175,7 @@ public class UserControllerTest {
     }
     
     @Test
-    public void UserController_RemoveRoleFromUser_Success() throws Exception {
+    void UserController_RemoveRoleFromUser_Success() throws Exception {
 
         ResultActions response = mockMvc.perform(delete("/user/1/role/1")
                 .contentType(MediaType.APPLICATION_JSON));
@@ -184,7 +184,7 @@ public class UserControllerTest {
     }
     
     @Test
-    public void UserController_GetRolesForUser_Success() throws Exception {
+    void UserController_GetRolesForUser_Success() throws Exception {
         List<RoleDto> roles = Collections.singletonList(roleDto);
         when(userService.findRolesForUser(1L)).thenReturn(roles);
 
@@ -198,7 +198,7 @@ public class UserControllerTest {
     }	
     
 	@Test
-	public void UserController_Update_User_Details_Success() throws Exception {
+	void UserController_Update_User_Details_Success() throws Exception {
 		UpdateUserDetailsResponse responseDto = new UpdateUserDetailsResponse();
 		responseDto.setFirstName("newfirst");
 		responseDto.setLastName("newlast");
@@ -217,7 +217,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_Update_User_Details_500() throws Exception{
+	void UserController_Update_User_Details_500() throws Exception{
 		
 		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserUpdateDetailsException("testing123"));
 		
@@ -230,7 +230,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_Update_User_Details_404() throws Exception{
+	void UserController_Update_User_Details_404() throws Exception{
 		
 		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserNotFoundException("testing123"));
 		
@@ -243,7 +243,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_Update_User_Details_NoFirstName() throws Exception{
+	void UserController_Update_User_Details_NoFirstName() throws Exception{
 		
 		request.setFirstName(null);
 		ResultActions response = mockMvc.perform(put("/user/1")
@@ -255,7 +255,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void UserController_Update_User_Details_NoLastName() throws Exception{
+	void UserController_Update_User_Details_NoLastName() throws Exception{
 		
 		request.setLastName(null);
 		ResultActions response = mockMvc.perform(put("/user/1")

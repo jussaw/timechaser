@@ -60,7 +60,7 @@ public class RoleControllerTest {
     }
 
     @Test
-    public void RoleController_FindRoleById_ReturnOk() throws Exception {
+    void RoleController_FindRoleById_ReturnOk() throws Exception {
         when(roleService.findById(1L)).thenReturn(Optional.of(role));
 
         ResultActions response = mockMvc.perform(get("/role/1")
@@ -72,7 +72,7 @@ public class RoleControllerTest {
     }
 
     @Test
-    public void RoleController_FindRoleById_NotFound() throws Exception {
+    void RoleController_FindRoleById_NotFound() throws Exception {
         when(roleService.findById(1L)).thenReturn(Optional.empty());
 
         ResultActions response = mockMvc.perform(get("/role/1")
@@ -82,7 +82,7 @@ public class RoleControllerTest {
     }
 
     @Test
-    public void RoleController_FindRoleByName_ReturnOk() throws Exception {
+    void RoleController_FindRoleByName_ReturnOk() throws Exception {
         when(roleService.findByName("Admin")).thenReturn(Optional.of(role));
 
         ResultActions response = mockMvc.perform(get("/role/name/Admin")
@@ -94,7 +94,7 @@ public class RoleControllerTest {
     }
 
     @Test
-    public void RoleController_FindRoleByName_NotFound() throws Exception {
+    void RoleController_FindRoleByName_NotFound() throws Exception {
         when(roleService.findByName("Admin")).thenReturn(Optional.empty());
 
         ResultActions response = mockMvc.perform(get("/role/name/Admin")
@@ -104,7 +104,7 @@ public class RoleControllerTest {
     }
 
     @Test
-    public void RoleController_FindAllRoles_ReturnOk() throws Exception {
+    void RoleController_FindAllRoles_ReturnOk() throws Exception {
         List<RoleDto> roleDtos = Arrays.asList(roleDto);
         when(roleService.findAll()).thenReturn(roleDtos);
 
@@ -117,7 +117,7 @@ public class RoleControllerTest {
     }
 
     @Test
-    public void RoleController_CreateRole_ReturnCreated() throws Exception {
+    void RoleController_CreateRole_ReturnCreated() throws Exception {
         when(roleService.create(any(RoleDto.class))).thenReturn(roleDto);
 
         ResultActions response = mockMvc.perform(post("/role")
@@ -130,7 +130,7 @@ public class RoleControllerTest {
     }
 
     @Test
-    public void RoleController_UpdateRole_ReturnOk() throws Exception {
+    void RoleController_UpdateRole_ReturnOk() throws Exception {
         when(roleService.update(any(RoleDto.class), eq(1L))).thenReturn(roleDto);
 
         ResultActions response = mockMvc.perform(put("/role/1")
@@ -143,7 +143,7 @@ public class RoleControllerTest {
     }
     
     @Test
-    public void RoleController_UpdateRole_NotFound() throws Exception {
+    void RoleController_UpdateRole_NotFound() throws Exception {
         when(roleService.update(any(RoleDto.class), eq(1L))).thenThrow(new RoleNotFoundException("Role not found with ID: 1"));
 
         ResultActions response = mockMvc.perform(put("/role/1")
@@ -154,7 +154,7 @@ public class RoleControllerTest {
     }
     
     @Test
-    public void RoleController_DeleteRoleById_ReturnNoContent() throws Exception {
+    void RoleController_DeleteRoleById_ReturnNoContent() throws Exception {
         ResultActions response = mockMvc.perform(delete("/role/1")
                 .contentType(MediaType.APPLICATION_JSON));
 

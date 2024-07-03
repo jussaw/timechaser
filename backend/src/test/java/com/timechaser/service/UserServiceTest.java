@@ -204,7 +204,7 @@ public class UserServiceTest {
                 .hasMessage("User with ID: 1 was not found.");
     }
     @Test
-	public void UserService_findById_Success() {
+	void UserService_findById_Success() {
 		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 		
 		User result = userService.findById(user.getId()).get();
@@ -219,7 +219,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void UserService_Update_Success() {
+	void UserService_Update_Success() {
 		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenReturn(user);
 		
@@ -234,7 +234,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void UserService_Update_400() {
+	void UserService_Update_400() {
 		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenThrow(new UserUpdateDetailsException("testing123"));
 		
@@ -243,7 +243,7 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void UserService_Update_404() {
+	void UserService_Update_404() {
 		when(userService.findById(anyLong())).thenThrow(new UserNotFoundException("testing123"));
 		
 		assertThatThrownBy(() ->  userService.findById(2L))
