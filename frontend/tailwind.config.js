@@ -12,7 +12,7 @@ export default {
         "custom-gray": "#9BA1B3",
         "custom-brown": "#968586",
         "custom-yellow": "#B4A58C",
-        "custom-white": "#E1E5F2",
+        "custom-white": "#F3F4F6",
       },
     },
   },
