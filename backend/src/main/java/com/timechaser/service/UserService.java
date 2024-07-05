@@ -16,6 +16,8 @@ import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserDetailsResponse;
+import com.timechaser.dto.UpdateUserPasswordRequest;
+import com.timechaser.dto.UpdateUserPasswordResponse;
 import com.timechaser.entity.User;
 import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.exception.UserCreationException;
@@ -23,6 +25,7 @@ import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.mapper.RoleMapper;
 import com.timechaser.repository.RoleRepository;
 import com.timechaser.exception.UserUpdateDetailsException;
+import com.timechaser.exception.UserUpdatePasswordException;
 import com.timechaser.repository.UserRepository;
 
 @Service
@@ -100,8 +103,9 @@ public class UserService {
         		.map(RoleMapper::toDto)
         		.collect(Collectors.toList());
     }
+    
 	public UpdateUserDetailsResponse updateDetails(Long id, UpdateUserDetailsRequest request) {
-		logger.info("Updating user with id {}", id);
+		logger.info("Updating user details with id {}", id);
 		
 		try {
 			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
@@ -117,9 +121,28 @@ public class UserService {
 			throw e;
 		} catch (Exception e) {
 			logger.error("Error while updating user details", e);
-			throw new UserUpdateDetailsException("Failed to update user");
+			throw new UserUpdateDetailsException("Failed to update user details");
 		} 
+	}
+	
+	public UpdateUserPasswordResponse updatePassword(Long id, UpdateUserPasswordRequest request) {
+		logger.info("Updating user password with id {}", id);
 		
+		try {
+			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
+			
+			user.setPassword(passwordEncoder.encode(request.getPassword()));
+			
+			user = userRepository.save(user);
+			
+			return new UpdateUserPasswordResponse(user);
+	
+		} catch (UserNotFoundException e) {
+			throw e;
+		} catch (Exception e) {
+			logger.error("Error while updating user password", e);
+			throw new UserUpdatePasswordException("Failed to update user password");
+		} 
 	}
 	
 	public Optional<User> findById(Long id) {

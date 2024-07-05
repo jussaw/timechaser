@@ -32,10 +32,13 @@ import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserDetailsResponse;
+import com.timechaser.dto.UpdateUserPasswordRequest;
+import com.timechaser.dto.UpdateUserPasswordResponse;
 import com.timechaser.exception.AccessDeniedException;
 import com.timechaser.exception.UserCreationException;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
+import com.timechaser.exception.UserUpdatePasswordException;
 import com.timechaser.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
@@ -205,11 +208,10 @@ public class UserControllerTest {
 		
 		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenReturn(responseDto);
 		
-		ResultActions response = mockMvc.perform(put("/user/1")
+		ResultActions response = mockMvc.perform(put("/user/1/details")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
-		// Asserting the response expectations
 	    response.andExpect(MockMvcResultMatchers.status().isOk())
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(responseDto.getFirstName())))
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(responseDto.getLastName())));
@@ -221,7 +223,7 @@ public class UserControllerTest {
 		
 		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserUpdateDetailsException("testing123"));
 		
-		ResultActions response = mockMvc.perform(put("/user/1")
+		ResultActions response = mockMvc.perform(put("/user/1/details")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
@@ -234,7 +236,7 @@ public class UserControllerTest {
 		
 		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserNotFoundException("testing123"));
 		
-		ResultActions response = mockMvc.perform(put("/user/1")
+		ResultActions response = mockMvc.perform(put("/user/1/details")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
@@ -246,7 +248,7 @@ public class UserControllerTest {
 	void UserController_Update_User_Details_NoFirstName() throws Exception{
 		
 		request.setFirstName(null);
-		ResultActions response = mockMvc.perform(put("/user/1")
+		ResultActions response = mockMvc.perform(put("/user/1/details")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
@@ -258,7 +260,62 @@ public class UserControllerTest {
 	void UserController_Update_User_Details_NoLastName() throws Exception{
 		
 		request.setLastName(null);
-		ResultActions response = mockMvc.perform(put("/user/1")
+		ResultActions response = mockMvc.perform(put("/user/1/details")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+	}
+	
+	@Test
+	void UserController_Update_User_Password_Success() throws Exception {
+		
+		UpdateUserPasswordResponse responseDto = new UpdateUserPasswordResponse();
+		// need a way to set password to compare response to
+		
+		when(userService.updatePassword(anyLong(), any(UpdateUserPasswordRequest.class))).thenReturn(responseDto);
+		
+		ResultActions response = mockMvc.perform(put("/user/1/password")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isOk());
+	    	// need a way to check for response expectation for password string
+
+	}
+	
+	@Test
+	void UserController_Update_User_Password_500() throws Exception{
+		
+		when(userService.updatePassword(anyLong(), any(UpdateUserPasswordRequest.class))).thenThrow(new UserUpdatePasswordException("testing123"));
+		
+		ResultActions response = mockMvc.perform(put("/user/1/password")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+
+	}
+	
+	@Test
+	void UserController_Update_User_Password_404() throws Exception{
+		
+		when(userService.updatePassword(anyLong(), any(UpdateUserPasswordRequest.class))).thenThrow(new UserNotFoundException("testing123"));
+		
+		ResultActions response = mockMvc.perform(put("/user/1/password")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isNotFound());
+
+	}
+	
+	@Test
+	void UserController_Update_User_Password_NoPassword() throws Exception{
+		
+		request.setPassword(null);
+		ResultActions response = mockMvc.perform(put("/user/1/password")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
