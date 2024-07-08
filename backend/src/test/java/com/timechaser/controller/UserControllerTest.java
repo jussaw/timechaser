@@ -32,7 +32,6 @@ import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserDetailsResponse;
-import com.timechaser.exception.AccessDeniedException;
 import com.timechaser.exception.UserCreationException;
 import com.timechaser.repository.UserRepository;
 import com.timechaser.exception.UserNotFoundException;
