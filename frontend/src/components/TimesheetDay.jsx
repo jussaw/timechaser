@@ -68,10 +68,10 @@ export default function TimesheetDay(props) {
       className="flex h-full w-full flex-col items-center justify-between rounded-xl shadow-lg"
     >
       <div className="flex w-full flex-col items-center">
-        <div className="flex w-full flex-col justify-center rounded-t-xl bg-blue-500 py-2 text-gray-100">
+        <div className="flex w-full flex-col justify-center rounded-t-xl bg-custom-blue py-2 text-custom-white">
           <h2 className="text-center text-lg">{props.day}</h2>
           <h2 className="text-center text-lg">{props.date}</h2>
-          <hr className="border-t-1 m-1 border-gray-100" />
+          <hr className="border-t-1 m-1 border-custom-white" />
           <div className="flex flex-row justify-between p-2 pb-0">
             <FontAwesomeIcon icon={faClock} />
             <FontAwesomeIcon icon={faClipboard} />
@@ -84,33 +84,33 @@ export default function TimesheetDay(props) {
               <div className="flex w-full flex-row justify-between p-2">
                 <div className="w-1/12 text-start">{project.hours}</div>
                 <div className="w-10/12 text-center">{project.project}</div>
-                <div className="w-1/12 text-end text-red-500">
+                <div className="text-custom-red w-1/12 text-end">
                   <FontAwesomeIcon icon={faMinus} />
                 </div>
               </div>
               <div className="flex justify-center">
-                <hr className="w-11/12 border-t-2 bg-gradient-to-r from-gray-100 via-gray-900 to-transparent px-2" />
+                <hr className="via-custom-black w-11/12 border-t-2 bg-gradient-to-r from-custom-white to-transparent px-2" />
               </div>
             </li>
           ))}
           <div className="flex w-full justify-center">
             {isHovered && !showInputs && (
               <button onClick={handlePlusClick} className="mt-2">
-                <FontAwesomeIcon className="text-gray-500" icon={faPlus} />
+                <FontAwesomeIcon className="text-custom-gray" icon={faPlus} />
               </button>
             )}
             {showInputs && (
               <form className="mt-3 w-full px-2">
                 <div className="mb-2 flex">
                   <input
-                    className="text-md mr-1 w-3/12 rounded-lg border border-blue-500 bg-gray-100 px-1"
+                    className="text-md mr-1 w-3/12 rounded-lg border border-custom-blue bg-custom-white px-1"
                     id="hours"
                     name="hours"
                     value={props.timesheetInput[props.day].hours}
                     onChange={handleChange}
                   />
                   <input
-                    className="text-md mr-1 w-8/12 rounded-lg border border-blue-500 bg-gray-100 px-1"
+                    className="text-md mr-1 w-8/12 rounded-lg border border-custom-blue bg-custom-white px-1"
                     id="project"
                     name="project"
                     value={props.timesheetInput[props.day].project}
@@ -118,7 +118,7 @@ export default function TimesheetDay(props) {
                   />
                   <button
                     onClick={handleMinusClick}
-                    className="ml-2 w-1/12 items-center text-end text-red-500"
+                    className="text-custom-red ml-2 w-1/12 items-center text-end"
                   >
                     <FontAwesomeIcon icon={faXmark} />
                   </button>

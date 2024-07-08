@@ -12,7 +12,7 @@ export default function Login() {
         <div className="flex h-full flex-col items-center justify-between">
           <h1 className="mb-8 flex w-full items-center justify-center">
             <FontAwesomeIcon
-              className="pr-2 text-3xl text-blue-500"
+              className="pr-2 text-3xl text-custom-blue"
               icon={faClockRotateLeft}
             />
             <label className="auth-greeting-label">Welcome!</label>

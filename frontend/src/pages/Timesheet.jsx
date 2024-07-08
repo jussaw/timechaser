@@ -178,7 +178,7 @@ export default function Timesheet() {
       <div className="universal-component-style mb-4 flex items-center justify-center space-x-7 p-10 text-center text-3xl font-bold">
         <button>
           <FontAwesomeIcon
-            className="text-blue-500 hover:text-blue-800"
+            className="text-custom-blue hover:text-custom-blue-dark"
             icon={faChevronLeft}
           />
         </button>
@@ -194,7 +194,7 @@ export default function Timesheet() {
         </h1>
         <button>
           <FontAwesomeIcon
-            className="text-blue-500 hover:text-blue-800"
+            className="text-custom-blue hover:text-custom-blue-dark"
             icon={faChevronRight}
           />
         </button>
@@ -218,7 +218,7 @@ export default function Timesheet() {
             ))}
           </div>
           <div className="mt-4 flex w-full justify-center space-x-4">
-            <button className="w-4/12 rounded-full bg-blue-500 py-1 text-gray-100 hover:bg-blue-800">
+            <button className="w-4/12 rounded-full bg-custom-blue py-1 text-custom-white hover:bg-custom-blue-dark">
               Submit
             </button>
           </div>

@@ -1,5 +1,5 @@
 .universal-component-style {
-  @apply rounded-3xl bg-gray-100 shadow-xl;
+  @apply rounded-3xl bg-custom-white shadow-xl;
 }
 .dashboard-component {
   @apply universal-component-style;

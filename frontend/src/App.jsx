@@ -11,7 +11,7 @@ import Profile from "./pages/Profile";
 export default function App() {
   return (
     <Router>
-      <div className="flex h-screen w-screen flex-col bg-gray-200 p-4 font-sans text-gray-800">
+      <div className="bg-custom-main-background text-custom-black flex h-screen w-screen flex-col p-4 font-sans">
         <div className="flex h-full w-full flex-row">
           <SideBar className="sidebar-component" />
           <Routes>
