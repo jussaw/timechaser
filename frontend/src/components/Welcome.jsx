@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export default function Welcome() {
   // TODO: Replace firstName with what is in AuthContext
-  const [firstName, setFirstName] = useState("Justin");
+  const [firstName, setFirstName] = useState("Bob");
   // TODO: Replace totalHours from API call
   const [totalHours, setTotalHours] = useState(16);
   // TODO: Repace weekEndDate and weekStartDate with API call
