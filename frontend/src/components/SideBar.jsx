@@ -28,7 +28,7 @@ export default function SideBar({ className }) {
           to="/dashboard"
         >
           <FontAwesomeIcon
-            className="text-4xl text-blue-500"
+            className="text-4xl text-custom-blue"
             icon={faClockRotateLeft}
           />
           <div className="pl-2 text-3xl font-bold">TimeChaser</div>

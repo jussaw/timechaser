@@ -6,7 +6,7 @@ export default function Loading(props) {
   return (
     <div>
       <FontAwesomeIcon
-        className="text-blue-500"
+        className="text-custom-blue"
         icon={faCircleNotch}
         spin
         size={props.size}

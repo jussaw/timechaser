@@ -175,7 +175,7 @@ export default function Profile() {
             </label>
             <input
               ref={firstNameInputRef}
-              className={`data mr-2 w-32 ${isEditingFirstName ? "border-gray-800" : "border-custom-white"}`}
+              className={`data mr-2 w-32 ${isEditingFirstName ? "border-custom-black" : "border-custom-white"}`}
               type="text"
               id="firstName"
               name="firstName"
@@ -192,7 +192,7 @@ export default function Profile() {
             >
               {/* TODO change colors to custom color palette */}
               <FontAwesomeIcon
-                className={`w-4 ${isEditingFirstName ? "text-red-500" : "text-custom-blue"}`}
+                className={`w-4 ${isEditingFirstName ? "text-custom-red" : "text-custom-blue"}`}
                 icon={isEditingFirstName ? faXmark : faPenToSquare}
               />
             </button>
@@ -203,7 +203,7 @@ export default function Profile() {
             </label>
             <input
               ref={lastNameInputRef}
-              className={`data mr-2 w-32 ${isEditingLastName ? "border-gray-800" : "border-custom-white"}`}
+              className={`data mr-2 w-32 ${isEditingLastName ? "border-custom-black" : "border-custom-white"}`}
               type="text"
               id="lastName"
               name="lastName"
@@ -219,7 +219,7 @@ export default function Profile() {
               className="edit-button mr-56"
             >
               <FontAwesomeIcon
-                className={`w-4 ${isEditingLastName ? "text-red-500" : "text-custom-blue"}`}
+                className={`w-4 ${isEditingLastName ? "text-custom-red" : "text-custom-blue"}`}
                 icon={isEditingLastName ? faXmark : faPenToSquare}
               />
             </button>
@@ -246,7 +246,7 @@ export default function Profile() {
           </div>
           <button
             type="submit"
-            className={`rounded-full p-2 px-4 text-custom-white ${isUserFormChanged && validateUser() ? "bg-custom-blue hover:bg-custom-blue-dark" : "bg-custom-gray"}`}
+            className={`rounded-full p-2 px-4 text-custom-white ${isUserFormChanged && validateUser() ? "bg-custom-blue hover:bg-custom-blue-dark" : "bg-custom-disable"}`}
             disabled={!validateUser()}
           >
             Save
@@ -269,7 +269,7 @@ export default function Profile() {
               <strong>Current Password: </strong>
             </label>
             <input
-              className="data w-32 border-gray-800"
+              className="data border-custom-black w-32"
               type="password"
               id="currentPassword"
               name="currentPassword"
@@ -281,7 +281,7 @@ export default function Profile() {
               <strong>New Password: </strong>
             </label>
             <input
-              className="data w-32 border-gray-800"
+              className="data border-custom-black w-32"
               type="password"
               id="newPassword"
               name="newPassword"
@@ -296,7 +296,7 @@ export default function Profile() {
               <strong>Confirm Password: </strong>
             </label>
             <input
-              className="data w-32 border-gray-800"
+              className="data border-custom-black w-32"
               type="password"
               id="confirmPassword"
               name="confirmPassword"
@@ -311,13 +311,13 @@ export default function Profile() {
             className={`rounded-full p-2 px-4 text-custom-white ${
               validatePasswords()
                 ? "bg-custom-blue hover:bg-custom-blue-dark"
-                : "bg-custom-gray"
+                : "bg-custom-disable"
             }`}
             disabled={!validatePasswords()}
           >
             Reset
           </button>
-          <div className="text-red-500">
+          <div className="text-custom-red">
             {passwordFormValues.newPassword.length > 0 && !newPasswordValid && (
               <>
                 <span>Invalid Password</span>
