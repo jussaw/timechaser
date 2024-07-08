@@ -2,6 +2,7 @@ package com.timechaser.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,7 +106,7 @@ public class UserService {
 		logger.info("Updating user details with id {}", id);
 		
 		try {
-			User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
+			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
 			
 			user.setFirstName(request.getFirstName());
 			user.setLastName(request.getLastName());
@@ -124,7 +125,7 @@ public class UserService {
 		logger.info("Updating user password with id {}", id);
 		
 		try {
-			User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
+			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
 			
 			user.setPassword(passwordEncoder.encode(request.getPassword()));
 			
@@ -136,5 +137,11 @@ public class UserService {
 			logger.error("Error while updating user password", e);
 			throw new UserUpdatePasswordException("Failed to update user password");
 		} 
+	}
+	
+	public Optional<User> findById(Long id) {
+		logger.info("Finding user with id {}", id);
+		Optional<User> user = userRepository.findById(id);
+		return user;
 	}
 }

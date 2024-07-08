@@ -208,10 +208,32 @@ public class UserServiceTest {
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("User with ID: 1 was not found.");
     }
+    
+    @Test
+	void UserService_findById_Success() {
+		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+		
+		User result = userService.findById(user.getId()).get();
+		
+		assertNotNull(result);
+		assertEquals(user.getUsername(), result.getUsername());
+		assertEquals(user.getLastName(), result.getLastName());
+		assertEquals(user.getUsername(), result.getUsername());
+		assertEquals(user.getId(), result.getId());
+		verify(userRepository, times(1)).findById(user.getId());
+	}
+    
+	@Test
+	void UserService_findById_404() {
+		when(userService.findById(anyLong())).thenThrow(new UserNotFoundException("testing123"));
+		
+		assertThatThrownBy(() ->  userService.findById(2L))
+		.isInstanceOf(UserNotFoundException.class);
+	}
 	
 	@Test
 	void UserService_Update_Details_Success() {
-		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenReturn(user);
 		
 		userService.updateDetails(1L, updateUserDetailsRequest);
@@ -231,7 +253,7 @@ public class UserServiceTest {
 	
 	@Test
 	void UserService_Update_Password_Success() {
-		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(passwordEncoder.encode(createUserRequest.getPassword())).thenReturn("encodedPassword");
 		when(userRepository.save(any(User.class))).thenReturn(user);
 		
