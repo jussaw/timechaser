@@ -38,7 +38,7 @@ Ensure you have the following installed on your machine:
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/yourusername/timechaser-frontend.git
+   git clone https://bitbucket.cyber-range.ray.com/scm/tc/timechaser.git
    cd timechaser/frontend
    ```
 
