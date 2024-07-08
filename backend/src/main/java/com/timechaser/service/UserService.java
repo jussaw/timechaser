@@ -2,7 +2,6 @@ package com.timechaser.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +14,7 @@ import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
 import com.timechaser.dto.UpdateUserDetailsRequest;
-import com.timechaser.dto.UpdateUserDetailsResponse;
 import com.timechaser.dto.UpdateUserPasswordRequest;
-import com.timechaser.dto.UpdateUserPasswordResponse;
 import com.timechaser.entity.User;
 import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.exception.UserCreationException;
@@ -104,18 +101,16 @@ public class UserService {
         		.collect(Collectors.toList());
     }
     
-	public UpdateUserDetailsResponse updateDetails(Long id, UpdateUserDetailsRequest request) {
+	public void updateDetails(Long id, UpdateUserDetailsRequest request) {
 		logger.info("Updating user details with id {}", id);
 		
 		try {
-			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
+			User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
 			
 			user.setFirstName(request.getFirstName());
 			user.setLastName(request.getLastName());
 			
 			user = userRepository.save(user);
-			
-			return new UpdateUserDetailsResponse(user);
 	
 		} catch (UserNotFoundException e) {
 			throw e;
@@ -125,17 +120,15 @@ public class UserService {
 		} 
 	}
 	
-	public UpdateUserPasswordResponse updatePassword(Long id, UpdateUserPasswordRequest request) {
+	public void updatePassword(Long id, UpdateUserPasswordRequest request) {
 		logger.info("Updating user password with id {}", id);
 		
 		try {
-			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
+			User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
 			
 			user.setPassword(passwordEncoder.encode(request.getPassword()));
 			
 			user = userRepository.save(user);
-			
-			return new UpdateUserPasswordResponse(user);
 	
 		} catch (UserNotFoundException e) {
 			throw e;
@@ -143,11 +136,5 @@ public class UserService {
 			logger.error("Error while updating user password", e);
 			throw new UserUpdatePasswordException("Failed to update user password");
 		} 
-	}
-	
-	public Optional<User> findById(Long id) {
-		logger.info("Finding user with id {}", id);
-		Optional<User> user = userRepository.findById(id);
-		return user;
 	}
 }

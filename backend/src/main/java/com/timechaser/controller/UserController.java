@@ -22,9 +22,7 @@ import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
-import com.timechaser.dto.UpdateUserDetailsResponse;
 import com.timechaser.dto.UpdateUserPasswordRequest;
-import com.timechaser.dto.UpdateUserPasswordResponse;
 import com.timechaser.service.UserService;
 
 @RestController
@@ -86,22 +84,22 @@ public class UserController {
     }
 
 	@PutMapping("/{id}/details")
-	public ResponseEntity<UpdateUserDetailsResponse> updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
+	public ResponseEntity updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
 		
 		logger.info("Received request to update user details with ID {}", id);
 		
-		UpdateUserDetailsResponse response = userService.updateDetails(id, request);
+		userService.updateDetails(id, request);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity.ok().build();
 	}
 	
 	@PutMapping("/{id}/password")
-	public ResponseEntity<UpdateUserPasswordResponse> updateUserPassword(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserPasswordRequest request) {
+	public ResponseEntity updateUserPassword(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserPasswordRequest request) {
 		
 		logger.info("Received request to update user password with ID {}", id);
 		
-		UpdateUserPasswordResponse response = userService.updatePassword(id, request);
+		userService.updatePassword(id, request);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity.ok().build();
 	}
 }
