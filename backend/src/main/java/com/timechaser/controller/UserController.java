@@ -1,6 +1,7 @@
 package com.timechaser.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -23,6 +24,10 @@ import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
+import com.timechaser.dto.UserDto;
+import com.timechaser.entity.User;
+import com.timechaser.exception.UserNotFoundException;
+import com.timechaser.mapper.UserMapper;
 import com.timechaser.service.UserService;
 
 @RestController
@@ -34,6 +39,20 @@ public class UserController {
 
 	public UserController(UserService userService) {
 		this.userService = userService;
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<UserDto> getUser(@PathVariable("id") Long id) {
+
+		logger.info("Received request to get user with ID {}", id);
+		
+		Optional<User> userOptional = userService.findById(id);
+		
+		UserDto userDto = userOptional
+				.map(UserMapper::toDto)
+				.orElseThrow(() -> new UserNotFoundException("Unable to find user with ID: " + id));
+		
+		return ResponseEntity.status(HttpStatus.OK).body(userDto);
 	}
 
 	@PostMapping(consumes = "application/json")

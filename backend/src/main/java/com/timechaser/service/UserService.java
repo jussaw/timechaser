@@ -141,7 +141,9 @@ public class UserService {
 	
 	public Optional<User> findById(Long id) {
 		logger.info("Finding user with id {}", id);
+		
 		Optional<User> user = userRepository.findById(id);
+		
 		return user;
 	}
 }
