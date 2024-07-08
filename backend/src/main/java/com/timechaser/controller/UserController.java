@@ -47,7 +47,7 @@ public class UserController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity deleteUser(@PathVariable("id") Long id) {
+	public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
 
 		logger.info("Received request to delete user with id {}", id);
 		
@@ -57,7 +57,7 @@ public class UserController {
 	}
 	
 	@PostMapping(value = "{id}/role", consumes = "application/json")
-    public ResponseEntity addRoleToUser(@PathVariable Long id, @RequestBody @Valid AddRoleDto addRoleDto) {
+    public ResponseEntity<?> addRoleToUser(@PathVariable Long id, @RequestBody @Valid AddRoleDto addRoleDto) {
 		logger.info("Received request to add role ID {} to user ID {}", addRoleDto.getRoleId(), id);
 		
         userService.addRoleToUser(id, addRoleDto.getRoleId());
@@ -66,7 +66,7 @@ public class UserController {
     }
 	
 	@DeleteMapping("{userId}/role/{roleId}")
-    public ResponseEntity deleteRoleFromUser(@PathVariable Long userId, @PathVariable Long roleId) {
+    public ResponseEntity<?> deleteRoleFromUser(@PathVariable Long userId, @PathVariable Long roleId) {
 		logger.info("Received request to remove role ID {} from user ID {}", roleId, userId);
 		
         userService.removeRoleFromUser(userId, roleId);
