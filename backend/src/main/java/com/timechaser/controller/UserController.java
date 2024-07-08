@@ -22,7 +22,7 @@ import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
-import com.timechaser.dto.UpdateUserDetailsResponse;
+import com.timechaser.dto.UpdateUserPasswordRequest;
 import com.timechaser.service.UserService;
 
 @RestController
@@ -49,7 +49,7 @@ public class UserController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity deleteUser(@PathVariable("id") Long id) {
 
-		logger.info("Received request to delete user with id {}", id);
+		logger.info("Received request to delete user with ID {}", id);
 		
 		userService.deleteById(id);
 		
@@ -83,14 +83,23 @@ public class UserController {
         return ResponseEntity.ok().body(roles);
     }
 
-	@PutMapping("/{id}")
-	public ResponseEntity<UpdateUserDetailsResponse> updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
+	@PutMapping("/{id}/details")
+	public ResponseEntity updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
 		
-		logger.info("Received request to update user with {}", id);
+		logger.info("Received request to update user details with ID {}", id);
 		
-		UpdateUserDetailsResponse response = userService.updateDetails(id, request);
+		userService.updateDetails(id, request);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/{id}/password")
+	public ResponseEntity updateUserPassword(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserPasswordRequest request) {
 		
+		logger.info("Received request to update user password with ID {}", id);
+		
+		userService.updatePassword(id, request);
+		
+		return ResponseEntity.ok().build();
 	}
 }
