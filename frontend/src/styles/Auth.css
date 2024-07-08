@@ -11,5 +11,5 @@
 }
 
 .auth-submit {
-  @apply mb-6 mt-7 rounded-full bg-custom-blue p-2 text-custom-white hover:bg-custom-blue;
+  @apply mb-6 mt-7 rounded-full bg-custom-blue p-2 text-custom-white hover:bg-custom-blue-dark;
 }
