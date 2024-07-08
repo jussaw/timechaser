@@ -4,14 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        "custom-orange": "#FB923C",
         "custom-blue": {
           DEFAULT: "#3B82F6",
           dark: "#1E3A8A",
         },
+        "custom-purple": "#E9D5FF",
         "custom-gray": "#6B7280",
         "custom-brown": "#968586",
-        "custom-yellow": "#B4A58C",
+        "custom-khaki": "#B4A58C",
         "custom-white": "#F3F4F6",
         "custom-black": "#1F2937",
         "custom-red": "#EF4444",
