@@ -1,0 +1,11 @@
+.admin-input-label-box {
+  @apply flex flex-row;
+}
+
+.admin-input-box {
+  @apply rounded-full border border-custom-blue bg-custom-white text-lg;
+}
+
+.admin-label-box {
+  @apply flex w-44 text-xl font-semibold;
+}

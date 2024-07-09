@@ -5,8 +5,9 @@ import Dashboard from "./pages/Dashboard";
 import Sandbox from "./pages/Sandbox";
 import Timesheet from "./pages/Timesheet";
 import Login from "./pages/Login";
-import "./styles/UniversalComponent.css";
 import Profile from "./pages/Profile";
+import Admin from "./pages/Admin";
+import "./styles/UniversalComponent.css";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/timesheet" element={<Timesheet />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/admin" element={<Admin />} />
             {/* TODO: Delete Later. Only for Sandboxing */}
             <Route path="/sandbox" element={<Sandbox />} />
           </Routes>

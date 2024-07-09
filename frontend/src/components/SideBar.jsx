@@ -6,6 +6,7 @@ import {
   faStopwatch,
   faUser,
   faArrowRightFromBracket,
+  faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation } from "react-router-dom";
 import "../styles/UniversalComponent.css";
@@ -17,6 +18,7 @@ export default function SideBar({ className }) {
   const renderDarkDashboard = location.pathname === "/dashboard";
   const renderDarkTimesheet = location.pathname === "/timesheet";
   const renderDarkProfile = location.pathname === "/profile";
+  const renderDarkAdmin = location.pathname === "/admin";
 
   return renderSidebar ? (
     <div
@@ -59,6 +61,13 @@ export default function SideBar({ className }) {
         >
           <FontAwesomeIcon className="text-xl" icon={faUser} />
           <div className="sidebar-button-icon"> Profile</div>
+        </Link>
+        <Link
+          className={renderDarkAdmin ? "sidebar-button-dark" : "sidebar-button"}
+          to="/admin"
+        >
+          <FontAwesomeIcon className="text-xl" icon={faUserTie} />
+          <div className="sidebar-button-icon"> Admin</div>
         </Link>
       </div>
       {/* TODO: Add Logout Logic */}
