@@ -1,6 +1,7 @@
 import React from "react";
 import PlaceholderComponent from "../components/PlaceholderComponent";
 import "../styles/UniversalComponent.css";
+import HourAllocationChart from "../components/HourAllocationChart";
 import Welcome from "../components/Welcome";
 
 export default function Dashboard() {
@@ -18,7 +19,10 @@ export default function Dashboard() {
       <div className="flex w-6/12 flex-col space-y-4">
         <div className="flex h-full w-full flex-col space-y-4">
           <PlaceholderComponent />
-          <PlaceholderComponent />
+          <div className="flex flex-row space-x-4">
+            <HourAllocationChart />
+            <PlaceholderComponent />
+          </div>
         </div>
         <div className="flex h-full w-full flex-col space-y-4">
           <PlaceholderComponent />
