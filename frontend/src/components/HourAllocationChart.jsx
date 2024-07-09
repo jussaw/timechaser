@@ -19,9 +19,6 @@ export default function HourAllocationChart() {
             value: {
               show: true,
               fontWeight: 500,
-              formatter: function (val) {
-                return val;
-              },
             },
             total: {
               show: true,
@@ -41,25 +38,7 @@ export default function HourAllocationChart() {
 
   return (
     <div className="dashboard-component flex h-full w-full flex-grow items-center justify-center">
-      <div className="donut">
-        <Chart options={options} series={series} type="donut" width="380" />
-      </div>
+      <Chart options={options} series={series} type="donut" width="380" />
     </div>
   );
 }
-
-// class Donut extends Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       options: {
-//         labels: ["Apple", "Mango", "Orange", "Watermelon"],
-//         fill: {
-//           colors: [``, "#E91E63", "#9C27B0"],
-//         },
-//       },
-//       series: [44, 55, 41, 17, 15],
-//     };
-//   }
-// }
