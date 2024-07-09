@@ -19,6 +19,16 @@ export const getFormattedDate = (date) => {
   return `${formattedMonth}/${formattedDay}/${year}`;
 };
 
+export const getWelcomeFormattedDate = (date) => {
+  const options = {
+    weekday: "short",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  };
+  return new Intl.DateTimeFormat("en-US", options).format(date);
+};
+
 export const getDateAfterXDays = (date, days) => {
   const resultDate = new Date(date);
   resultDate.setDate(date.getDate() + days);
