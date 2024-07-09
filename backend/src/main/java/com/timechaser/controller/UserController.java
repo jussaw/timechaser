@@ -103,7 +103,7 @@ public class UserController {
     }
 
 	@PutMapping("/{id}/details")
-	public ResponseEntity updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
+	public ResponseEntity<?> updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
 		
 		logger.info("Received request to update user details with ID {}", id);
 		
@@ -113,7 +113,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/{id}/password")
-	public ResponseEntity updateUserPassword(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserPasswordRequest request) {
+	public ResponseEntity<?> updateUserPassword(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserPasswordRequest request) {
 		
 		logger.info("Received request to update user password with ID {}", id);
 		
