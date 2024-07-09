@@ -19,12 +19,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            .antMatchers("/h2-console").permitAll()
-            .and()
-            .httpBasic()
-            .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // http.authorizeRequests()
+        //     .antMatchers("/h2-console").permitAll()
+        //     .and()
+        //     .httpBasic()
+        //     .and()
+        //     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.httpBasic().disable() //Disable log in page
             .authorizeRequests(auth -> auth.anyRequest().permitAll())
             .csrf().disable();
