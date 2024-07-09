@@ -2,15 +2,16 @@ package com.timechaser.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
-
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,11 +32,13 @@ import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
-import com.timechaser.dto.UpdateUserDetailsResponse;
+import com.timechaser.dto.UpdateUserPasswordRequest;
+import com.timechaser.entity.User;
 import com.timechaser.exception.UserCreationException;
 import com.timechaser.repository.UserRepository;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
+import com.timechaser.exception.UserUpdatePasswordException;
 import com.timechaser.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
@@ -202,29 +205,21 @@ public class UserControllerTest {
     
 	@Test
 	void UserController_Update_User_Details_Success() throws Exception {
-		UpdateUserDetailsResponse responseDto = new UpdateUserDetailsResponse();
-		responseDto.setFirstName("newfirst");
-		responseDto.setLastName("newlast");
 		
-		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenReturn(responseDto);
-		
-		ResultActions response = mockMvc.perform(put("/user/1")
+		ResultActions response = mockMvc.perform(put("/user/1/details")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
-		// Asserting the response expectations
-	    response.andExpect(MockMvcResultMatchers.status().isOk())
-	            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(responseDto.getFirstName())))
-	            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(responseDto.getLastName())));
+	    response.andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
 	
 	@Test
 	void UserController_Update_User_Details_500() throws Exception{
 		
-		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserUpdateDetailsException("testing123"));
+		doThrow(new UserUpdateDetailsException("testing123")).when(userService).updateDetails(anyLong(), any(UpdateUserDetailsRequest.class));
 		
-		ResultActions response = mockMvc.perform(put("/user/1")
+		ResultActions response = mockMvc.perform(put("/user/1/details")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
@@ -235,9 +230,9 @@ public class UserControllerTest {
 	@Test
 	void UserController_Update_User_Details_404() throws Exception{
 		
-		when(userService.updateDetails(anyLong(), any(UpdateUserDetailsRequest.class))).thenThrow(new UserNotFoundException("testing123"));
+		doThrow(new UserNotFoundException("testing123")).when(userService).updateDetails(anyLong(), any(UpdateUserDetailsRequest.class));
 		
-		ResultActions response = mockMvc.perform(put("/user/1")
+		ResultActions response = mockMvc.perform(put("/user/1/details")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
@@ -249,7 +244,7 @@ public class UserControllerTest {
 	void UserController_Update_User_Details_NoFirstName() throws Exception{
 		
 		request.setFirstName(null);
-		ResultActions response = mockMvc.perform(put("/user/1")
+		ResultActions response = mockMvc.perform(put("/user/1/details")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
@@ -261,11 +256,95 @@ public class UserControllerTest {
 	void UserController_Update_User_Details_NoLastName() throws Exception{
 		
 		request.setLastName(null);
-		ResultActions response = mockMvc.perform(put("/user/1")
+		ResultActions response = mockMvc.perform(put("/user/1/details")
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
 	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 	}
+	
+	@Test
+	void UserController_Update_User_Password_Success() throws Exception {
+		
+		ResultActions response = mockMvc.perform(put("/user/1/password")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isOk());
+
+	}
+	
+	@Test
+	void UserController_Update_User_Password_500() throws Exception{
+		
+		doThrow(new UserUpdatePasswordException("testing123")).when(userService).updatePassword(anyLong(), any(UpdateUserPasswordRequest.class));
+		
+		ResultActions response = mockMvc.perform(put("/user/1/password")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isInternalServerError());
+
+	}
+	
+	@Test
+	void UserController_Update_User_Password_404() throws Exception{
+		
+		doThrow(new UserNotFoundException("testing123")).when(userService).updatePassword(anyLong(), any(UpdateUserPasswordRequest.class));
+		
+		ResultActions response = mockMvc.perform(put("/user/1/password")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isNotFound());
+
+	}
+	
+	@Test
+	void UserController_Update_User_Password_NoPassword() throws Exception{
+		
+		request.setPassword(null);
+		ResultActions response = mockMvc.perform(put("/user/1/password")
+		        .contentType(MediaType.APPLICATION_JSON)
+		        .content(objectMapper.writeValueAsString(request)));
+		
+	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+	}
+	
+	@Test
+	void UserController_GetUser_Success() throws Exception {
+	    // Arrange
+	    User user = new User();
+	    user.setId(1L);
+	    user.setUsername("username");
+	    user.setFirstName("First");
+	    user.setLastName("Last");
+	    user.setPassword("password"); // This should be ignored in the JSON response
+
+	    when(userService.findById(1L)).thenReturn(Optional.of(user));
+
+	    ResultActions response = mockMvc.perform(get("/user/1")
+	            .contentType(MediaType.APPLICATION_JSON));
+
+	    response.andExpect(MockMvcResultMatchers.status().isOk())
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(user.getId().intValue())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.username", CoreMatchers.is(user.getUsername())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(user.getFirstName())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(user.getLastName())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.password").doesNotExist());
+	}
+
+
+	@Test
+	void UserController_GetUser_NotFound() throws Exception {
+	    when(userService.findById(1L)).thenReturn(Optional.empty());
+
+	    ResultActions response = mockMvc.perform(get("/user/1")
+	            .contentType(MediaType.APPLICATION_JSON));
+
+	    response.andExpect(MockMvcResultMatchers.status().isNotFound());
+	}
+
 }

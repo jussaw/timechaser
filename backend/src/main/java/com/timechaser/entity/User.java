@@ -19,16 +19,20 @@ import org.hibernate.annotations.Where;
 
 import com.timechaser.dto.CreateUserRequest;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE user SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 @Setter
 @Getter
 @Entity
+@Builder
 public class User extends Auditable{
 	@Id
 	@GeneratedValue(strategy  = GenerationType.IDENTITY)

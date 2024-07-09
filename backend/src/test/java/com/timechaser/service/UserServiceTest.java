@@ -27,13 +27,14 @@ import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
 import com.timechaser.dto.UpdateUserDetailsRequest;
-import com.timechaser.dto.UpdateUserDetailsResponse;
+import com.timechaser.dto.UpdateUserPasswordRequest;
 import com.timechaser.entity.User;
 import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.exception.UserCreationException;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.repository.RoleRepository;
 import com.timechaser.exception.UserUpdateDetailsException;
+import com.timechaser.exception.UserUpdatePasswordException;
 import com.timechaser.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,6 +53,7 @@ public class UserServiceTest {
 
 	private CreateUserRequest createUserRequest;
 	private UpdateUserDetailsRequest updateUserDetailsRequest;
+	private UpdateUserPasswordRequest updateUserPasswordRequest;
 	private User user;
 	private Role role;
 	private Optional<User> optionalUser;
@@ -84,6 +86,9 @@ public class UserServiceTest {
 		updateUserDetailsRequest = new UpdateUserDetailsRequest();
 		updateUserDetailsRequest.setFirstName("newfirst");
 		updateUserDetailsRequest.setLastName("newlast");
+		
+		updateUserPasswordRequest = new UpdateUserPasswordRequest();
+		updateUserPasswordRequest.setPassword("password");
 	}
 
 	@Test
@@ -203,6 +208,7 @@ public class UserServiceTest {
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("User with ID: 1 was not found.");
     }
+    
     @Test
 	void UserService_findById_Success() {
 		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
@@ -214,28 +220,31 @@ public class UserServiceTest {
 		assertEquals(user.getLastName(), result.getLastName());
 		assertEquals(user.getUsername(), result.getUsername());
 		assertEquals(user.getId(), result.getId());
-		
 		verify(userRepository, times(1)).findById(user.getId());
+	}
+    
+	@Test
+	void UserService_findById_404() {
+		when(userService.findById(anyLong())).thenThrow(new UserNotFoundException("testing123"));
+		
+		assertThatThrownBy(() ->  userService.findById(2L))
+		.isInstanceOf(UserNotFoundException.class);
 	}
 	
 	@Test
-	void UserService_Update_Success() {
+	void UserService_Update_Details_Success() {
 		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenReturn(user);
 		
-		UpdateUserDetailsResponse response = userService.updateDetails(1L, updateUserDetailsRequest);
+		userService.updateDetails(1L, updateUserDetailsRequest);
 		
-		assertNotNull(response);
-        assertEquals(user.getFirstName(), response.getFirstName());
-        assertEquals(user.getLastName(), response.getLastName());
-        
         verify(userRepository, times(1)).findById(user.getId());
         verify(userRepository, times(1)).save(user);
 	}
 	
 	@Test
-	void UserService_Update_400() {
-		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
+	void UserService_Update_Details_400() {
+		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 		when(userRepository.save(any(User.class))).thenThrow(new UserUpdateDetailsException("testing123"));
 		
 		assertThatThrownBy(() ->  userService.updateDetails(user.getId(), updateUserDetailsRequest))
@@ -243,10 +252,25 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	void UserService_Update_404() {
-		when(userService.findById(anyLong())).thenThrow(new UserNotFoundException("testing123"));
+	void UserService_Update_Password_Success() {
+		when(userService.findById(anyLong())).thenReturn(Optional.of(user));
+		when(passwordEncoder.encode(createUserRequest.getPassword())).thenReturn("encodedPassword");
+		when(userRepository.save(any(User.class))).thenReturn(user);
 		
-		assertThatThrownBy(() ->  userService.findById(2L))
-		.isInstanceOf(UserNotFoundException.class);
+		userService.updatePassword(1L, updateUserPasswordRequest);
+		
+        verify(userRepository, times(1)).findById(user.getId());
+        verify(passwordEncoder, times(1)).encode(updateUserPasswordRequest.getPassword());
+        verify(userRepository, times(1)).save(user);
+	}
+	
+	@Test
+	void UserService_Update_Password_400() {
+		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+		when(passwordEncoder.encode(createUserRequest.getPassword())).thenReturn("encodedPassword");
+		when(userRepository.save(any(User.class))).thenThrow(new UserUpdateDetailsException("testing123"));
+		
+		assertThatThrownBy(() ->  userService.updatePassword(user.getId(), updateUserPasswordRequest))
+		.isInstanceOf(UserUpdatePasswordException.class);
 	}
 }
