@@ -33,13 +33,12 @@ import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
-import com.timechaser.dto.UserDto;
 import com.timechaser.entity.User;
 import com.timechaser.exception.UserCreationException;
+import com.timechaser.repository.UserRepository;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.exception.UserUpdatePasswordException;
-import com.timechaser.mapper.UserMapper;
 import com.timechaser.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,6 +49,9 @@ public class UserControllerTest {
 	
 	@MockBean
 	private UserService userService;
+
+	@MockBean
+	private UserRepository userRepository;
 	
 	@Autowired
     private ObjectMapper objectMapper;
