@@ -1,11 +1,23 @@
-.admin-input-label-box {
-  @apply flex flex-row;
+.admin-label-input-error {
+  @apply flex flex-col space-y-2;
 }
 
-.admin-input-box {
-  @apply rounded-full border border-custom-blue bg-custom-white text-lg;
+.admin-label-input {
+  @apply flex flex-row items-center;
 }
 
-.admin-label-box {
-  @apply flex w-44 text-xl font-semibold;
+.admin-input {
+  @apply w-56 rounded-full border border-custom-blue bg-custom-white px-3 py-1 text-lg focus:outline-none focus:ring-2 focus:ring-custom-blue;
+}
+
+.admin-input-invalid {
+  @apply w-56 rounded-full border border-custom-red bg-custom-white px-3 py-1 text-lg focus:outline-none focus:ring-2 focus:ring-custom-red;
+}
+
+.admin-label {
+  @apply flex w-40 text-lg font-semibold;
+}
+
+.admin-error {
+  @apply w-fit rounded-xl bg-custom-red p-2 px-3 text-custom-white;
 }
