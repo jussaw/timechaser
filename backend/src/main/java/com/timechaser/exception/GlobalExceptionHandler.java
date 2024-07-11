@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -49,12 +50,14 @@ public class GlobalExceptionHandler {
 				((ServletWebRequest) request).getHttpMethod().name());
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-		
 	}
 	
-	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException e, WebRequest request){
-		logger.error("Access Denied Exception Thrown: {} , Request Details: {}", e.getMessage(), request.getDescription(false));
+	@ExceptionHandler({
+		AccessDeniedException.class, 
+		BadCredentialsException.class
+	})
+	public ResponseEntity<?> handleAuthenticationException(Exception e, WebRequest request){
+		logger.error("Authentication Exception Thrown: {} , Request Details: {}", e.getMessage(), request.getDescription(false));
 		
 		ErrorResponse errorResponse = new ErrorResponse(
 				LocalDateTime.now(), 

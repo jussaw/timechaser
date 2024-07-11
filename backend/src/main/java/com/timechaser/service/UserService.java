@@ -75,8 +75,8 @@ public class UserService {
 
         if(!user.getRoles().contains(role)) {
             user.getRoles().add(role);
+            userRepository.save(user);
         }
-        userRepository.save(user);
     }
 	
 	@Transactional

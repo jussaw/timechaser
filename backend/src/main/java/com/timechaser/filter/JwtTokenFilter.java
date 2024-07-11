@@ -2,7 +2,6 @@ package com.timechaser.filter;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -38,6 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+		
         if (StringUtils.isEmpty(header) || !header.startsWith("Bearer ")) {
         	filterChain.doFilter(request, response);
             return;
@@ -45,6 +45,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
+        
         if (!jwtTokenUtil.validateToken(token)) {
         	filterChain.doFilter(request, response);
             return;
