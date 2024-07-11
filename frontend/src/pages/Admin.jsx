@@ -42,7 +42,7 @@ export default function Admin() {
       username: formValues["username"].length >= 8,
       password: passwordRegex.test(formValues["password"]),
       confirmPassword:
-        formValues["confirmPassword"].trim() !== "" &&
+        passwordRegex.test(formValues["confirmPassword"]) &&
         formValues["confirmPassword"] === formValues["password"],
     });
   }, [formValues]);
