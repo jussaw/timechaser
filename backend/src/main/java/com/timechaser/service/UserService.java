@@ -73,8 +73,10 @@ public class UserService {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new RoleNotFoundException("Role with ID: " + roleId + " was not found."));
 
-        user.getRoles().add(role);
-        userRepository.save(user);
+        if(!user.getRoles().contains(role)) {
+            user.getRoles().add(role);
+            userRepository.save(user);
+        }
     }
 	
 	@Transactional
@@ -143,6 +145,14 @@ public class UserService {
 		logger.info("Finding user with id {}", id);
 		
 		Optional<User> user = userRepository.findById(id);
+		
+		return user;
+	}
+	
+	public Optional<User> findByUsername(String username){
+		logger.info("Finding user with username: {}", username);
+		
+		Optional<User> user = userRepository.findByUsername(username);
 		
 		return user;
 	}

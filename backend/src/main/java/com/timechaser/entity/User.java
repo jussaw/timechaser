@@ -33,7 +33,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Builder
-public class User extends Auditable{
+public class User extends Auditable {
 	@Id
 	@GeneratedValue(strategy  = GenerationType.IDENTITY)
 	private Long id;
