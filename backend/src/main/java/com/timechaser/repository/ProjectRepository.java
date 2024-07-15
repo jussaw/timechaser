@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.timechaser.entity.Project;
 
 @Repository
-public interface ProjectRepository extends JpaRepository<Long, Project>{
+public interface ProjectRepository extends JpaRepository<Project, Long>{
 }
