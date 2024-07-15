@@ -17,27 +17,33 @@ import java.util.Optional;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
 import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.repository.UserRepository;
+import com.timechaser.security.UserRoles;
 import com.timechaser.service.RoleService;
 
-@ExtendWith(MockitoExtension.class)
-@WebMvcTest(controllers = RoleController.class)
+@ContextConfiguration
+@SpringBootTest
+@WithMockUser(authorities = {UserRoles.ADMIN})
 public class RoleControllerTest {
 
-    @Autowired
+	@Autowired
+	private WebApplicationContext webApplicationContext;
+	
     MockMvc mockMvc;
 
     @MockBean
@@ -54,6 +60,8 @@ public class RoleControllerTest {
 
     @BeforeEach
     void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
         role = new Role();
         role.setId(1L);
         role.setName("Admin");
