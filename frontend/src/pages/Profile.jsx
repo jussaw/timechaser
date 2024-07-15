@@ -33,6 +33,7 @@ export default function Profile() {
   const [currentPasswordValid, setCurrentPasswordValid] = useState(false);
   const [newPasswordValid, setNewPasswordValid] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [validPasswords, setValidPasswords] = useState(false);
 
   //states used for buttons
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
@@ -153,13 +154,14 @@ export default function Profile() {
       return true;
     return false;
   };
-  const validatePasswords = () => {
-    return (
-      newPasswordValid &&
-      passwordFormValues.newPassword === passwordFormValues.confirmPassword
-    );
-  };
 
+  //validate passwords
+  useEffect(() => {
+    setValidPasswords(
+      newPasswordValid &&
+        passwordFormValues.newPassword === passwordFormValues.confirmPassword,
+    );
+  }, [passwordFormValues.newPassword, passwordFormValues.confirmPassword]);
   //TODO: refactor all colors to fit palette
   return (
     <div className="full-page-component user-info flex h-full w-full flex-grow px-28 py-20">
@@ -269,7 +271,7 @@ export default function Profile() {
               <strong>Current Password: </strong>
             </label>
             <input
-              className="data border-custom-black w-32"
+              className="data w-32 border-custom-black"
               type="password"
               id="currentPassword"
               name="currentPassword"
@@ -281,7 +283,7 @@ export default function Profile() {
               <strong>New Password: </strong>
             </label>
             <input
-              className="data border-custom-black w-32"
+              className="data w-32 border-custom-black"
               type="password"
               id="newPassword"
               name="newPassword"
@@ -296,7 +298,7 @@ export default function Profile() {
               <strong>Confirm Password: </strong>
             </label>
             <input
-              className="data border-custom-black w-32"
+              className="data w-32 border-custom-black"
               type="password"
               id="confirmPassword"
               name="confirmPassword"
@@ -309,11 +311,11 @@ export default function Profile() {
           <button
             type="submit"
             className={`rounded-full p-2 px-4 text-custom-white ${
-              validatePasswords()
+              validPasswords
                 ? "bg-custom-blue hover:bg-custom-blue-dark"
                 : "bg-custom-disable"
             }`}
-            disabled={!validatePasswords()}
+            disabled={!validPasswords}
           >
             Reset
           </button>

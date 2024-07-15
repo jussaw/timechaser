@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
 import com.timechaser.exception.RoleNotFoundException;
+import com.timechaser.repository.UserRepository;
 import com.timechaser.service.RoleService;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +42,9 @@ public class RoleControllerTest {
 
     @MockBean
     private RoleService roleService;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @Autowired
     private ObjectMapper objectMapper;

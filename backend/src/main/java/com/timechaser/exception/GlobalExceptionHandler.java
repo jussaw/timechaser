@@ -30,6 +30,7 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler({
 		UserUpdateDetailsException.class, 
+		UserUpdatePasswordException.class, 
 		Exception.class
 	})	
 	public ResponseEntity<?> handleException(Exception e, WebRequest request){
