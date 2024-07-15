@@ -1,12 +1,15 @@
 package com.timechaser.dto;
 
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class LoginResponse {
-	private CreateUserResponse user;
 	private String token;
+	private CreateUserResponse user;
+	private List<RoleDto> roles;
 }
