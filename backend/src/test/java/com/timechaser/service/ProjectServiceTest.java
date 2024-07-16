@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.timechaser.dto.CreateProjectResponse;
 import com.timechaser.entity.Project;
-import com.timechaser.exception.ProjectCreationException;
+import com.timechaser.exception.CreateException;
 import com.timechaser.repository.ProjectRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,7 +53,7 @@ public class ProjectServiceTest {
         when(projectRepository.save(any(Project.class))).thenThrow(new IllegalArgumentException());
 
         assertThatThrownBy(() -> projectService.create(projectName))
-            .isInstanceOf(ProjectCreationException.class);
+            .isInstanceOf(CreateException.class);
     }
     
 }
