@@ -12,9 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.timechaser.dto.CreateProjectResponse;
+import com.timechaser.dto.ProjectDto;
 import com.timechaser.entity.Project;
 import com.timechaser.exception.CreateException;
+import com.timechaser.mapper.ProjectMapper;
 import com.timechaser.repository.ProjectRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +28,7 @@ public class ProjectServiceTest {
     private ProjectService projectService;
 
     private Project project;
+    private ProjectDto projectDto;
     private String projectName;
 
     @BeforeEach
@@ -35,13 +37,15 @@ public class ProjectServiceTest {
 
         project = new Project();
         project.setName(projectName);
+
+        projectDto = ProjectMapper.toDto(project);
     }
 
     @Test
     void ProjectService_Create_Success() {
         when(projectRepository.save(any(Project.class))).thenReturn(project);
 
-        CreateProjectResponse response = projectService.create(projectName);
+        ProjectDto response = projectService.create(projectDto);
 
         assertNotNull(response);
         assertEquals(project.getId(), response.getId());
@@ -52,7 +56,7 @@ public class ProjectServiceTest {
     void ProjectService_Create_Failure() {
         when(projectRepository.save(any(Project.class))).thenThrow(new IllegalArgumentException());
 
-        assertThatThrownBy(() -> projectService.create(projectName))
+        assertThatThrownBy(() -> projectService.create(projectDto))
             .isInstanceOf(CreateException.class);
     }
     

@@ -6,9 +6,10 @@ import org.slf4j.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.timechaser.dto.CreateProjectResponse;
+import com.timechaser.dto.ProjectDto;
 import com.timechaser.entity.Project;
 import com.timechaser.exception.CreateException;
+import com.timechaser.mapper.ProjectMapper;
 import com.timechaser.repository.ProjectRepository;
 
 @Service
@@ -22,16 +23,16 @@ public class ProjectService {
     }
 
     @Transactional
-    public CreateProjectResponse create(String name) {
-        logger.info("Creating project with name {}", name);
+    public ProjectDto create(ProjectDto projectDto) {
+        logger.info("Creating project with name {}", projectDto.getName());
 
         try {
-            Project project = new Project(name);
+            Project project = ProjectMapper.toEntity(projectDto);
             project = projectRepository.save(project);
 
-            return new CreateProjectResponse(project);
+            return ProjectMapper.toDto(project);
         } catch (Exception e) {
-            logger.error("Error occured while creating project with name {}", name);
+            logger.error("Error occured while creating project with name {}", projectDto.getName());
             throw new CreateException("Failed to create project", e);
         }
     }

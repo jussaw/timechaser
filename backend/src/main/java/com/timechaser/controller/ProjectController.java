@@ -7,7 +7,7 @@ import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.timechaser.dto.CreateProjectResponse;
+import com.timechaser.dto.ProjectDto;
 import com.timechaser.service.ProjectService;
 
 @RestController
@@ -20,15 +20,16 @@ public class ProjectController {
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
     }
+    
 
     @PreAuthorize("hasRole(T(com.timechaser.security.UserRoles).ADMIN)")
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<CreateProjectResponse> createProject(@Valid @RequestBody String name) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectDto projectDto) {
 
-        logger.info("Received request to create project with name {}", name);
+        logger.info("Received request to create project with name {}", projectDto.getName());
 
-        CreateProjectResponse response = projectService.create(name);
+        projectDto = projectService.create(projectDto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(projectDto);
     }
 }
