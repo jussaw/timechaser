@@ -53,11 +53,10 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler({
-		AccessDeniedException.class, 
 		BadCredentialsException.class
 	})
-	public ResponseEntity<?> handleAuthenticationException(Exception e, WebRequest request){
-		logger.error("Authentication Exception Thrown: {} , Request Details: {}", e.getMessage(), request.getDescription(false));
+	public ResponseEntity<?> handleBadCredentialsException(Exception e, WebRequest request){
+		logger.error("Bad Credentials Exception Thrown: {} , Request Details: {}", e.getMessage(), request.getDescription(false));
 		
 		ErrorResponse errorResponse = new ErrorResponse(
 				LocalDateTime.now(), 
@@ -70,21 +69,19 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler({
-		UserUpdateDetailsException.class, 
-		UserUpdatePasswordException.class, 
-		Exception.class
-	})	
-	public ResponseEntity<?> handleException(Exception e, WebRequest request){
-		logger.error("Exception occurred: {}, Request Details: {}", e.getMessage(), request.getDescription(false), e);
+		AccessDeniedException.class, 
+	})
+	public ResponseEntity<?> handleAccessDeniedException(Exception e, WebRequest request){
+		logger.error("Access Denied Exception Thrown: {} , Request Details: {}", e.getMessage(), request.getDescription(false), e);
 		
 		ErrorResponse errorResponse = new ErrorResponse(
 				LocalDateTime.now(), 
-				HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+				HttpStatus.FORBIDDEN.value(), 
 				e.getMessage(), 
 				request.getDescription(false),
 				((ServletWebRequest) request).getHttpMethod().name());
-
-		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		
+		return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -108,5 +105,23 @@ public class GlobalExceptionHandler {
 				((ServletWebRequest) request).getHttpMethod().name());
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler({
+		UserUpdateDetailsException.class, 
+		UserUpdatePasswordException.class, 
+		Exception.class
+	})	
+	public ResponseEntity<?> handleException(Exception e, WebRequest request){
+		logger.error("Exception occurred: {}, Request Details: {}", e.getMessage(), request.getDescription(false), e);
+		
+		ErrorResponse errorResponse = new ErrorResponse(
+				LocalDateTime.now(), 
+				HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+				e.getMessage(), 
+				request.getDescription(false),
+				((ServletWebRequest) request).getHttpMethod().name());
+
+		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

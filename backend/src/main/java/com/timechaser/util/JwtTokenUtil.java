@@ -32,14 +32,9 @@ public class JwtTokenUtil {
                 .sign(getAlgorithm());
     }
 
-    public boolean validateToken(String token) {
-        try {
-            JWTVerifier verifier = JWT.require(getAlgorithm()).build();
-            verifier.verify(token);
-            return true;
-        } catch (JWTVerificationException exception) {
-            return false;
-        }
+    public void validateToken(String token) throws JWTVerificationException {
+        JWTVerifier verifier = JWT.require(getAlgorithm()).build();
+        verifier.verify(token);
     }
 
     public String getUsernameFromToken(String token) {
