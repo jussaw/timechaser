@@ -1,14 +1,23 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import axiosInstance from "../config/axiosConfig";
+import { jwtDecode } from "jwt-decode";
 import "../styles/Auth.css";
 
 export default function Login() {
+  const apiUrl = import.meta.env.VITE_SPRING_API_URL;
+  const navigate = useNavigate();
+  const { authData, setAuthData } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+
+  const [error, setError] = useState(null);
 
   const usernameRef = useRef(null);
 
@@ -16,6 +25,12 @@ export default function Login() {
     usernameRef.current = document.getElementById("username");
     usernameRef.current.focus();
   }, []);
+
+  useEffect(() => {
+    if (authData) {
+      navigate("/dashboard");
+    }
+  }, [authData, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,9 +40,31 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("submitted");
-
-    // TODO: Add API call to login and store JWT in context. If successful, redirect to dashboard. If error, display error.
+    axiosInstance
+      .post(
+        "/auth/login",
+        {
+          username: formData.username,
+          password: formData.password,
+        },
+        {
+          headers: {
+            "Skip-Auth": true,
+          },
+        },
+      )
+      .then((response) => {
+        const decodedToken = jwtDecode(response.data.token);
+        setAuthData((prevAuthData) => ({
+          ...prevAuthData,
+          ...response.data,
+          tokenExpiration: jwtDecode(response.data.token).exp,
+        }));
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.error("There was an error making the POST request!", error);
+      });
   };
 
   return (
@@ -64,7 +101,12 @@ export default function Login() {
                 required
                 className="auth-input-box"
               />
-              <button type="submit" className="auth-submit">
+              {error && <span>er</span>}
+              <button
+                type="submit"
+                onSubmit={handleSubmit}
+                className="auth-submit"
+              >
                 Log in
               </button>
             </form>
