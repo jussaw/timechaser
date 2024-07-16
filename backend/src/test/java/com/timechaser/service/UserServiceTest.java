@@ -30,7 +30,7 @@ import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
 import com.timechaser.entity.User;
 import com.timechaser.exception.RoleNotFoundException;
-import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.CreateException;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.repository.RoleRepository;
 import com.timechaser.exception.UserUpdateDetailsException;
@@ -113,7 +113,7 @@ public class UserServiceTest {
 		when(userRepository.save(any(User.class))).thenThrow(new IllegalArgumentException());
 		
 		assertThatThrownBy(() ->  userService.create(createUserRequest))
-			.isInstanceOf(UserCreationException.class);
+			.isInstanceOf(CreateException.class);
 	}
 
 	@Test

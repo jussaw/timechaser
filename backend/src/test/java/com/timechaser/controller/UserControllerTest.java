@@ -36,7 +36,7 @@ import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
 import com.timechaser.entity.User;
-import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.CreateException;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.exception.UserUpdatePasswordException;
@@ -125,7 +125,7 @@ class UserControllerTest {
 	@Test
 	void UserController_CreateUser_UserCreationFailure() throws Exception{
 		
-		when(userService.create(any(CreateUserRequest.class))).thenThrow(new UserCreationException("Faiied to create user", new Exception()));
+		when(userService.create(any(CreateUserRequest.class))).thenThrow(new CreateException("Faiied to create user", new Exception()));
 		
 		ResultActions response = mockMvc.perform(post("/user")
 		        .contentType(MediaType.APPLICATION_JSON)
