@@ -18,7 +18,7 @@ import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
 import com.timechaser.entity.User;
 import com.timechaser.exception.RoleNotFoundException;
-import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.CreateException;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.mapper.RoleMapper;
 import com.timechaser.repository.RoleRepository;
@@ -53,7 +53,7 @@ public class UserService {
 
 		} catch (Exception e) {
 			logger.error("Error occured while creating user with username {}", request.getUsername());
-			throw new UserCreationException("Failed to create user", e);
+			throw new CreateException("Failed to create user", e);
 		}
 	}
 

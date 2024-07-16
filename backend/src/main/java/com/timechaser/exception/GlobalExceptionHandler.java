@@ -21,8 +21,8 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 	Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 	
-	@ExceptionHandler(UserCreationException.class)
-	public ResponseEntity<?> handleUserCreationException(UserCreationException e, WebRequest request){
+	@ExceptionHandler(CreateException.class)
+	public ResponseEntity<?> handleUserCreationException(CreateException e, WebRequest request){
 		logger.error("User Creation Exception occurred: {}, Request Details: {}", e.getMessage(), request.getDescription(false), e);
 		
 		ErrorResponse errorResponse = new ErrorResponse(

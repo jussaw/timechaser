@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.timechaser.dto.CreateProjectResponse;
 import com.timechaser.entity.Project;
-import com.timechaser.exception.ProjectCreationException;
+import com.timechaser.exception.CreateException;
 import com.timechaser.repository.ProjectRepository;
 
 @Service
@@ -32,7 +32,7 @@ public class ProjectService {
             return new CreateProjectResponse(project);
         } catch (Exception e) {
             logger.error("Error occured while creating project with name {}", name);
-            throw new ProjectCreationException("Failed to create project", e);
+            throw new CreateException("Failed to create project", e);
         }
     }
 
