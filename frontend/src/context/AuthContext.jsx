@@ -1,32 +1,27 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { Navigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [jwtToken, setJwtToken] = useState(null);
+  const [authData, setAuthData] = useState(() => {
+    const storedAuthData = localStorage.getItem("authData");
+    return storedAuthData ? JSON.parse(storedAuthData) : null;
+  });
 
-  // Function to set JWT token
-  const login = (token) => {
-    setJwtToken(token);
-  };
-
-  // Function to remove JWT token (logout)
-  const logout = () => {
-    setJwtToken(null);
-  };
+  useEffect(() => {
+    if (authData) {
+      localStorage.setItem("authData", JSON.stringify(authData));
+    } else {
+      localStorage.removeItem("authData");
+    }
+  }, [authData]);
 
   return (
-    <AuthContext.Provider
-      value={{
-        jwtToken,
-        login,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{ authData, setAuthData }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook to use the auth context
 export const useAuth = () => useContext(AuthContext);
