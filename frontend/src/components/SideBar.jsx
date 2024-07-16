@@ -85,7 +85,6 @@ export default function SideBar({ className }) {
           <div className="sidebar-button-icon"> Profile</div>
         </Link>
       </div>
-      {/* TODO: Add Logout Logic */}
       <Link className="sidebar-button" to="/" onClick={onLogOut}>
         <FontAwesomeIcon className="text-xl" icon={faArrowRightFromBracket} />
         <div className="sidebar-button-icon"> Logout</div>
