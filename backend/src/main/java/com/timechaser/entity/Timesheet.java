@@ -40,10 +40,10 @@ public class Timesheet extends Auditable {
     @JoinColumn(name = "user_id", nullable = false)
 	private User user;
 	@Column(nullable = false)
-	private int year;
+	private Integer year;
 	@Column(nullable = false)
-	private int weekNumber;
-	@Column(nullable = false)
+	private Integer weekNumber;
+	@Column(scale = 2)
 	private BigDecimal totalHours;
 	@Column(nullable = false)
     @Enumerated(EnumType.STRING)
