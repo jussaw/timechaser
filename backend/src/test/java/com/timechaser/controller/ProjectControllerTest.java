@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timechaser.dto.ProjectDto;
 import com.timechaser.entity.Project;
 import com.timechaser.mapper.ProjectMapper;
-import com.timechaser.security.UserRoles;
+import com.timechaser.enums.UserRoles;
 import com.timechaser.service.ProjectService;
 
 @ContextConfiguration
