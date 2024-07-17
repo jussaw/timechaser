@@ -30,8 +30,4 @@ public class Project extends Auditable{
 	private Long id;
 	@Column(nullable = false)
 	private String name;
-
-	public Project(String name) {
-		this.name = name;
-	}
 }

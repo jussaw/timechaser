@@ -22,8 +22,8 @@ public class GlobalExceptionHandler {
 	Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 	
 	@ExceptionHandler(CreateException.class)
-	public ResponseEntity<?> handleUserCreationException(CreateException e, WebRequest request){
-		logger.error("User Creation Exception occurred: {}, Request Details: {}", e.getMessage(), request.getDescription(false), e);
+	public ResponseEntity<?> handleCreationException(CreateException e, WebRequest request){
+		logger.error("Creation Exception occurred: {}, Request Details: {}", e.getMessage(), request.getDescription(false), e);
 		
 		ErrorResponse errorResponse = new ErrorResponse(
 				LocalDateTime.now(), 
