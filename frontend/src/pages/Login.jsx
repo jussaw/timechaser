@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClockRotateLeft,
+  faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../config/axiosConfig";
 import { jwtDecode } from "jwt-decode";
 import "../styles/Auth.css";
@@ -33,6 +36,23 @@ export default function Login() {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  const mapErrorCode = (error) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          setError("Incorrect credentials");
+          break;
+        case 403:
+          setError("Unauthorized");
+          break;
+        default:
+          setError("Internal Server Error");
+      }
+    } else {
+      setError("Server Offline");
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -59,7 +79,7 @@ export default function Login() {
         navigate("/dashboard");
       })
       .catch((error) => {
-        console.error("There was an error making the POST request!", error);
+        mapErrorCode(error);
       });
   };
 
@@ -97,7 +117,6 @@ export default function Login() {
                 required
                 className="auth-input-box"
               />
-              {error && <span>er</span>}
               <button
                 type="submit"
                 onSubmit={handleSubmit}
@@ -105,6 +124,15 @@ export default function Login() {
               >
                 Log in
               </button>
+              {error && (
+                <span className="auth-error">
+                  <FontAwesomeIcon
+                    className="mr-2"
+                    icon={faTriangleExclamation}
+                  />
+                  {error}
+                </span>
+              )}
             </form>
           </div>
         </div>
