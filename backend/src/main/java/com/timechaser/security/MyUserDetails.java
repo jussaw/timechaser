@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.timechaser.entity.*;
 
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
