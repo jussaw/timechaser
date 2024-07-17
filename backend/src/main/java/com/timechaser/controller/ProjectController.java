@@ -22,7 +22,7 @@ public class ProjectController {
     }
     
 
-    @PreAuthorize("hasRole(T(com.timechaser.security.UserRoles).ADMIN)")
+    @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectDto projectDto) {
 
