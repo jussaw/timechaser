@@ -20,7 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.timechaser.entity.Role;
 import com.timechaser.entity.User;
-import com.timechaser.security.UserRoles;
+import com.timechaser.enums.UserRoles;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorizationServiceTest {

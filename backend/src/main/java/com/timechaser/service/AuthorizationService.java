@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.timechaser.entity.User;
-import com.timechaser.security.UserRoles;
+import com.timechaser.enums.UserRoles;
 
 @Service
 public class AuthorizationService {

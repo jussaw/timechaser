@@ -42,7 +42,7 @@ import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.exception.UserUpdatePasswordException;
 import com.timechaser.filter.JwtTokenFilter;
 import com.timechaser.repository.UserRepository;
-import com.timechaser.security.UserRoles;
+import com.timechaser.enums.UserRoles;
 import com.timechaser.service.AuthorizationService;
 import com.timechaser.service.UserService;
 
