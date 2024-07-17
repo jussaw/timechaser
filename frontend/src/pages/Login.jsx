@@ -8,7 +8,6 @@ import { jwtDecode } from "jwt-decode";
 import "../styles/Auth.css";
 
 export default function Login() {
-  const apiUrl = import.meta.env.VITE_SPRING_API_URL;
   const navigate = useNavigate();
   const { authData, setAuthData } = useContext(AuthContext);
   const [formData, setFormData] = useState({
