@@ -60,7 +60,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(userDto);
 	}
 
-	@PreAuthorize("hasRole(T(com.timechaser.security.UserRoles).ADMIN)")
+	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
 		
@@ -82,7 +82,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
-	@PreAuthorize("hasRole(T(com.timechaser.security.UserRoles).ADMIN)")
+	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
 	@PostMapping(value = "{id}/role", consumes = "application/json")
     public ResponseEntity<?> addRoleToUser(@PathVariable Long id, @RequestBody @Valid AddRoleDto addRoleDto) {
 		logger.info("Received request to add role ID {} to user ID {}", addRoleDto.getRoleId(), id);
@@ -92,7 +92,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 	
-	@PreAuthorize("hasRole(T(com.timechaser.security.UserRoles).ADMIN)")
+	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
 	@DeleteMapping("{userId}/role/{roleId}")
     public ResponseEntity<?> deleteRoleFromUser(@PathVariable Long userId, @PathVariable Long roleId) {
 		logger.info("Received request to remove role ID {} from user ID {}", roleId, userId);

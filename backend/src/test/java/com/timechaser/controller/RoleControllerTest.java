@@ -33,7 +33,7 @@ import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
 import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.repository.UserRepository;
-import com.timechaser.security.UserRoles;
+import com.timechaser.enums.UserRoles;
 import com.timechaser.service.RoleService;
 
 @ContextConfiguration
