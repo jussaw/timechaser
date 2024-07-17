@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import com.timechaser.service.RoleService;
 
 @RestController
 @RequestMapping("/role")
+@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
 public class RoleController {
 	private final Logger logger = LoggerFactory.getLogger(RoleController.class);
 	private final RoleService roleService;
@@ -75,7 +77,6 @@ public class RoleController {
 		roleDto = roleService.create(roleDto);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(roleDto);
-
 	}
 	
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -85,16 +86,14 @@ public class RoleController {
 		roleDto = roleService.update(roleDto, id);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(roleDto);
-
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity deleteRoleById(@PathVariable Long id){
+	public ResponseEntity<?> deleteRoleById(@PathVariable Long id){
 		logger.info("Received request to delete role with id: {}", id);
 			
 		roleService.deleteById(id);
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
-	
 }

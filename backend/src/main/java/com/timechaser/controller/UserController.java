@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ import com.timechaser.dto.UserDto;
 import com.timechaser.entity.User;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.mapper.UserMapper;
+import com.timechaser.service.AuthorizationService;
 import com.timechaser.service.UserService;
 
 @RestController
@@ -36,11 +38,14 @@ public class UserController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	private final UserService userService;
+	private final AuthorizationService authorizationService;
 
-	public UserController(UserService userService) {
+	public UserController(UserService userService, AuthorizationService authorizationService) {
 		this.userService = userService;
+		this.authorizationService = authorizationService;
 	}
-	
+
+	@PreAuthorize("@authorizationService.isAdminOrSelf(#id)")
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDto> getUser(@PathVariable("id") Long id) {
 
@@ -55,6 +60,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(userDto);
 	}
 
+	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
 		
@@ -65,8 +71,9 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
+	@PreAuthorize("@authorizationService.isAdminOrSelf(#id)")
 	@DeleteMapping("/{id}")
-	public ResponseEntity deleteUser(@PathVariable("id") Long id) {
+	public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
 
 		logger.info("Received request to delete user with ID {}", id);
 		
@@ -75,8 +82,9 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
+	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
 	@PostMapping(value = "{id}/role", consumes = "application/json")
-    public ResponseEntity addRoleToUser(@PathVariable Long id, @RequestBody @Valid AddRoleDto addRoleDto) {
+    public ResponseEntity<?> addRoleToUser(@PathVariable Long id, @RequestBody @Valid AddRoleDto addRoleDto) {
 		logger.info("Received request to add role ID {} to user ID {}", addRoleDto.getRoleId(), id);
 		
         userService.addRoleToUser(id, addRoleDto.getRoleId());
@@ -84,8 +92,9 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 	
+	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
 	@DeleteMapping("{userId}/role/{roleId}")
-    public ResponseEntity deleteRoleFromUser(@PathVariable Long userId, @PathVariable Long roleId) {
+    public ResponseEntity<?> deleteRoleFromUser(@PathVariable Long userId, @PathVariable Long roleId) {
 		logger.info("Received request to remove role ID {} from user ID {}", roleId, userId);
 		
         userService.removeRoleFromUser(userId, roleId);
@@ -93,6 +102,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 	
+	@PreAuthorize("@authorizationService.isAdminOrSelf(#id)")
 	@GetMapping("{id}/role")
     public ResponseEntity<List<RoleDto>> getRolesForUser(@PathVariable Long id) {
 		logger.info("Received request to get roles to user ID {}", id);
@@ -101,9 +111,10 @@ public class UserController {
         
         return ResponseEntity.ok().body(roles);
     }
-
+	
+	@PreAuthorize("@authorizationService.isAdminOrSelf(#id)")
 	@PutMapping("/{id}/details")
-	public ResponseEntity updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
+	public ResponseEntity<?> updateUserDetails(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserDetailsRequest request) {
 		
 		logger.info("Received request to update user details with ID {}", id);
 		
@@ -112,8 +123,9 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 	
+	@PreAuthorize("@authorizationService.isSelf(#id)")
 	@PutMapping("/{id}/password")
-	public ResponseEntity updateUserPassword(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserPasswordRequest request) {
+	public ResponseEntity<?> updateUserPassword(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserPasswordRequest request) {
 		
 		logger.info("Received request to update user password with ID {}", id);
 		

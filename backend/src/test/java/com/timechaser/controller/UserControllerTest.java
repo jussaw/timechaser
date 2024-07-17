@@ -5,8 +5,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import java.util.Collections;
@@ -16,15 +16,17 @@ import java.util.Optional;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timechaser.dto.AddRoleDto;
@@ -33,23 +35,38 @@ import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
-import com.timechaser.dto.UserDto;
 import com.timechaser.entity.User;
-import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.CreateException;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.exception.UserUpdatePasswordException;
-import com.timechaser.mapper.UserMapper;
+import com.timechaser.filter.JwtTokenFilter;
+import com.timechaser.repository.UserRepository;
+import com.timechaser.enums.UserRoles;
+import com.timechaser.service.AuthorizationService;
 import com.timechaser.service.UserService;
 
-@ExtendWith(MockitoExtension.class)
-@WebMvcTest(controllers = UserController.class)
-public class UserControllerTest {
+@ContextConfiguration
+@SpringBootTest
+@WithMockUser(authorities = {UserRoles.ADMIN})
+class UserControllerTest {
+	
 	@Autowired
+	private WebApplicationContext webApplicationContext;
+	
 	MockMvc mockMvc;
 	
 	@MockBean
 	private UserService userService;
+
+	@MockBean
+	private UserRepository userRepository;
+	
+	@MockBean
+	private JwtTokenFilter jwtTokenFilter;
+	
+	@MockBean
+	private AuthorizationService authorizationService;
 	
 	@Autowired
     private ObjectMapper objectMapper;
@@ -61,6 +78,8 @@ public class UserControllerTest {
 
     @BeforeEach
     void setup() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
         request = new CreateUserRequest();
         request.setFirstName("First");
         request.setLastName("Last");
@@ -73,6 +92,10 @@ public class UserControllerTest {
         roleDto = new RoleDto();
         roleDto.setId(1L);
         roleDto.setName("Admin");
+        
+		when(authorizationService.isAdminOrSelf(any())).thenReturn(true);
+		when(authorizationService.isSelf(any())).thenReturn(true);
+
     }
 
 	
@@ -102,7 +125,7 @@ public class UserControllerTest {
 	@Test
 	void UserController_CreateUser_UserCreationFailure() throws Exception{
 		
-		when(userService.create(any(CreateUserRequest.class))).thenThrow(new UserCreationException("Faiied to create user", new Exception()));
+		when(userService.create(any(CreateUserRequest.class))).thenThrow(new CreateException("Faiied to create user", new Exception()));
 		
 		ResultActions response = mockMvc.perform(post("/user")
 		        .contentType(MediaType.APPLICATION_JSON)
@@ -313,7 +336,6 @@ public class UserControllerTest {
 	
 	@Test
 	void UserController_GetUser_Success() throws Exception {
-	    // Arrange
 	    User user = new User();
 	    user.setId(1L);
 	    user.setUsername("username");

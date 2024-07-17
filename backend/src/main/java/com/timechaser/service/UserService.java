@@ -18,7 +18,7 @@ import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
 import com.timechaser.entity.User;
 import com.timechaser.exception.RoleNotFoundException;
-import com.timechaser.exception.UserCreationException;
+import com.timechaser.exception.CreateException;
 import com.timechaser.exception.UserNotFoundException;
 import com.timechaser.mapper.RoleMapper;
 import com.timechaser.repository.RoleRepository;
@@ -53,7 +53,7 @@ public class UserService {
 
 		} catch (Exception e) {
 			logger.error("Error occured while creating user with username {}", request.getUsername());
-			throw new UserCreationException("Failed to create user", e);
+			throw new CreateException("Failed to create user", e);
 		}
 	}
 
@@ -73,8 +73,10 @@ public class UserService {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new RoleNotFoundException("Role with ID: " + roleId + " was not found."));
 
-        user.getRoles().add(role);
-        userRepository.save(user);
+        if(!user.getRoles().contains(role)) {
+            user.getRoles().add(role);
+            userRepository.save(user);
+        }
     }
 	
 	@Transactional
@@ -143,6 +145,14 @@ public class UserService {
 		logger.info("Finding user with id {}", id);
 		
 		Optional<User> user = userRepository.findById(id);
+		
+		return user;
+	}
+	
+	public Optional<User> findByUsername(String username){
+		logger.info("Finding user with username: {}", username);
+		
+		Optional<User> user = userRepository.findByUsername(username);
 		
 		return user;
 	}

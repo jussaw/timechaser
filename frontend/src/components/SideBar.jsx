@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClockRotateLeft,
@@ -8,17 +10,39 @@ import {
   faArrowRightFromBracket,
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, useLocation } from "react-router-dom";
 import "../styles/UniversalComponent.css";
 import "../styles/Sidebar.css";
 
 export default function SideBar({ className }) {
+  const { authData, setAuthData } = useContext(AuthContext);
+  const navigate = useNavigate();
   const location = useLocation();
+
   const renderSidebar = !["/"].includes(location.pathname);
   const renderDarkDashboard = location.pathname === "/dashboard";
   const renderDarkTimesheet = location.pathname === "/timesheet";
   const renderDarkProfile = location.pathname === "/profile";
   const renderDarkAdmin = location.pathname === "/admin";
+
+  const onLogOut = () => {
+    setAuthData(null);
+  };
+
+  useEffect(() => {
+    if (!authData) {
+      navigate("/");
+    }
+  }, [authData, navigate]);
+
+  useEffect(() => {
+    if (authData) {
+      const expired = authData.tokenExpiration * 1000;
+      if (Date.now() >= expired) {
+        setAuthData(null);
+        navigate("/");
+      }
+    }
+  }, []);
 
   return renderSidebar ? (
     <div
@@ -70,8 +94,7 @@ export default function SideBar({ className }) {
           <div className="sidebar-button-icon"> Admin</div>
         </Link>
       </div>
-      {/* TODO: Add Logout Logic */}
-      <Link className="sidebar-button" to="/">
+      <Link className="sidebar-button" to="/" onClick={onLogOut}>
         <FontAwesomeIcon className="text-xl" icon={faArrowRightFromBracket} />
         <div className="sidebar-button-icon"> Logout</div>
       </Link>
