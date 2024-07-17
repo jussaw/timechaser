@@ -26,7 +26,7 @@ import com.timechaser.service.RoleService;
 
 @RestController
 @RequestMapping("/role")
-@PreAuthorize("hasRole(T(com.timechaser.security.UserRoles).ADMIN)")
+@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
 public class RoleController {
 	private final Logger logger = LoggerFactory.getLogger(RoleController.class);
 	private final RoleService roleService;
