@@ -21,7 +21,8 @@ export default function SideBar({ className }) {
   const renderDarkProfile = location.pathname === "/profile";
   const renderDarkManager = location.pathname === "/manager";
   //TODO: get managerPendingSubmissions count from
-  const [managerPendingSubmissions, setManagerPendingSubmissions] = useState(0);
+  const [managerPendingSubmissionsCount, setManagerPendingSubmissionsCount] =
+    useState(1);
   //TODO: get user role and confirm if manager
   const [isManager, setIsManager] = useState(true);
   return renderSidebar ? (
@@ -76,9 +77,9 @@ export default function SideBar({ className }) {
           >
             <FontAwesomeIcon className="sidebar-icon" icon={faBusinessTime} />
             <div className="sidebar-button-icon"> Manager</div>
-            {managerPendingSubmissions != 0 && (
+            {managerPendingSubmissionsCount != 0 && (
               <span className="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-custom-red p-3.5 text-custom-white">
-                {managerPendingSubmissions}
+                {managerPendingSubmissionsCount}
               </span>
             )}
           </Link>
