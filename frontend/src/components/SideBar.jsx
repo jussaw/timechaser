@@ -14,9 +14,9 @@ import "../styles/Sidebar.css";
 
 export default function SideBar({ className }) {
   const { authData, setAuthData } = useContext(AuthContext);
-
   const navigate = useNavigate();
   const location = useLocation();
+
   const renderSidebar = !["/"].includes(location.pathname);
   const renderDarkDashboard = location.pathname === "/dashboard";
   const renderDarkTimesheet = location.pathname === "/timesheet";
