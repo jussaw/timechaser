@@ -33,7 +33,7 @@ export default function SideBar({ className }) {
   }, [authData, navigate]);
 
   useEffect(() => {
-    if (authData !== null) {
+    if (authData) {
       const expired = authData.tokenExpiration * 1000;
       if (Date.now() >= expired) {
         setAuthData(null);
