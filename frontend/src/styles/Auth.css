@@ -7,13 +7,13 @@
 }
 
 .auth-input-box {
-  @apply border-custom-black mb-2 rounded-full border bg-custom-white px-4 py-2 text-sm;
+  @apply mb-2 rounded-full border border-custom-black bg-custom-white px-4 py-2 text-sm;
 }
 
-.auth-input-submit {
-  @apply mb-4 mt-6 rounded-full bg-custom-blue p-2 text-custom-white hover:bg-custom-blue-dark;
+.auth-submit {
+  @apply mb-6 mt-7 rounded-full bg-custom-blue p-2 text-custom-white hover:bg-custom-blue-dark;
 }
 
-.auth-redirect-question {
-  @apply mt-3 flex w-full items-end justify-center px-4 hover:text-blue-300;
+.auth-error {
+  @apply bg-custom-red-light mb-0 w-48 rounded-md p-2 px-2 text-custom-red;
 }

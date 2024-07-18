@@ -1,6 +1,7 @@
 package com.timechaser.entity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -33,7 +35,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Builder
-public class User extends Auditable{
+public class User extends Auditable {
 	@Id
 	@GeneratedValue(strategy  = GenerationType.IDENTITY)
 	private Long id;
@@ -53,6 +55,9 @@ public class User extends Auditable{
             inverseJoinColumns = @JoinColumn(name = "role_id")
             )
     private Set<Role> roles = new HashSet<>();
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Timesheet> timesheets;
 	
 	public User(CreateUserRequest request) {
 		this.username = request.getUsername();

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,12 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
-import com.timechaser.exception.RoleNotFoundException;
+import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.RoleMapper;
 import com.timechaser.service.RoleService;
 
 @RestController
 @RequestMapping("/role")
+@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
 public class RoleController {
 	private final Logger logger = LoggerFactory.getLogger(RoleController.class);
 	private final RoleService roleService;
@@ -41,7 +43,7 @@ public class RoleController {
 		
 		RoleDto response = roleOptional
 		        .map(RoleMapper::toDto)
-		        .orElseThrow(() -> new RoleNotFoundException("Role not found with ID: " + id));
+		        .orElseThrow(() -> new NotFoundException("Role not found with ID: " + id));
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -54,7 +56,7 @@ public class RoleController {
 		
 		RoleDto response = roleOptional
 		        .map(RoleMapper::toDto)
-		        .orElseThrow(() -> new RoleNotFoundException("Role not found with name: " + name));
+		        .orElseThrow(() -> new NotFoundException("Role not found with name: " + name));
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -75,7 +77,6 @@ public class RoleController {
 		roleDto = roleService.create(roleDto);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(roleDto);
-
 	}
 	
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -84,8 +85,7 @@ public class RoleController {
 		
 		roleDto = roleService.update(roleDto, id);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(roleDto);
-
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
 	@DeleteMapping("/{id}")
@@ -96,5 +96,4 @@ public class RoleController {
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
-	
 }

@@ -7,23 +7,26 @@ import Timesheet from "./pages/Timesheet";
 import Login from "./pages/Login";
 import "./styles/UniversalComponent.css";
 import Profile from "./pages/Profile";
+import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {
   return (
-    <Router>
-      <div className="bg-custom-main-background text-custom-black flex h-screen w-screen flex-col p-4 font-sans">
-        <div className="flex h-full w-full flex-row">
-          <SideBar className="sidebar-component" />
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/timesheet" element={<Timesheet />} />
-            <Route path="/profile" element={<Profile />} />
-            {/* TODO: Delete Later. Only for Sandboxing */}
-            <Route path="/sandbox" element={<Sandbox />} />
-          </Routes>
+    <AuthProvider>
+      <Router>
+        <div className="flex h-screen w-screen flex-col bg-custom-main-background p-4 font-sans text-custom-black">
+          <div className="flex h-full w-full flex-row">
+            <SideBar className="sidebar-component" />
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/timesheet" element={<Timesheet />} />
+              <Route path="/profile" element={<Profile />} />
+              {/* TODO: Delete Later. Only for Sandboxing */}
+              <Route path="/sandbox" element={<Sandbox />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
