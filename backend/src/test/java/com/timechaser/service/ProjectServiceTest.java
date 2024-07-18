@@ -1,9 +1,14 @@
 package com.timechaser.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.timechaser.dto.ProjectDto;
 import com.timechaser.entity.Project;
 import com.timechaser.exception.CreateException;
+import com.timechaser.exception.ProjectNotFoundException;
 import com.timechaser.mapper.ProjectMapper;
 import com.timechaser.repository.ProjectRepository;
 
@@ -58,6 +64,32 @@ public class ProjectServiceTest {
 
         assertThatThrownBy(() -> projectService.create(projectDto))
             .isInstanceOf(CreateException.class);
+    }
+    
+    @Test
+    void ProjectService_UpdateProject_Success() {
+        when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
+        when(projectRepository.save(any(Project.class))).thenReturn(project);
+        
+        ProjectDto result = projectService.update(projectDto, 1L);
+        
+        assertNotNull(result);
+        assertEquals(projectDto.getId(), result.getId());
+        assertEquals(projectDto.getName(), result.getName());
+    }
+    
+    @Test
+    void ProjectService_UpdateProject_ProjectNotFound() {
+        when(projectRepository.findById(1L)).thenReturn(Optional.empty());
+        
+        Exception exception = assertThrows(ProjectNotFoundException.class, () -> {
+            projectService.update(projectDto, 1L);
+        });
+        
+        String expectedMessage = "Project not found with ID: 1";
+        String actualMessage = exception.getMessage();
+        
+        assertTrue(actualMessage.contains(expectedMessage));
     }
     
 }
