@@ -23,7 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
-import com.timechaser.exception.RoleNotFoundException;
+import com.timechaser.exception.NotFoundException;
 import com.timechaser.repository.RoleRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -111,7 +111,7 @@ public class RoleServiceTest {
     void RoleService_UpdateRole_RoleNotFound() {
         when(roleRepository.findById(1L)).thenReturn(Optional.empty());
         
-        Exception exception = assertThrows(RoleNotFoundException.class, () -> {
+        Exception exception = assertThrows(NotFoundException.class, () -> {
             roleService.update(roleDto, 1L);
         });
         

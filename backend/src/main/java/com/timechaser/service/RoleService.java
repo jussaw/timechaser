@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
-import com.timechaser.exception.RoleNotFoundException;
+import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.RoleMapper;
 import com.timechaser.repository.RoleRepository;
 
@@ -63,8 +63,9 @@ public class RoleService {
 		logger.info("Updating role with ID: {}", id);
 		
 		Role existingRole = roleRepository.findById(id)
-                .orElseThrow(() -> new RoleNotFoundException("Role not found with ID: " + id));
+                .orElseThrow(() -> new NotFoundException("Role not found with ID: " + id));
 		
+		existingRole.setId(roleDto.getId());
 		existingRole.setName(roleDto.getName());
 		existingRole = roleRepository.save(existingRole);
 		

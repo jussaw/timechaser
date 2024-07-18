@@ -15,7 +15,10 @@ export default {
         "custom-khaki": "#B4A58C",
         "custom-white": "#F3F4F6",
         "custom-black": "#1F2937",
-        "custom-red": "#EF4444",
+        "custom-red": {
+          DEFAULT: "#EF4444",
+          light: "#FEE2E2",
+        },
         "custom-disable": "#9BA1B3",
         "custom-main-background": "#E5E7EB",
       },
