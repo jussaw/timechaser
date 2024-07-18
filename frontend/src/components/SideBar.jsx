@@ -42,6 +42,16 @@ export default function SideBar() {
 
   useEffect(() => {
     if (authData) {
+      const expired = authData.tokenExpiration * 1000;
+      if (Date.now() >= expired) {
+        setAuthData(null);
+        navigate("/");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (authData) {
       setRoles({
         isAdmin: false,
         isManager: false,
@@ -62,16 +72,6 @@ export default function SideBar() {
       });
     }
   }, [authData]);
-
-  useEffect(() => {
-    if (authData) {
-      const expired = authData.tokenExpiration * 1000;
-      if (Date.now() >= expired) {
-        setAuthData(null);
-        navigate("/");
-      }
-    }
-  }, []);
 
   return renderSidebar ? (
     <div
