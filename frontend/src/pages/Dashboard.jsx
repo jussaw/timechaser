@@ -1,6 +1,5 @@
 import React from "react";
 import PlaceholderComponent from "../components/PlaceholderComponent";
-import "../styles/UniversalComponent.css";
 import HourAllocationChart from "../components/HourAllocationChart";
 import Welcome from "../components/Welcome";
 

@@ -19,6 +19,10 @@ export default {
           DEFAULT: "#EF4444",
           light: "#FEE2E2",
         },
+        "custom-green": {
+          dark: "#166534",
+          light: "#BBF7D0",
+        },
         "custom-disable": "#9BA1B3",
         "custom-main-background": "#E5E7EB",
       },

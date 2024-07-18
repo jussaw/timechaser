@@ -117,11 +117,7 @@ export default function Login() {
                 required
                 className="auth-input-box"
               />
-              <button
-                type="submit"
-                onSubmit={handleSubmit}
-                className="auth-submit"
-              >
+              <button type="submit" className="auth-submit">
                 Log in
               </button>
               {error && (

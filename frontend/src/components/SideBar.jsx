@@ -9,11 +9,12 @@ import {
   faUser,
   faArrowRightFromBracket,
   faBusinessTime,
+  faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/UniversalComponent.css";
 import "../styles/Sidebar.css";
 
-export default function SideBar({ className }) {
+export default function SideBar() {
   const { authData, setAuthData } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,7 +25,7 @@ export default function SideBar({ className }) {
     isEmployee: false,
   });
 
-  //TODO: get managerPendingSubmissions count from
+  //TODO: get managerPendingSubmissions count from API call
   const [managerPendingSubmissionsCount, setManagerPendingSubmissionsCount] =
     useState(1);
 
@@ -33,6 +34,7 @@ export default function SideBar({ className }) {
   const renderDarkTimesheet = location.pathname === "/timesheet";
   const renderDarkProfile = location.pathname === "/profile";
   const renderDarkManager = location.pathname === "/manager";
+  const renderDarkAdmin = location.pathname === "/admin";
 
   const onLogOut = () => {
     setAuthData(null);
@@ -79,7 +81,9 @@ export default function SideBar({ className }) {
 
   return renderSidebar ? (
     <div
-      className={`${className} flex flex-col items-center justify-between p-4`}
+      className={
+        "sidebar-component flex flex-col items-center justify-between p-4"
+      }
     >
       <div className="w-full">
         <Link
@@ -133,6 +137,17 @@ export default function SideBar({ className }) {
                 {managerPendingSubmissionsCount}
               </span>
             )}
+          </Link>
+        )}
+        {roles.isAdmin && (
+          <Link
+            className={
+              renderDarkAdmin ? "sidebar-button-dark" : "sidebar-button"
+            }
+            to="/admin"
+          >
+            <FontAwesomeIcon className="sidebar-icon" icon={faUserTie} />
+            <div className="sidebar-button-icon"> Admin</div>
           </Link>
         )}
       </div>
