@@ -47,7 +47,7 @@ export default function SideBar() {
         isManager: false,
         isEmployee: false,
       });
-      authData.roles.forEach(function (role) {
+      authData.roles.forEach((role) => {
         switch (role.id) {
           case 1:
             setRoles((prevState) => ({ ...prevState, ["isAdmin"]: true }));
