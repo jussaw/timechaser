@@ -1,8 +1,10 @@
 package com.timechaser.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,47 +19,49 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timechaser.dto.ProjectDto;
 import com.timechaser.entity.Project;
-import com.timechaser.mapper.ProjectMapper;
 import com.timechaser.enums.UserRoles;
+import com.timechaser.exception.NotFoundException;
+import com.timechaser.mapper.ProjectMapper;
 import com.timechaser.service.ProjectService;
 
 @ContextConfiguration
 @SpringBootTest
-@WithMockUser(authorities = {UserRoles.ADMIN})
+@WithMockUser(authorities = { UserRoles.ADMIN })
 public class ProjectControllerTest {
-    
-    @Autowired
-    private WebApplicationContext webApplicationContext;
 
-    MockMvc mockMvc;
+	@Autowired
+	private WebApplicationContext webApplicationContext;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+	MockMvc mockMvc;
 
-    @MockBean
-    private ProjectService projectService;
+	@Autowired
+	private ObjectMapper objectMapper;
 
-    private Project project;
-    private ProjectDto projectDto;
+	@MockBean
+	private ProjectService projectService;
 
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+	private Project project;
+	private ProjectDto projectDto;
 
-        project = new Project();
-        project.setId(1L);
-        project.setName("Test Project");
+	@BeforeEach
+	void setUp() {
+		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
-        projectDto = ProjectMapper.toDto(project);
-    }
+		project = new Project();
+		project.setId(1L);
+		project.setName("Test Project");
 
-    @Test
+		projectDto = ProjectMapper.toDto(project);
+	}
+
+	@Test
     void ProjectController_CreateProject_ReturnCreated() throws Exception {
         when(projectService.create(any(ProjectDto.class))).thenReturn(projectDto);
 
@@ -68,5 +72,27 @@ public class ProjectControllerTest {
             response.andExpect(status().isCreated())
                     .andExpect(jsonPath("$.id", CoreMatchers.is(projectDto.getId().intValue())))
                     .andExpect(jsonPath("$.name", CoreMatchers.is(projectDto.getName())));
+    }
+
+	@Test
+    void ProjectController_UpdateProject_ReturnOk() throws Exception {
+        when(projectService.update(any(ProjectDto.class), eq(1L))).thenReturn(projectDto);
+
+        ResultActions response = mockMvc.perform(put("/project/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(projectDto)));
+
+        response.andExpect(status().isOk());
+    }
+
+	@Test
+    void ProjectController_UpdateProject_NotFound() throws Exception {
+        when(projectService.update(any(ProjectDto.class), eq(1L))).thenThrow(new NotFoundException("Project not found with ID: 1"));
+
+        ResultActions response = mockMvc.perform(put("/project/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(projectDto)));
+
+        response.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

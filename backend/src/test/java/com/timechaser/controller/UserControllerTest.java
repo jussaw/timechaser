@@ -36,13 +36,13 @@ import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
 import com.timechaser.entity.User;
+import com.timechaser.enums.UserRoles;
 import com.timechaser.exception.CreateException;
-import com.timechaser.exception.UserNotFoundException;
+import com.timechaser.exception.NotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.exception.UserUpdatePasswordException;
 import com.timechaser.filter.JwtTokenFilter;
 import com.timechaser.repository.UserRepository;
-import com.timechaser.enums.UserRoles;
 import com.timechaser.service.AuthorizationService;
 import com.timechaser.service.UserService;
 
@@ -251,7 +251,7 @@ class UserControllerTest {
 	@Test
 	void UserController_Update_User_Details_404() throws Exception{
 		
-		doThrow(new UserNotFoundException("testing123")).when(userService).updateDetails(anyLong(), any(UpdateUserDetailsRequest.class));
+		doThrow(new NotFoundException("testing123")).when(userService).updateDetails(anyLong(), any(UpdateUserDetailsRequest.class));
 		
 		ResultActions response = mockMvc.perform(put("/user/1/details")
 		        .contentType(MediaType.APPLICATION_JSON)
@@ -312,7 +312,7 @@ class UserControllerTest {
 	@Test
 	void UserController_Update_User_Password_404() throws Exception{
 		
-		doThrow(new UserNotFoundException("testing123")).when(userService).updatePassword(anyLong(), any(UpdateUserPasswordRequest.class));
+		doThrow(new NotFoundException("testing123")).when(userService).updatePassword(anyLong(), any(UpdateUserPasswordRequest.class));
 		
 		ResultActions response = mockMvc.perform(put("/user/1/password")
 		        .contentType(MediaType.APPLICATION_JSON)

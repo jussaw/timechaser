@@ -27,17 +27,16 @@ public class GlobalExceptionHandler {
 		
 		ErrorResponse errorResponse = new ErrorResponse(
 				LocalDateTime.now(), 
-				HttpStatus.NOT_FOUND.value(), 
+				HttpStatus.INTERNAL_SERVER_ERROR.value(), 
 				e.getMessage(), 
 				request.getDescription(false),
 				((ServletWebRequest) request).getHttpMethod().name());
 		
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ExceptionHandler({
-		UserNotFoundException.class, 
-		RoleNotFoundException.class
+		NotFoundException.class
 	})
 	public ResponseEntity<?> handleNotFoundException(Exception e, WebRequest request){
 		logger.error("Not Found Exception occurred: {}, Request Details: {}", e.getMessage(), request.getDescription(false), e);

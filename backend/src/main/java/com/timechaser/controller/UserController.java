@@ -27,7 +27,7 @@ import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
 import com.timechaser.dto.UserDto;
 import com.timechaser.entity.User;
-import com.timechaser.exception.UserNotFoundException;
+import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.UserMapper;
 import com.timechaser.service.AuthorizationService;
 import com.timechaser.service.UserService;
@@ -55,7 +55,7 @@ public class UserController {
 		
 		UserDto userDto = userOptional
 				.map(UserMapper::toDto)
-				.orElseThrow(() -> new UserNotFoundException("Unable to find user with ID: " + id));
+				.orElseThrow(() -> new NotFoundException("Unable to find user with ID: " + id));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(userDto);
 	}
