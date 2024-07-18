@@ -82,6 +82,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	        );
 	
 	        SecurityContextHolder.getContext().setAuthentication(authentication);
+	        
+	        filterChain.doFilter(request, response);
+
 
 		} catch (JWTVerificationException e) {
 			logger.error("An validating JWT Token has occurred", e);
