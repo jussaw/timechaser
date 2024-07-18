@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
-import com.timechaser.exception.RoleNotFoundException;
+import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.RoleMapper;
 import com.timechaser.service.RoleService;
 
@@ -43,7 +43,7 @@ public class RoleController {
 		
 		RoleDto response = roleOptional
 		        .map(RoleMapper::toDto)
-		        .orElseThrow(() -> new RoleNotFoundException("Role not found with ID: " + id));
+		        .orElseThrow(() -> new NotFoundException("Role not found with ID: " + id));
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -56,7 +56,7 @@ public class RoleController {
 		
 		RoleDto response = roleOptional
 		        .map(RoleMapper::toDto)
-		        .orElseThrow(() -> new RoleNotFoundException("Role not found with name: " + name));
+		        .orElseThrow(() -> new NotFoundException("Role not found with name: " + name));
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -85,7 +85,7 @@ public class RoleController {
 		
 		roleDto = roleService.update(roleDto, id);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(roleDto);
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
 	@DeleteMapping("/{id}")

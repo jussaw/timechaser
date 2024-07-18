@@ -1,8 +1,8 @@
 package com.timechaser.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,17 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
-import com.timechaser.entity.Role;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
+import com.timechaser.entity.Role;
 import com.timechaser.entity.User;
-import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.exception.CreateException;
-import com.timechaser.exception.UserNotFoundException;
-import com.timechaser.mapper.RoleMapper;
-import com.timechaser.repository.RoleRepository;
+import com.timechaser.exception.NotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.exception.UserUpdatePasswordException;
+import com.timechaser.mapper.RoleMapper;
+import com.timechaser.repository.RoleRepository;
 import com.timechaser.repository.UserRepository;
 
 @Service
@@ -69,9 +68,9 @@ public class UserService {
 		logger.info("Adding roleID: {} to userID: {}", roleId, userId);
 		
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User with ID: " + userId + " was not found."));
+                .orElseThrow(() -> new NotFoundException("User with ID: " + userId + " was not found."));
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new RoleNotFoundException("Role with ID: " + roleId + " was not found."));
+                .orElseThrow(() -> new NotFoundException("Role with ID: " + roleId + " was not found."));
 
         if(!user.getRoles().contains(role)) {
             user.getRoles().add(role);
@@ -84,9 +83,9 @@ public class UserService {
 		logger.info("Removing roleID: {} from userID: {}", roleId, userId);
 		
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User with ID: " + userId + " was not found."));
+                .orElseThrow(() -> new NotFoundException("User with ID: " + userId + " was not found."));
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new RoleNotFoundException("Role with ID: " + roleId + " was not found."));
+                .orElseThrow(() -> new NotFoundException("Role with ID: " + roleId + " was not found."));
 
         user.getRoles().remove(role);
         userRepository.save(user);
@@ -96,7 +95,7 @@ public class UserService {
 		logger.info("Finding roles for user ID: {}", userId);
 		
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User with ID: " + userId + " was not found."));
+                .orElseThrow(() -> new NotFoundException("User with ID: " + userId + " was not found."));
 
         return user.getRoles()
         		.stream()
@@ -108,14 +107,14 @@ public class UserService {
 		logger.info("Updating user details with id {}", id);
 		
 		try {
-			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
+			User user = findById(id).orElseThrow(() -> new NotFoundException("Unable to find user with id: " + id));
 			
 			user.setFirstName(request.getFirstName());
 			user.setLastName(request.getLastName());
 			
 			user = userRepository.save(user);
 	
-		} catch (UserNotFoundException e) {
+		} catch (NotFoundException e) {
 			throw e;
 		} catch (Exception e) {
 			logger.error("Error while updating user details", e);
@@ -127,13 +126,13 @@ public class UserService {
 		logger.info("Updating user password with id {}", id);
 		
 		try {
-			User user = findById(id).orElseThrow(() -> new UserNotFoundException("Unable to find user with id: " + id));
+			User user = findById(id).orElseThrow(() -> new NotFoundException("Unable to find user with id: " + id));
 			
 			user.setPassword(passwordEncoder.encode(request.getPassword()));
 			
 			user = userRepository.save(user);
 	
-		} catch (UserNotFoundException e) {
+		} catch (NotFoundException e) {
 			throw e;
 		} catch (Exception e) {
 			logger.error("Error while updating user password", e);

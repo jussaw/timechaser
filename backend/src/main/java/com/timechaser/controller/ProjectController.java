@@ -35,11 +35,11 @@ public class ProjectController {
     
     @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProjectDto> updateProject(@PathVariable Long id, @RequestBody ProjectDto projectDto) {
+    public ResponseEntity<ProjectDto> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectDto projectDto) {
     	logger.info("Received request to update project with id: {}");
     	
     	projectDto = projectService.update(projectDto, id);
     	
-    	return ResponseEntity.status(HttpStatus.OK).body(projectDto);
+    	return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

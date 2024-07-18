@@ -3,10 +3,10 @@ package com.timechaser.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,9 +31,9 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Role;
-import com.timechaser.exception.RoleNotFoundException;
-import com.timechaser.repository.UserRepository;
 import com.timechaser.enums.UserRoles;
+import com.timechaser.exception.NotFoundException;
+import com.timechaser.repository.UserRepository;
 import com.timechaser.service.RoleService;
 
 @ContextConfiguration
@@ -149,14 +149,12 @@ public class RoleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(roleDto)));
 
-        response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", CoreMatchers.is(roleDto.getId().intValue())))
-                .andExpect(jsonPath("$.name", CoreMatchers.is(roleDto.getName())));
+        response.andExpect(status().isOk());
     }
     
     @Test
     void RoleController_UpdateRole_NotFound() throws Exception {
-        when(roleService.update(any(RoleDto.class), eq(1L))).thenThrow(new RoleNotFoundException("Role not found with ID: 1"));
+        when(roleService.update(any(RoleDto.class), eq(1L))).thenThrow(new NotFoundException("Role not found with ID: 1"));
 
         ResultActions response = mockMvc.perform(put("/role/1")
                 .contentType(MediaType.APPLICATION_JSON)

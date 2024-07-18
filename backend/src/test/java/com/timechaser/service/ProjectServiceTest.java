@@ -20,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.timechaser.dto.ProjectDto;
 import com.timechaser.entity.Project;
 import com.timechaser.exception.CreateException;
-import com.timechaser.exception.ProjectNotFoundException;
+import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.ProjectMapper;
 import com.timechaser.repository.ProjectRepository;
 
@@ -82,7 +82,7 @@ public class ProjectServiceTest {
     void ProjectService_UpdateProject_ProjectNotFound() {
         when(projectRepository.findById(1L)).thenReturn(Optional.empty());
         
-        Exception exception = assertThrows(ProjectNotFoundException.class, () -> {
+        Exception exception = assertThrows(NotFoundException.class, () -> {
             projectService.update(projectDto, 1L);
         });
         
