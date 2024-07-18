@@ -27,12 +27,12 @@ public class GlobalExceptionHandler {
 		
 		ErrorResponse errorResponse = new ErrorResponse(
 				LocalDateTime.now(), 
-				HttpStatus.NOT_FOUND.value(), 
+				HttpStatus.INTERNAL_SERVER_ERROR.value(), 
 				e.getMessage(), 
 				request.getDescription(false),
 				((ServletWebRequest) request).getHttpMethod().name());
 		
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ExceptionHandler({
