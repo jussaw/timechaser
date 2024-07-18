@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTriangleExclamation,
+  faCircleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../config/axiosConfig";
 import Select from "react-select";
 import "../styles/Admin.css";
 
 export default function Admin() {
-  // TODO: Delete if not using react-select
-  const { authData, setAuthData } = useContext(AuthContext);
-
   const [formData, setformData] = useState({
     role: "",
     firstName: "",
@@ -26,8 +25,10 @@ export default function Admin() {
     password: false,
     confirmPassword: false,
   });
-  const [submissionError, setSubmissionError] = useState(null);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [submissionError, setSubmissionError] = useState(null);
+  const [submissionUsername, setSubmissionUsername] = useState(null);
+  const [isSubmissionSuccess, setIsSubmissionSuccess] = useState(false);
   const [focusedField, setFocusedField] = useState("");
 
   const formErrors = {
@@ -39,14 +40,9 @@ export default function Admin() {
       "Password must be at least 8 characters and contain at least one lowercase letter, one uppercase letter, one number, and one special character",
     confirmPassword: "Passwords do not match",
   };
+
   const passwordRegex =
     /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()\-[\]~_+{}=;:'",<.>/?\\|`]).{8,}$/;
-  // TODO: Delete if not using react-select
-  const roleOptions = [
-    { value: 1, label: "Admin", color: "#00B8D9", isFixed: true },
-    { value: 2, label: "Manager", color: "#0052CC" },
-    { value: 3, label: "Employee", color: "#5243AA" },
-  ];
 
   useEffect(() => {
     setIsFormDataValid({
@@ -88,6 +84,24 @@ export default function Admin() {
     setFocusedField("");
   };
 
+  const mapErrorCode = (error) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 400:
+          setSubmissionError("A required field is missing");
+          break;
+        case 500:
+          setSubmissionError("This username is already in use");
+          break;
+        default:
+          setSubmissionError("Internal Server Error");
+          break;
+      }
+    } else {
+      setSubmissionError("Server Offline");
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -107,24 +121,30 @@ export default function Admin() {
             roleId: parseInt(formData.role),
           })
           .then(() => {
-            console.log("Successful role assignment");
-            // TODO: Set success message
+            setSubmissionUsername(formData.username);
+            setIsSubmissionSuccess(true);
+            setformData({
+              role: "",
+              firstName: "",
+              lastName: "",
+              username: "",
+              password: "",
+              confirmPassword: "",
+            });
           })
           .catch((error) => {
-            setSubmissionError(error);
             console.error("Error role assignment", error);
           });
       })
       .catch((error) => {
-        setSubmissionError(error);
-        console.error("Error user creation", error);
+        mapErrorCode(error);
+        console.error("Error user creation", error.message);
       });
   };
 
   return (
     <div className="full-page-component flex flex-grow flex-col justify-start space-y-8 p-12">
-      <h1 className="text-4xl font-bold">Create User: </h1>
-      {/* TODO: Display success message when form is successfully submitted */}
+      <h1 className="text-4xl font-bold">Create User</h1>
       <form
         className="flex flex-grow flex-col justify-start space-y-8"
         onSubmit={handleSubmit}
@@ -272,46 +292,18 @@ export default function Admin() {
         >
           Create
         </button>
-        {/* TODO: Refactor rendering form error */}
-        {focusedField === "role" && !isFormDataValid["role"] && (
+        {focusedField && !isFormDataValid[focusedField] && (
           <span className="admin-error">
-            <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
-            {formErrors["role"]}
+            <FontAwesomeIcon className="mr-2" icon={faCircleExclamation} />
+            {formErrors[focusedField]}
           </span>
         )}
-        {focusedField === "firstName" && !isFormDataValid["firstName"] && (
-          <span className="admin-error">
-            <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
-            {formErrors["firstName"]}
-          </span>
+        {isSubmissionSuccess && (
+          <div className="bg-custom-green-light text-custom-green-dark w-fit rounded-md px-3 py-2">
+            🎉 Successfully created user: {submissionUsername}
+          </div>
         )}
-        {focusedField === "lastName" && !isFormDataValid["lastName"] && (
-          <span className="admin-error">
-            <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
-            {formErrors["lastName"]}
-          </span>
-        )}
-        {focusedField === "username" && !isFormDataValid["username"] && (
-          <span className="admin-error">
-            <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
-            {formErrors["username"]}
-          </span>
-        )}
-        {focusedField === "password" && !isFormDataValid["password"] && (
-          <span className="admin-error">
-            <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
-            {formErrors["password"]}
-          </span>
-        )}
-        {focusedField === "confirmPassword" &&
-          !isFormDataValid["confirmPassword"] && (
-            <span className="admin-error">
-              <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
-              {formErrors["confirmPassword"]}
-            </span>
-          )}
       </form>
-      {/* TODO: Display error from API */}
     </div>
   );
 }

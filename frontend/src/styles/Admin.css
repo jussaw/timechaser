@@ -19,5 +19,5 @@
 }
 
 .admin-error {
-  @apply bg-custom-red-light w-fit rounded-md p-2 px-3 text-custom-red;
+  @apply w-fit rounded-md bg-custom-red-light px-3 py-2 text-custom-red;
 }
