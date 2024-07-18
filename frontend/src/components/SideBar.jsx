@@ -152,7 +152,10 @@ export default function SideBar() {
         )}
       </div>
       <Link className="sidebar-button" to="/" onClick={onLogOut}>
-        <FontAwesomeIcon className="text-xl" icon={faArrowRightFromBracket} />
+        <FontAwesomeIcon
+          className="sidebar-icon"
+          icon={faArrowRightFromBracket}
+        />
         <div className="sidebar-button-icon"> Logout</div>
       </Link>
     </div>
