@@ -55,6 +55,7 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError(null);
 
     axiosInstance
       .post(
