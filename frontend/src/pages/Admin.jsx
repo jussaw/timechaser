@@ -71,7 +71,7 @@ export default function Admin() {
     const { name, value } = e.target;
     setformData({
       ...formData,
-      [name]: value,
+      [name]: name === "username" ? value.replace(/\s+/g, "") : value,
     });
   };
 
