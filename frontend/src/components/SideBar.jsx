@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,10 +13,16 @@ import {
 import "../styles/UniversalComponent.css";
 import "../styles/Sidebar.css";
 
-export default function SideBar({ className }) {
+export default function SideBar() {
   const { authData, setAuthData } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [roles, setRoles] = useState({
+    isAdmin: false,
+    isManager: false,
+    isEmployee: false,
+  });
 
   const renderSidebar = !["/"].includes(location.pathname);
   const renderDarkDashboard = location.pathname === "/dashboard";
@@ -36,6 +42,29 @@ export default function SideBar({ className }) {
 
   useEffect(() => {
     if (authData) {
+      setRoles({
+        isAdmin: false,
+        isManager: false,
+        isEmployee: false,
+      });
+      authData.roles.forEach(function (role) {
+        switch (role.id) {
+          case 1:
+            setRoles((prevState) => ({ ...prevState, ["isAdmin"]: true }));
+            break;
+          case 2:
+            setRoles((prevState) => ({ ...prevState, ["isManager"]: true }));
+            break;
+          case 3:
+            setRoles((prevState) => ({ ...prevState, ["isEmployee"]: true }));
+            break;
+        }
+      });
+    }
+  }, [authData]);
+
+  useEffect(() => {
+    if (authData) {
       const expired = authData.tokenExpiration * 1000;
       if (Date.now() >= expired) {
         setAuthData(null);
@@ -46,7 +75,9 @@ export default function SideBar({ className }) {
 
   return renderSidebar ? (
     <div
-      className={`${className} flex flex-col items-center justify-between p-4`}
+      className={
+        "sidebar-component flex flex-col items-center justify-between p-4"
+      }
     >
       <div className="w-full">
         <Link
@@ -86,13 +117,17 @@ export default function SideBar({ className }) {
           <FontAwesomeIcon className="text-xl" icon={faUser} />
           <div className="sidebar-button-icon"> Profile</div>
         </Link>
-        <Link
-          className={renderDarkAdmin ? "sidebar-button-dark" : "sidebar-button"}
-          to="/admin"
-        >
-          <FontAwesomeIcon className="text-xl" icon={faUserTie} />
-          <div className="sidebar-button-icon"> Admin</div>
-        </Link>
+        {roles.isAdmin && (
+          <Link
+            className={
+              renderDarkAdmin ? "sidebar-button-dark" : "sidebar-button"
+            }
+            to="/admin"
+          >
+            <FontAwesomeIcon className="text-xl" icon={faUserTie} />
+            <div className="sidebar-button-icon"> Admin</div>
+          </Link>
+        )}
       </div>
       <Link className="sidebar-button" to="/" onClick={onLogOut}>
         <FontAwesomeIcon className="text-xl" icon={faArrowRightFromBracket} />

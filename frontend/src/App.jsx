@@ -16,7 +16,7 @@ export default function App() {
       <Router>
         <div className="flex h-screen w-screen flex-col bg-custom-main-background p-4 font-sans text-custom-black">
           <div className="flex h-full w-full flex-row">
-            <SideBar className="sidebar-component" />
+            <SideBar />
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
