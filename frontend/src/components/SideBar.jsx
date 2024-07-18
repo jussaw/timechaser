@@ -8,6 +8,7 @@ import {
   faStopwatch,
   faUser,
   faArrowRightFromBracket,
+  faBusinessTime,
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/UniversalComponent.css";
@@ -24,10 +25,15 @@ export default function SideBar() {
     isEmployee: false,
   });
 
+  //TODO: get managerPendingSubmissions count from API call
+  const [managerPendingSubmissionsCount, setManagerPendingSubmissionsCount] =
+    useState(1);
+
   const renderSidebar = !["/"].includes(location.pathname);
   const renderDarkDashboard = location.pathname === "/dashboard";
   const renderDarkTimesheet = location.pathname === "/timesheet";
   const renderDarkProfile = location.pathname === "/profile";
+  const renderDarkManager = location.pathname === "/manager";
   const renderDarkAdmin = location.pathname === "/admin";
 
   const onLogOut = () => {
@@ -96,7 +102,7 @@ export default function SideBar() {
           }
           to="/dashboard"
         >
-          <FontAwesomeIcon className="text-xl" icon={faChartColumn} />
+          <FontAwesomeIcon className="sidebar-icon" icon={faChartColumn} />
           <div className="sidebar-button-icon"> Dashboard</div>
         </Link>
         <Link
@@ -105,7 +111,7 @@ export default function SideBar() {
           }
           to="/timesheet"
         >
-          <FontAwesomeIcon className="text-xl" icon={faStopwatch} />
+          <FontAwesomeIcon className="sidebar-icon" icon={faStopwatch} />
           <div className="sidebar-button-icon"> Timesheet</div>
         </Link>
         <Link
@@ -114,9 +120,25 @@ export default function SideBar() {
           }
           to="/profile"
         >
-          <FontAwesomeIcon className="text-xl" icon={faUser} />
+          <FontAwesomeIcon className="sidebar-icon" icon={faUser} />
           <div className="sidebar-button-icon"> Profile</div>
         </Link>
+        {roles.isManager && (
+          <Link
+            className={
+              renderDarkManager ? "sidebar-button-dark" : "sidebar-button"
+            }
+            to="/manager"
+          >
+            <FontAwesomeIcon className="sidebar-icon" icon={faBusinessTime} />
+            <div className="sidebar-button-icon"> Manager</div>
+            {managerPendingSubmissionsCount != 0 && (
+              <span className="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-custom-red p-3.5 text-custom-white">
+                {managerPendingSubmissionsCount}
+              </span>
+            )}
+          </Link>
+        )}
         {roles.isAdmin && (
           <Link
             className={
