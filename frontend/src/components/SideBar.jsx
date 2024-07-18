@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,16 +18,21 @@ export default function SideBar({ className }) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [roles, setRoles] = useState({
+    isAdmin: false,
+    isManager: false,
+    isEmployee: false,
+  });
+
+  //TODO: get managerPendingSubmissions count from
+  const [managerPendingSubmissionsCount, setManagerPendingSubmissionsCount] =
+    useState(1);
+
   const renderSidebar = !["/"].includes(location.pathname);
   const renderDarkDashboard = location.pathname === "/dashboard";
   const renderDarkTimesheet = location.pathname === "/timesheet";
   const renderDarkProfile = location.pathname === "/profile";
   const renderDarkManager = location.pathname === "/manager";
-  //TODO: get managerPendingSubmissions count from
-  const [managerPendingSubmissionsCount, setManagerPendingSubmissionsCount] =
-    useState(1);
-  //TODO: get user role and confirm if manager
-  const [isManager, setIsManager] = useState(true);
 
   const onLogOut = () => {
     setAuthData(null);
@@ -48,6 +53,29 @@ export default function SideBar({ className }) {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (authData) {
+      setRoles({
+        isAdmin: false,
+        isManager: false,
+        isEmployee: false,
+      });
+      authData.roles.forEach((role) => {
+        switch (role.id) {
+          case 1:
+            setRoles((prevState) => ({ ...prevState, ["isAdmin"]: true }));
+            break;
+          case 2:
+            setRoles((prevState) => ({ ...prevState, ["isManager"]: true }));
+            break;
+          case 3:
+            setRoles((prevState) => ({ ...prevState, ["isEmployee"]: true }));
+            break;
+        }
+      });
+    }
+  }, [authData]);
 
   return renderSidebar ? (
     <div
@@ -91,8 +119,7 @@ export default function SideBar({ className }) {
           <FontAwesomeIcon className="sidebar-icon" icon={faUser} />
           <div className="sidebar-button-icon"> Profile</div>
         </Link>
-        {/* TODO: set visible only if manager */}
-        {isManager && (
+        {roles.isManager && (
           <Link
             className={
               renderDarkManager ? "sidebar-button-dark" : "sidebar-button"
