@@ -5,7 +5,6 @@ import {
   faCircleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../config/axiosConfig";
-import Select from "react-select";
 import "../styles/Admin.css";
 
 export default function Admin() {
@@ -104,6 +103,8 @@ export default function Admin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setSubmissionError(null);
+    setIsSubmissionSuccess(false);
 
     axiosInstance
       .post("/user", {
@@ -296,6 +297,12 @@ export default function Admin() {
           <span className="admin-error">
             <FontAwesomeIcon className="mr-2" icon={faCircleExclamation} />
             {formErrors[focusedField]}
+          </span>
+        )}
+        {submissionError && (
+          <span className="admin-error">
+            <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
+            {submissionError}
           </span>
         )}
         {isSubmissionSuccess && (
