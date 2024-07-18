@@ -146,7 +146,7 @@ export default function SideBar() {
             }
             to="/admin"
           >
-            <FontAwesomeIcon className="text-xl" icon={faUserTie} />
+            <FontAwesomeIcon className="sidebar-icon" icon={faUserTie} />
             <div className="sidebar-button-icon"> Admin</div>
           </Link>
         )}
