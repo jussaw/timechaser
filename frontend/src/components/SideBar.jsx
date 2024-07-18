@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +8,7 @@ import {
   faStopwatch,
   faUser,
   faArrowRightFromBracket,
+  faBusinessTime,
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/UniversalComponent.css";
 import "../styles/Sidebar.css";
@@ -17,10 +18,21 @@ export default function SideBar({ className }) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [roles, setRoles] = useState({
+    isAdmin: false,
+    isManager: false,
+    isEmployee: false,
+  });
+
+  //TODO: get managerPendingSubmissions count from
+  const [managerPendingSubmissionsCount, setManagerPendingSubmissionsCount] =
+    useState(1);
+
   const renderSidebar = !["/"].includes(location.pathname);
   const renderDarkDashboard = location.pathname === "/dashboard";
   const renderDarkTimesheet = location.pathname === "/timesheet";
   const renderDarkProfile = location.pathname === "/profile";
+  const renderDarkManager = location.pathname === "/manager";
 
   const onLogOut = () => {
     setAuthData(null);
@@ -41,6 +53,29 @@ export default function SideBar({ className }) {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (authData) {
+      setRoles({
+        isAdmin: false,
+        isManager: false,
+        isEmployee: false,
+      });
+      authData.roles.forEach((role) => {
+        switch (role.id) {
+          case 1:
+            setRoles((prevState) => ({ ...prevState, ["isAdmin"]: true }));
+            break;
+          case 2:
+            setRoles((prevState) => ({ ...prevState, ["isManager"]: true }));
+            break;
+          case 3:
+            setRoles((prevState) => ({ ...prevState, ["isEmployee"]: true }));
+            break;
+        }
+      });
+    }
+  }, [authData]);
 
   return renderSidebar ? (
     <div
@@ -63,7 +98,7 @@ export default function SideBar({ className }) {
           }
           to="/dashboard"
         >
-          <FontAwesomeIcon className="text-xl" icon={faChartColumn} />
+          <FontAwesomeIcon className="sidebar-icon" icon={faChartColumn} />
           <div className="sidebar-button-icon"> Dashboard</div>
         </Link>
         <Link
@@ -72,7 +107,7 @@ export default function SideBar({ className }) {
           }
           to="/timesheet"
         >
-          <FontAwesomeIcon className="text-xl" icon={faStopwatch} />
+          <FontAwesomeIcon className="sidebar-icon" icon={faStopwatch} />
           <div className="sidebar-button-icon"> Timesheet</div>
         </Link>
         <Link
@@ -81,9 +116,25 @@ export default function SideBar({ className }) {
           }
           to="/profile"
         >
-          <FontAwesomeIcon className="text-xl" icon={faUser} />
+          <FontAwesomeIcon className="sidebar-icon" icon={faUser} />
           <div className="sidebar-button-icon"> Profile</div>
         </Link>
+        {roles.isManager && (
+          <Link
+            className={
+              renderDarkManager ? "sidebar-button-dark" : "sidebar-button"
+            }
+            to="/manager"
+          >
+            <FontAwesomeIcon className="sidebar-icon" icon={faBusinessTime} />
+            <div className="sidebar-button-icon"> Manager</div>
+            {managerPendingSubmissionsCount != 0 && (
+              <span className="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-custom-red p-3.5 text-custom-white">
+                {managerPendingSubmissionsCount}
+              </span>
+            )}
+          </Link>
+        )}
       </div>
       <Link className="sidebar-button" to="/" onClick={onLogOut}>
         <FontAwesomeIcon className="text-xl" icon={faArrowRightFromBracket} />

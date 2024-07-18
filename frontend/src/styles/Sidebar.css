@@ -9,3 +9,7 @@
 .sidebar-button-icon {
   @apply pl-2 font-semibold;
 }
+
+.sidebar-icon {
+  @apply w-7 text-2xl;
+}

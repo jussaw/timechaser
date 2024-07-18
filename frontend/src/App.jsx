@@ -7,6 +7,7 @@ import Timesheet from "./pages/Timesheet";
 import Login from "./pages/Login";
 import "./styles/UniversalComponent.css";
 import Profile from "./pages/Profile";
+import Manager from "./pages/Manager";
 import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {
@@ -21,6 +22,8 @@ export default function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/timesheet" element={<Timesheet />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/manager" element={<Manager />} />
+
               {/* TODO: Delete Later. Only for Sandboxing */}
               <Route path="/sandbox" element={<Sandbox />} />
             </Routes>
