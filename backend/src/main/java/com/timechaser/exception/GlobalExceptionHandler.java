@@ -36,8 +36,7 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler({
-		UserNotFoundException.class, 
-		RoleNotFoundException.class
+		NotFoundException.class
 	})
 	public ResponseEntity<?> handleNotFoundException(Exception e, WebRequest request){
 		logger.error("Not Found Exception occurred: {}, Request Details: {}", e.getMessage(), request.getDescription(false), e);

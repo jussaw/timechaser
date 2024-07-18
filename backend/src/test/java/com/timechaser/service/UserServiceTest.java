@@ -25,16 +25,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
-import com.timechaser.entity.Role;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
+import com.timechaser.entity.Role;
 import com.timechaser.entity.User;
-import com.timechaser.exception.RoleNotFoundException;
 import com.timechaser.exception.CreateException;
-import com.timechaser.exception.UserNotFoundException;
-import com.timechaser.repository.RoleRepository;
+import com.timechaser.exception.NotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.exception.UserUpdatePasswordException;
+import com.timechaser.repository.RoleRepository;
 import com.timechaser.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -141,7 +140,7 @@ public class UserServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.addRoleToUser(1L, 1L))
-                .isInstanceOf(UserNotFoundException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("User with ID: 1 was not found.");
     }
 
@@ -151,7 +150,7 @@ public class UserServiceTest {
         when(roleRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.addRoleToUser(1L, 1L))
-                .isInstanceOf(RoleNotFoundException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("Role with ID: 1 was not found.");
     }
 
@@ -174,7 +173,7 @@ public class UserServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.removeRoleFromUser(1L, 1L))
-                .isInstanceOf(UserNotFoundException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("User with ID: 1 was not found.");
     }
 
@@ -184,7 +183,7 @@ public class UserServiceTest {
         when(roleRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.removeRoleFromUser(1L, 1L))
-                .isInstanceOf(RoleNotFoundException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("Role with ID: 1 was not found.");
     }
 
@@ -205,7 +204,7 @@ public class UserServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> userService.findRolesForUser(1L))
-                .isInstanceOf(UserNotFoundException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("User with ID: 1 was not found.");
     }
     
@@ -225,10 +224,10 @@ public class UserServiceTest {
     
 	@Test
 	void UserService_findById_404() {
-		when(userService.findById(anyLong())).thenThrow(new UserNotFoundException("testing123"));
+		when(userService.findById(anyLong())).thenThrow(new NotFoundException("testing123"));
 		
 		assertThatThrownBy(() ->  userService.findById(2L))
-		.isInstanceOf(UserNotFoundException.class);
+		.isInstanceOf(NotFoundException.class);
 	}
 	
 	@Test
