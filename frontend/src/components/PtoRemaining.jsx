@@ -1,10 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import crescent from "../assets/crescent.png";
 
 export default function PtoRemaining() {
   const [hours, setHours] = useState();
   //TODO: retrieve pto from APi call
-
+  useEffect(() => {
+    if (authData) {
+      authData.roles.forEach((role) => {
+        switch (role.id) {
+          case 1:
+            setRoles((prevState) => ({ ...prevState, ["isAdmin"]: true }));
+            break;
+          case 2:
+            setRoles((prevState) => ({ ...prevState, ["isManager"]: true }));
+            break;
+          case 3:
+            setRoles((prevState) => ({ ...prevState, ["isEmployee"]: true }));
+            break;
+        }
+      });
+    }
+  }, [authData]);
   return (
     <div
       className="dashboard-component h-6/12 relative w-full flex-grow items-center justify-center bg-cover bg-center"
