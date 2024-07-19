@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -92,4 +94,16 @@ public class ProjectServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
     
+    @Test
+    void ProjectService_FindAll_Success() {
+        List<Project> roles = Arrays.asList(project);
+        when(projectRepository.findAll()).thenReturn(roles);
+        
+        List<ProjectDto> result = projectService.findAll();
+        
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(projectDto.getId(), result.get(0).getId());
+        assertEquals(projectDto.getName(), result.get(0).getName());
+    }
 }
