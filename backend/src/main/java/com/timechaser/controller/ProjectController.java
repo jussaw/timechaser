@@ -1,5 +1,7 @@
 package com.timechaser.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.slf4j.*;
@@ -41,5 +43,15 @@ public class ProjectController {
     	projectDto = projectService.update(projectDto, id);
     	
     	return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
+    @GetMapping("/all")
+    public ResponseEntity<List<ProjectDto>> findAllProjects() {
+    	logger.info("Received request to get all projects");
+    	
+    	List<ProjectDto> projectDtos = projectService.findAll();
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(projectDtos);
     }
 }

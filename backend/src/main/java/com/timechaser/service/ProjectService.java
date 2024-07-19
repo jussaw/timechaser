@@ -1,6 +1,8 @@
 package com.timechaser.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,5 +61,16 @@ public class ProjectService {
 		
 		
 		return ProjectMapper.toDto(existingProject);
+	}
+
+    
+	public List<ProjectDto> findAll() {
+		logger.info("Getting all projects");
+		
+		List<Project> projects = projectRepository.findAll();
+        
+        return projects.stream()
+        		.map(ProjectMapper::toDto)
+        		.collect(Collectors.toList());
 	}
 }
