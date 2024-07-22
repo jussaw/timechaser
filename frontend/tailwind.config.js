@@ -8,7 +8,6 @@ export default {
           DEFAULT: "#3B82F6",
           dark: "#1E3A8A",
         },
-        "custom-orange": "#FB923C",
         "custom-purple": "#E9D5FF",
         "custom-gray": "#6B7280",
         "custom-brown": "#968586",
