@@ -3,10 +3,14 @@ package com.timechaser.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Optional;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +30,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timechaser.dto.ProjectDto;
 import com.timechaser.entity.Project;
+import com.timechaser.entity.User;
 import com.timechaser.enums.UserRoles;
 import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.ProjectMapper;
@@ -94,5 +99,35 @@ public class ProjectControllerTest {
                 .content(objectMapper.writeValueAsString(projectDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+	
+	@Test
+	void ProjectController_GetProject_Success() throws Exception {
+	    when(projectService.findById(1L)).thenReturn(Optional.of(project));
+
+	    ResultActions response = mockMvc.perform(get("/project/1")
+	            .contentType(MediaType.APPLICATION_JSON));
+
+	    response.andExpect(MockMvcResultMatchers.status().isOk())
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(project.getId().intValue())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(project.getName())));
+	}
+
+	@Test
+	void ProjectController_GetProject_NotFound() throws Exception {
+	    when(projectService.findById(1L)).thenReturn(Optional.empty());
+
+	    ResultActions response = mockMvc.perform(get("/project/1")
+	            .contentType(MediaType.APPLICATION_JSON));
+
+	    response.andExpect(MockMvcResultMatchers.status().isNotFound());
+	}
+	
+    @Test
+    void ProjectController_DeleteProjectById_ReturnNoContent() throws Exception {
+        ResultActions response = mockMvc.perform(delete("/project/1")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(status().isNoContent());
     }
 }

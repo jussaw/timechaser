@@ -4,14 +4,21 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.timechaser.dto.ProjectDto;
+import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Project;
+import com.timechaser.entity.Role;
 import com.timechaser.exception.CreateException;
 import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.ProjectMapper;
+import com.timechaser.mapper.RoleMapper;
 import com.timechaser.repository.ProjectRepository;
 
 @Service
@@ -60,4 +67,20 @@ public class ProjectService {
 		
 		return ProjectMapper.toDto(existingProject);
 	}
+    
+    public Optional<Project> findById(Long id) {
+        logger.info("Finding project with id: {}", id);
+
+        Optional<Project> project = projectRepository.findById(id);
+
+        return project;
+    }    
+    
+    @Transactional
+	public void deleteById(Long id) {
+		logger.info("Deleting project with id {}", id);
+
+		projectRepository.deleteById(id);
+	}
+	
 }
