@@ -19,11 +19,11 @@ export default function Dashboard() {
       </div>
       <div className="flex w-6/12 flex-col space-y-4">
         <div className="flex h-full w-full flex-col space-y-4">
-          <div className="flex flex-row space-x-4">
+          <div className="flex h-2/6 flex-row space-x-4">
             <PtoRemaining />
             <PlaceholderComponent />
           </div>
-          <div className="flex flex-row space-x-4">
+          <div className="flex h-4/6 flex-row space-x-4">
             <HourAllocationChart />
             <PlaceholderComponent />
           </div>
