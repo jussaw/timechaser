@@ -29,7 +29,6 @@ export default function SideBar() {
   const [managerPendingSubmissionsCount, setManagerPendingSubmissionsCount] =
     useState(1);
 
-  const renderSidebar = !["/"].includes(location.pathname);
   const renderDarkDashboard = location.pathname === "/dashboard";
   const renderDarkTimesheet = location.pathname === "/timesheet";
   const renderDarkProfile = location.pathname === "/profile";
@@ -79,7 +78,7 @@ export default function SideBar() {
     }
   }, [authData]);
 
-  return renderSidebar ? (
+  return (
     <div
       className={
         "sidebar-component flex flex-col items-center justify-between p-4"
@@ -159,5 +158,5 @@ export default function SideBar() {
         <div className="sidebar-button-icon"> Logout</div>
       </Link>
     </div>
-  ) : null;
+  );
 }
