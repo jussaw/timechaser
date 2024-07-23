@@ -21,7 +21,10 @@ export default function PtoRemaining() {
       />
       <div className="flex flex-col items-end space-y-2 rounded-3xl text-3xl">
         <div className="font-semibold">PTO remaining:</div>
-        <div className="font-bold">{hours} hours</div>
+
+        <div className="rounded-3xl bg-custom-purple p-2 px-4 text-3xl font-bold">
+          {hours} hours
+        </div>
       </div>
     </div>
   );
