@@ -3,6 +3,7 @@ import PlaceholderComponent from "../components/PlaceholderComponent";
 import HourAllocationChart from "../components/HourAllocationChart";
 import Welcome from "../components/Welcome";
 import PtoRemaining from "../components/PtoRemaining";
+import PaydayCountdown from "../components/PaydayCountdown";
 
 export default function Dashboard() {
   return (
@@ -20,7 +21,7 @@ export default function Dashboard() {
         <div className="flex h-full w-full flex-col space-y-4">
           <div className="flex h-2/6 flex-row space-x-4">
             <PtoRemaining />
-            <PlaceholderComponent />
+            <PaydayCountdown />
           </div>
           <div className="flex h-4/6 flex-row space-x-4">
             <HourAllocationChart />
