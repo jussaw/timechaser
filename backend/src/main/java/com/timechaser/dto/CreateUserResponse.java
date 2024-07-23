@@ -1,6 +1,5 @@
 package com.timechaser.dto;
 
-
 import com.timechaser.entity.User;
 
 import lombok.AllArgsConstructor;
