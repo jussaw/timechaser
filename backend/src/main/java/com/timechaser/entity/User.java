@@ -1,5 +1,6 @@
 package com.timechaser.entity;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,9 @@ public class User extends Auditable {
 	private String firstName;
 	@Column(nullable = false)
 	private String lastName;
+	@Column(nullable = false)
+	@Builder.Default
+	private Integer pto = 120;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
