@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -40,11 +41,8 @@ public class TimesheetEntry extends Auditable{
 	private LocalDate date;
 	@Column(scale=2)
 	private BigDecimal hoursWorked;
-	@ManyToMany
-	@JoinTable(
-	    name = "timesheet_entry_project",
-	    joinColumns = @JoinColumn(name = "timesheet_entry_id", referencedColumnName = "id"),
-	    inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id")
-	)
-	private Set<Project> projects;
+	
+	@OneToMany(mappedBy = "timesheetEntry")
+	private Set<TimesheetEntryProject> timeSheetEntryProjects;
+	
 }
