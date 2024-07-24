@@ -1,24 +1,19 @@
 package com.timechaser.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.timechaser.dto.ProjectDto;
-import com.timechaser.dto.RoleDto;
 import com.timechaser.entity.Project;
-import com.timechaser.entity.Role;
 import com.timechaser.exception.CreateException;
 import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.ProjectMapper;
-import com.timechaser.mapper.RoleMapper;
 import com.timechaser.repository.ProjectRepository;
 
 @Service
@@ -83,4 +78,13 @@ public class ProjectService {
 		projectRepository.deleteById(id);
 	}
 	
+    public List<ProjectDto> findAll() {
+		logger.info("Getting all projects");
+		
+		List<Project> projects = projectRepository.findAll();
+        
+        return projects.stream()
+        		.map(ProjectMapper::toDto)
+        		.collect(Collectors.toList());
+	}
 }

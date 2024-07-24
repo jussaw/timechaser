@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,7 +102,7 @@ public class ProjectControllerTest {
 
         response.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
-	
+
 	@Test
 	void ProjectController_GetProject_Success() throws Exception {
 	    when(projectService.findById(1L)).thenReturn(Optional.of(project));
@@ -129,5 +131,18 @@ public class ProjectControllerTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(status().isNoContent());
+    }
+
+    @Test
+    void ProjectController_FindAllProjects_ReturnOk() throws Exception {
+        List<ProjectDto> projectDtos = Arrays.asList(projectDto);
+        when(projectService.findAll()).thenReturn(projectDtos);
+
+        ResultActions response = mockMvc.perform(get("/project/all")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", CoreMatchers.is(projectDto.getId().intValue())))
+                .andExpect(jsonPath("$[0].name", CoreMatchers.is(projectDto.getName())));
     }
 }

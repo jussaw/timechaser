@@ -31,9 +31,9 @@ export default function Welcome() {
           {weekStartDate} - {weekEndDate}
         </div>
       </div>
-      <div className="bg-custom-purple m-6 ml-0 flex w-4/12 flex-col items-start justify-center rounded-3xl px-8">
-        <div className="text-lg font-semibold">Worked hours:</div>
-        <div className="text-2xl font-bold">{workedHours} hours</div>
+      <div className="m-6 ml-0 flex w-4/12 flex-col items-start justify-center rounded-3xl bg-custom-purple px-8">
+        <div className="text-2xl font-semibold">Worked hours:</div>
+        <div className="text-3xl font-bold">{workedHours} hours</div>
       </div>
     </div>
   );

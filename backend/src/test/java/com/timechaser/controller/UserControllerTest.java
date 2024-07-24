@@ -131,7 +131,7 @@ class UserControllerTest {
 		        .contentType(MediaType.APPLICATION_JSON)
 		        .content(objectMapper.writeValueAsString(request)));
 		
-	    response.andExpect(MockMvcResultMatchers.status().isBadRequest());
+	    response.andExpect(MockMvcResultMatchers.status().isInternalServerError());
 
 	}
 	

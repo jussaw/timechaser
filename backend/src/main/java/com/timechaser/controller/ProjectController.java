@@ -1,6 +1,7 @@
 package com.timechaser.controller;
 
 import java.util.Optional;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -74,4 +75,13 @@ public class ProjectController {
 		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}	
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ProjectDto>> findAllProjects() {
+    	logger.info("Received request to get all projects");
+    	
+    	List<ProjectDto> projectDtos = projectService.findAll();
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(projectDtos);
+    }
 }
