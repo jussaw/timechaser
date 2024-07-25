@@ -7,7 +7,7 @@ export default function Holidays() {
     <div className="flex flex-grow flex-row">
       <div className="full-page-component flex-grow items-center justify-center p-12">
         <div className="justify-start space-y-8 pb-4 text-4xl font-bold">
-          2024 Calendar
+          2024 Holiday Calendar
         </div>
         <div className="flex flex-grow flex-row space-x-4">
           <div className="flex w-2/12 flex-col space-y-4">
