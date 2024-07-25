@@ -26,7 +26,7 @@ public class TimesheetService {
         logger.info("Creating project with id {}", timesheetDto.getId());
 
         try {
-            Timesheet timesheet = new Timesheet();
+            Timesheet timesheet = TimesheetMapper.toEntity(timesheetDto);
             timesheet = timesheetRepository.save(timesheet);
 
             return TimesheetMapper.toDto(timesheet);

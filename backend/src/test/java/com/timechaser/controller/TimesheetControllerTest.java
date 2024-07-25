@@ -47,15 +47,19 @@ public class TimesheetControllerTest {
 	@MockBean
 	private TimesheetService timesheetService;
 
-	@MockBean
 	private User user;
-
 	private Timesheet timesheet;
 	private TimesheetDto timesheetDto;
 
 	@BeforeEach
 	void setUp() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
+		user = new User();
+		user.setFirstName("John");
+		user.setLastName("Doe");
+		user.setId(1L);
+		user.setUsername("Test");
 
 		timesheet = new Timesheet();
 		timesheet.setId(1L);
@@ -74,7 +78,7 @@ public class TimesheetControllerTest {
 
         ResultActions response = mockMvc.perform(post("/timesheet")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(timesheetDto)));
+			.content(objectMapper.writeValueAsString(timesheetDto)));
 
             response.andExpect(status().isCreated())
                     .andExpect(jsonPath("$.id", CoreMatchers.is(timesheetDto.getId().intValue())))
@@ -84,7 +88,7 @@ public class TimesheetControllerTest {
 					.andExpect(jsonPath("$.user.username", CoreMatchers.is(timesheetDto.getUser().getUsername())))
 					.andExpect(jsonPath("$.year", CoreMatchers.is(timesheetDto.getYear())))
 					.andExpect(jsonPath("$.weekNumber", CoreMatchers.is(timesheetDto.getWeekNumber())))
-					.andExpect(jsonPath("$.totalHours", CoreMatchers.is(timesheetDto.getTotalHours())))
-					.andExpect(jsonPath("$.status", CoreMatchers.is(timesheetDto.getStatus())));
+					.andExpect(jsonPath("$.totalHours", CoreMatchers.is(timesheetDto.getTotalHours().intValue())))
+					.andExpect(jsonPath("$.status", CoreMatchers.is(timesheetDto.getStatus().toString())));
     }
 }
