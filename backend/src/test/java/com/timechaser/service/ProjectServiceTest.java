@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -94,6 +97,33 @@ public class ProjectServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
     
+
+    @Test
+	void ProjectService_findById_Success() {
+		when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
+		
+		Project result = projectService.findById(1L).get();
+		
+		assertNotNull(result);
+        assertEquals(projectDto.getId(), result.getId());
+        assertEquals(projectDto.getName(), result.getName());
+	}
+    
+	@Test
+	void ProjectService_findById_NotExist() {
+		when(projectService.findById(2L)).thenThrow(new NotFoundException("Project not found by id"));
+		
+		assertThatThrownBy(() ->  projectService.findById(2L))
+		.isInstanceOf(NotFoundException.class);
+	}
+	
+	@Test
+	void ProjectService_Delete_Success() {
+		projectService.deleteById(1L);
+		
+		verify(projectRepository, times(1)).deleteById(1L);
+	}
+	
     @Test
     void ProjectService_FindAll_Success() {
         List<Project> roles = Arrays.asList(project);

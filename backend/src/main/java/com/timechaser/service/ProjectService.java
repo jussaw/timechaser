@@ -62,9 +62,23 @@ public class ProjectService {
 		
 		return ProjectMapper.toDto(existingProject);
 	}
-
     
-	public List<ProjectDto> findAll() {
+    public Optional<Project> findById(Long id) {
+        logger.info("Finding project with id: {}", id);
+
+        Optional<Project> project = projectRepository.findById(id);
+
+        return project;
+    }    
+    
+    @Transactional
+	public void deleteById(Long id) {
+		logger.info("Deleting project with id {}", id);
+
+		projectRepository.deleteById(id);
+	}
+	
+    public List<ProjectDto> findAll() {
 		logger.info("Getting all projects");
 		
 		List<Project> projects = projectRepository.findAll();
