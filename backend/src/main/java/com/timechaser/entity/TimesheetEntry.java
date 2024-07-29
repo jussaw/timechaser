@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.SQLDelete;
@@ -32,8 +35,10 @@ public class TimesheetEntry extends Auditable{
 	@Id
 	@GeneratedValue(strategy  = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false)
-	private Long timesheetId;
+	@ManyToOne
+	@MapsId("timesheet_id")
+	@JoinColumn(name = "timesheet_id")
+	private Timesheet timesheet;
 	@Column(nullable = false)
 	private LocalDate date;
 	@Column(scale=2)

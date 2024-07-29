@@ -70,6 +70,7 @@ public class UserServiceTest {
 		user.setUsername(createUserRequest.getUsername());
 		user.setPassword(createUserRequest.getPassword());
 		user.setId(1L);
+		user.setPto(120);
 		user.setFirstName(createUserRequest.getFirstName());
 		user.setLastName(createUserRequest.getLastName());		
 
@@ -102,6 +103,7 @@ public class UserServiceTest {
 		assertEquals(user.getLastName(), response.getLastName());
 		assertEquals(user.getUsername(), response.getUsername());
 		assertEquals(user.getId(), response.getId());
+		assertEquals(user.getPto(), response.getPto());
 		verify(passwordEncoder, times(1)).encode(createUserRequest.getPassword());
 		verify(userRepository, times(1)).save(any(User.class));
 	}
@@ -218,6 +220,7 @@ public class UserServiceTest {
 		assertEquals(user.getUsername(), result.getUsername());
 		assertEquals(user.getLastName(), result.getLastName());
 		assertEquals(user.getUsername(), result.getUsername());
+		assertEquals(user.getPto(), result.getPto());
 		assertEquals(user.getId(), result.getId());
 		verify(userRepository, times(1)).findById(user.getId());
 	}

@@ -45,6 +45,7 @@ public class UserService {
 		try {
 			User user = new User(request);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setPto(120);
 
 			user = userRepository.save(user);
 
