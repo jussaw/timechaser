@@ -47,6 +47,8 @@ public class User extends Auditable {
 	private String firstName;
 	@Column(nullable = false)
 	private String lastName;
+	@Column
+	private Integer pto;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
