@@ -105,6 +105,7 @@ class UserControllerTest {
 		responseDto.setFirstName("First");
 		responseDto.setLastName("Last");
 		responseDto.setUsername("username");
+		responseDto.setPto(120);
 		responseDto.setId(1L);
 		
 		when(userService.create(any(CreateUserRequest.class))).thenReturn(responseDto);
@@ -118,6 +119,7 @@ class UserControllerTest {
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(responseDto.getFirstName())))
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(responseDto.getLastName())))
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is( responseDto.getId().intValue())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.pto", CoreMatchers.is(responseDto.getPto())))
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.username", CoreMatchers.is(responseDto.getUsername())));
 
 	}
@@ -337,6 +339,7 @@ class UserControllerTest {
 	@Test
 	void UserController_GetUser_Success() throws Exception {
 	    User user = new User();
+	    user.setPto(10);
 	    user.setId(1L);
 	    user.setUsername("username");
 	    user.setFirstName("First");
@@ -353,6 +356,7 @@ class UserControllerTest {
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.username", CoreMatchers.is(user.getUsername())))
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(user.getFirstName())))
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(user.getLastName())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.pto", CoreMatchers.is(user.getPto())))
 	            .andExpect(MockMvcResultMatchers.jsonPath("$.password").doesNotExist());
 	}
 
