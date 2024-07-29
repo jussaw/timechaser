@@ -10,6 +10,7 @@ import {
   faArrowRightFromBracket,
   faBusinessTime,
   faUserTie,
+  faUmbrellaBeach,
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/UniversalComponent.css";
 import "../styles/Sidebar.css";
@@ -31,6 +32,7 @@ export default function SideBar() {
 
   const renderDarkDashboard = location.pathname === "/dashboard";
   const renderDarkTimesheet = location.pathname === "/timesheet";
+  const renderDarkHolidays = location.pathname === "/holidays";
   const renderDarkProfile = location.pathname === "/profile";
   const renderDarkManager = location.pathname === "/manager";
   const renderDarkAdmin = location.pathname === "/admin";
@@ -112,6 +114,15 @@ export default function SideBar() {
         >
           <FontAwesomeIcon className="sidebar-icon" icon={faStopwatch} />
           <div className="sidebar-button-icon"> Timesheet</div>
+        </Link>
+        <Link
+          className={
+            renderDarkHolidays ? "sidebar-button-dark" : "sidebar-button"
+          }
+          to="/holidays"
+        >
+          <FontAwesomeIcon className="sidebar-icon" icon={faUmbrellaBeach} />
+          <div className="sidebar-button-icon"> Holidays</div>
         </Link>
         <Link
           className={

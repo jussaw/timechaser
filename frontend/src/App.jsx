@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Manager from "./pages/Manager";
 import Admin from "./pages/Admin";
+import Holidays from "./pages/Holidays";
 import { AuthProvider } from "./context/AuthContext";
 
 function AppContent() {
@@ -26,6 +27,7 @@ function AppContent() {
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/timesheet" element={<Timesheet />} />
+          <Route path="/holidays" element={<Holidays />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/manager" element={<Manager />} />
           <Route path="/admin" element={<Admin />} />
