@@ -22,7 +22,6 @@ export default function Holidays() {
           <Holiday holiday="VeteransDay" />
           <Holiday holiday="Thanksgiving" />
           <Holiday holiday="Christmas" />
-          <Holiday holiday="Madeup" />
         </div>
       </div>
     </div>
