@@ -32,7 +32,7 @@ export default function Dashboard() {
         </div>
         <div className="flex h-full w-full flex-col space-y-4">
           <ManagerMessage />
-          <UpcomingHolidays />
+          <PlaceholderComponent />
         </div>
       </div>
     </div>
