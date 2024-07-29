@@ -6,7 +6,6 @@ import PtoRemaining from "../components/PtoRemaining";
 import PaydayCountdown from "../components/PaydayCountdown";
 import ManagerMessage from "../components/ManagerMessage";
 import UpcomingHolidays from "../components/UpcomingHolidays";
-import ManagerMessage from "../components/ManagerMessage";
 
 export default function Dashboard() {
   return (
