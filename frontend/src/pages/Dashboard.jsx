@@ -3,6 +3,8 @@ import PlaceholderComponent from "../components/PlaceholderComponent";
 import HourAllocationChart from "../components/HourAllocationChart";
 import Welcome from "../components/Welcome";
 import PtoRemaining from "../components/PtoRemaining";
+import ManagerMessage from "../components/ManagerMessage";
+import UpcomingHolidays from "../components/UpcomingHolidays";
 
 export default function Dashboard() {
   return (
@@ -28,8 +30,8 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="flex h-full w-full flex-col space-y-4">
-          <PlaceholderComponent />
-          <PlaceholderComponent />
+          <ManagerMessage />
+          <UpcomingHolidays />
         </div>
       </div>
     </div>

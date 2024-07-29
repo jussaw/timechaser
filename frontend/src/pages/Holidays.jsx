@@ -10,21 +10,19 @@ export default function Holidays() {
       </h1>
       <div className="flex flex-grow flex-row space-x-20">
         <div className="flex flex-col space-y-5">
-          <Holiday className="text-custom-white" holiday="NewYearsDay" />
-          <Holiday
-            className="text-custom-white"
-            holiday="MartinLutherKingJrDay"
-          />
-          <Holiday className="text-custom-white" holiday="MemorialDay" />
-          <Holiday className="text-custom-white" holiday="Juneteenth" />
-          <Holiday className="text-custom-white" holiday="IndependenceDay" />
+          <Holiday holiday="NewYearsDay" />
+          <Holiday holiday="MartinLutherKingJrDay" />
+          <Holiday holiday="MemorialDay" />
+          <Holiday holiday="Juneteenth" />
+          <Holiday holiday="IndependenceDay" />
         </div>
         <div className="flex flex-col space-y-5">
-          <Holiday className="text-custom-black" holiday="LaborDay" />
-          <Holiday className="text-custom-white" holiday="ColumbusDay" />
-          <Holiday className="text-custom-white" holiday="VeteransDay" />
-          <Holiday className="text-custom-white" holiday="Thanksgiving" />
-          <Holiday className="text-custom-black" holiday="Christmas" />
+          <Holiday holiday="LaborDay" />
+          <Holiday holiday="ColumbusDay" />
+          <Holiday holiday="VeteransDay" />
+          <Holiday holiday="Thanksgiving" />
+          <Holiday holiday="Christmas" />
+          <Holiday holiday="Madeup" />
         </div>
       </div>
     </div>
