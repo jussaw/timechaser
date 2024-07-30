@@ -44,7 +44,7 @@ export default function NewsFromCompany() {
   }, [news]);
 
   return (
-    <div className="dashboard-component flex h-1/2 flex-col bg-custom-white">
+    <div className="dashboard-component flex h-full flex-col bg-custom-white">
       <h1 className="w-full p-4 pb-0 text-center text-2xl font-semibold">
         News from Company
       </h1>
