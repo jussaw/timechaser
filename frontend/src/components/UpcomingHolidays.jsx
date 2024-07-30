@@ -5,6 +5,7 @@ import Holiday from "./Holiday";
 
 export default function UpcomingHolidays() {
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const twoWeeksLater = new Date(today);
   twoWeeksLater.setDate(today.getDate() + 14);
 
