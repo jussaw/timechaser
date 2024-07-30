@@ -16,7 +16,7 @@ export default function Dashboard() {
           <ManagerMessage />
         </div>
         <div className="flex h-full w-full flex-row space-x-4">
-          <ManagerMessage />
+          <PlaceholderComponent />
         </div>
       </div>
       <div className="flex w-6/12 flex-col space-y-4">

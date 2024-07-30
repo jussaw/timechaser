@@ -54,6 +54,11 @@ const holidayList = {
     date: new Date(baseYear, 11, 25), // December 25
     image: "src/assets/holidayImages/Christmas.png",
   },
+  Madeup: {
+    name: "Christmas",
+    date: new Date(baseYear, 6, 30), // December 25
+    image: "src/assets/holidayImages/Christmas.png",
+  },
 };
 
 function formatDateAsMonthDay(date) {
