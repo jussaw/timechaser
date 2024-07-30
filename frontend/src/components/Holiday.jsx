@@ -66,8 +66,8 @@ export default function Holiday(props) {
     <div
       className={
         props.holiday === "Christmas" || props.holiday === "LaborDay"
-          ? "relative h-36 w-96 overflow-hidden rounded-lg bg-cover bg-center bg-no-repeat text-custom-black"
-          : "relative h-36 w-96 overflow-hidden rounded-lg bg-cover bg-center bg-no-repeat text-custom-white"
+          ? "relative h-28 w-80 overflow-hidden rounded-lg bg-cover bg-center bg-no-repeat text-custom-black"
+          : "relative h-28 w-80 overflow-hidden rounded-lg bg-cover bg-center bg-no-repeat text-custom-white"
       }
       style={{
         backgroundImage: `url(${holidayList[props.holiday].image})`,
@@ -76,8 +76,6 @@ export default function Holiday(props) {
     >
       <div className="absolute inset-0 flex items-center justify-center bg-custom-black bg-opacity-5">
         <div className="text-l bg-opacity-0 text-center font-extrabold">
-          {console.log(props.name)}
-
           <p>{holidayList[props.holiday].name}</p>
           <p>{formatDateAsMonthDay(holidayList[props.holiday].date)}</p>
         </div>
