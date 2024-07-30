@@ -1,4 +1,3 @@
-// UpcomingHolidays.jsx
 import React from "react";
 import { holidayList } from "./Holiday";
 import Holiday from "./Holiday";
