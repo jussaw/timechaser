@@ -5,7 +5,7 @@ import Welcome from "../components/Welcome";
 import PtoRemaining from "../components/PtoRemaining";
 import PaydayCountdown from "../components/PaydayCountdown";
 import ManagerMessage from "../components/ManagerMessage";
-import UpcomingHolidays from "../components/UpcomingHolidays";
+import NewsFromCompany from "../components/NewsFromCompany";
 
 export default function Dashboard() {
   return (
@@ -13,7 +13,7 @@ export default function Dashboard() {
       <div className="flex w-6/12 flex-col space-y-4">
         <div className="flex h-full w-full flex-col space-y-4">
           <Welcome />
-          <PlaceholderComponent />
+          <ManagerMessage />
         </div>
         <div className="flex h-full w-full flex-row space-x-4">
           <PlaceholderComponent />
@@ -31,7 +31,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="flex h-full w-full flex-col space-y-4">
-          <ManagerMessage />
+          <NewsFromCompany />
           <PlaceholderComponent />
         </div>
       </div>
