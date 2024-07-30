@@ -5,7 +5,7 @@ import Welcome from "../components/Welcome";
 import PtoRemaining from "../components/PtoRemaining";
 import PaydayCountdown from "../components/PaydayCountdown";
 import ManagerMessage from "../components/ManagerMessage";
-import UpcomingHolidays from "../components/UpcomingHolidays";
+import NewsFromCompany from "../components/NewsFromCompany";
 
 export default function Dashboard() {
   return (
@@ -32,7 +32,7 @@ export default function Dashboard() {
         </div>
         <div className="flex h-full w-full flex-col space-y-4">
           <ManagerMessage />
-          <PlaceholderComponent />
+          <NewsFromCompany />
         </div>
       </div>
     </div>

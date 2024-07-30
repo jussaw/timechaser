@@ -9,7 +9,7 @@ export default function ManagerMessage() {
   }, []);
 
   return (
-    <div className="dashboard-component flex h-full w-full flex-col bg-custom-white">
+    <div className="dashboard-component flex h-1/2 w-full flex-col bg-custom-white">
       <h1 className="w-full p-4 pb-0 text-center text-2xl font-semibold">
         Message from Manager
       </h1>
