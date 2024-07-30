@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/UniversalComponent.css";
 
-const baseYear = 2024;
+const baseYear = new Date().getFullYear();
 
 const holidayList = {
   NewYearsDay: {
