@@ -14,19 +14,16 @@ export default function UpcomingHolidays() {
     return holiday.date >= today && holiday.date <= twoWeeksLater;
   });
 
-  return (
-    <div className="dashboard-component flex h-1/2 w-full items-center justify-center bg-custom-white">
-      <div className="h-full w-full">
-        <h1 className="">Upcoming Holidays</h1>
-        {console.log(upcomingHolidays)}
-        {upcomingHolidays.length > 0 ? (
-          upcomingHolidays.map((holiday, index) => (
-            <Holiday key={index} holiday={holiday.name} />
-          ))
-        ) : (
-          <p>No upcoming holidays in the next two weeks.</p>
-        )}
+  return upcomingHolidays.length > 0 ? (
+    <div className="dashboard-component flex h-full w-full flex-col bg-custom-white">
+      <h1 className="w-full p-4 pb-0 text-center text-2xl font-semibold">
+        Upcoming Holidays
+      </h1>
+      <div className="m-6 flex h-full justify-center space-x-12">
+        {upcomingHolidays.map((holiday, index) => (
+          <Holiday key={index} holiday={holiday.name} />
+        ))}
       </div>
     </div>
-  );
+  ) : null;
 }

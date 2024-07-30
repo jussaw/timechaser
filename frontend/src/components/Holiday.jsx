@@ -75,7 +75,7 @@ export default function Holiday(props) {
       }}
     >
       <div className="absolute inset-0 flex items-center justify-center bg-custom-black bg-opacity-5">
-        <div className="text-l bg-opacity-0 text-center font-extrabold">
+        <div className="bg-opacity-0 text-center text-2xl font-extrabold">
           <p>{holidayList[props.holiday].name}</p>
           <p>{formatDateAsMonthDay(holidayList[props.holiday].date)}</p>
         </div>
