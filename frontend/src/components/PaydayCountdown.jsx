@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
 
 export default function PaydayCountdown() {
-  const [days, setDays] = useState(10);
+  const [days, setDays] = useState();
 
   useEffect(() => {
     setDays(daysUntilNextPayday());
