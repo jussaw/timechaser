@@ -18,7 +18,7 @@ export default function PaydayCountdown() {
       <div className="flex flex-col items-end space-y-2 rounded-3xl">
         <div className="text-3xl font-semibold">Next payday in:</div>
         <div className="rounded-3xl bg-custom-purple p-2 px-4 text-3xl font-bold">
-          {days} days
+          {days === 0 ? "Today!" : `${days} days`}
         </div>
       </div>
     </div>
