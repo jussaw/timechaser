@@ -1,17 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
 
 export default function PaydayCountdown() {
-  const { authData, setAuthData } = useContext(AuthContext);
   const [days, setDays] = useState(10);
 
-  // TODO: setDays from API call
   useEffect(() => {
-    if (authData) {
-    }
-  }, [authData]);
+    setDays(daysUntilNextPayday());
+  }, []);
 
   return (
     <div className="dashboard-component flex w-full items-center justify-center space-x-2">
@@ -28,3 +24,26 @@ export default function PaydayCountdown() {
     </div>
   );
 }
+
+// Hardcoded payday is 15th and 30th of every month
+const daysUntilNextPayday = () => {
+  const today = new Date();
+  const day = today.getDate();
+  const month = today.getMonth();
+  const year = today.getFullYear();
+
+  let nextDate;
+
+  if (day <= 15) {
+    nextDate = new Date(year, month, 15);
+  } else if (day <= 30) {
+    nextDate = new Date(year, month, 30);
+  } else {
+    nextDate = new Date(year, month + 1, 15);
+  }
+
+  const oneDay = 24 * 60 * 60 * 1000;
+  const daysUntil = Math.round((nextDate - today) / oneDay);
+
+  return daysUntil;
+};
