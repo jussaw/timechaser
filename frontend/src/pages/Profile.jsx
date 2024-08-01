@@ -1,54 +1,77 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faXmark,
+  faPenToSquare,
+  faTriangleExclamation,
+  faCircleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
 import "../styles/Profile.css";
+import axiosInstance from "../config/axiosConfig";
+import { AuthContext, useAuth } from "../context/AuthContext";
 
 export default function Profile() {
+  const { authData, setauthdata } = useContext(AuthContext);
+
   const [displayName, setDisplayName] = useState({
     firstName: "",
     lastName: "",
   });
-  //TO-DO: get fields from API
-  const [userFormValues, setuserFormValues] = useState({
-    firstName: "John",
-    lastName: "Doe",
-  });
-  const [username, setUsername] = useState("e40040000");
-  const [isUserValid, setIsUserValid] = useState(false);
 
-  //time/timezone fields
-  const [timeZone, setTimeZone] = useState("");
-  const [currentTime, setCurrentTime] = useState(new Date());
-  //TO-DO: split apart supervisor name? Depends on API
-  const [supervisor, setSupervisor] = useState({
-    name: "Jane Doe",
+  const [userFormValues, setUserFormValues] = useState({
+    firstName: "",
+    lastName: "",
   });
+  const [username, setUsername] = useState("");
+  const [isUserFormSubmitted, setIsUserFormSubmitted] = useState();
+  const [userSubmissionError, setUserSubmissionError] = useState();
 
   //password reset fields
-  const [passwordFormValues, setpasswordFormValues] = useState({
-    currentPassword: "",
+  const [passwordFormValues, setPasswordFormValues] = useState({
+    // currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
-  const [currentPasswordValid, setCurrentPasswordValid] = useState(false);
-  const [newPasswordValid, setNewPasswordValid] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [validPasswords, setValidPasswords] = useState(false);
+  const [isNewPasswordValid, setIsNewPasswordValid] = useState(false);
+  const [isValidPasswords, setIsValidPasswords] = useState(false);
 
   //states used for buttons
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
   const [isEditingLastName, setIsEditingLastName] = useState(false);
   const [isUserFormChanged, setIsUserFormChanged] = useState(false);
 
-  //states for focus on input fields
+  const [isPasswordSubmitSuccess, setIsPasswordSubmitSuccess] = useState();
+  const [passwordSubmissionError, setPasswordSubmissionError] = useState(null);
+
+  //states for focus on input fields.
   const firstNameInputRef = useRef(null);
   const lastNameInputRef = useRef(null);
 
-  //TODO: get name values from API
+  //time/timezone fields
+  const [timeZone, setTimeZone] = useState("");
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  //TO-DO: get supervisor from api
+  const [supervisor, setSupervisor] = useState({
+    name: "Jane Doe",
+  });
+
   useEffect(() => {
-    setDisplayName(userFormValues);
-  }, []);
-  //getting time zone from device
+    setDisplayName({
+      firstName: authData.user.firstName,
+      lastName: authData.user.lastName,
+    });
+    setUserFormValues({
+      firstName: authData.user.firstName,
+      lastName: authData.user.lastName,
+    });
+  }, [authData.user.firstName, authData.user.lastName]);
+
+  useEffect(() => {
+    setUsername(authData.user.username);
+  });
+
+  //timer update logic for time zone
   useEffect(() => {
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -64,6 +87,18 @@ export default function Profile() {
 
     return () => clearInterval(timer);
   }, []);
+
+  //validate passwords
+  useEffect(() => {
+    setIsValidPasswords(
+      isNewPasswordValid &&
+        passwordFormValues.newPassword === passwordFormValues.confirmPassword,
+    );
+  }, [
+    passwordFormValues.newPassword,
+    passwordFormValues.confirmPassword,
+    isNewPasswordValid,
+  ]);
 
   //update first name field
   const toggleEditFirstName = () => {
@@ -81,9 +116,7 @@ export default function Profile() {
     }
   };
 
-  //TO-DO: send info to backend business logic for submitting form
   const handleUserSubmit = (e) => {
-    //stop page from reloading on submit
     e.preventDefault();
     userFormValues.firstName = userFormValues.firstName.trim();
     userFormValues.lastName = userFormValues.lastName.trim();
@@ -94,12 +127,65 @@ export default function Profile() {
       setIsEditingLastName(false);
       setIsUserFormChanged(false);
     }
+    axiosInstance
+      .put(`/user/${authData.user.id}/details`, {
+        firstName: userFormValues.firstName,
+        lastName: userFormValues.lastName,
+      })
+      .then(() => {
+        authData.user.firstName = userFormValues.firstName;
+        authData.user.lastName = userFormValues.lastName;
+        setIsUserFormSubmitted(true);
+      })
+      .catch((error) => {
+        setUserSubmissionError(mapErrorCode(error));
+      });
   };
 
-  //TODO: implement business logic for sending new password to backend
+  const mapErrorCode = (error) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 400:
+          return "Fields don't meet requirements";
+          break;
+        case 403:
+          return "Session expired";
+          break;
+        case 404:
+          return "User does not exist";
+          break;
+        case 500:
+          return "Internal Server Error";
+          break;
+        default:
+          return "Other Error";
+          break;
+      }
+    } else {
+      return "Server Offline";
+    }
+  };
+
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
-    //currentPasswordValid used here
+    axiosInstance
+      .put(`/user/${authData.user.id}/password`, {
+        password: passwordFormValues.newPassword,
+      })
+      .then(() => {
+        setPasswordFormValues({
+          // currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+
+        setIsPasswordSubmitSuccess(true);
+        console.log("yay it worked");
+      })
+      .catch((error) => {
+        setIsPasswordSubmitSuccess(false);
+        setPasswordSubmissionError(mapErrorCode(error));
+      });
   };
 
   //password validation
@@ -107,41 +193,21 @@ export default function Profile() {
     const passwordRegex =
       /^(?=.*[0-9])(?=.*[!@#$%^&!@*])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,}$/;
     const isPasswordValid = passwordRegex.test(passwordFormValues.newPassword);
-
-    setNewPasswordValid(isPasswordValid);
-
-    if (!isPasswordValid) {
-      setPasswordError(
-        "Password must be at least 8 characters long and contain at least one number, one uppercase letter, and one !@#$%^&*()-=[]~_+{}.",
-      );
-    } else {
-      setPasswordError("");
-    }
+    setIsNewPasswordValid(isPasswordValid);
   }, [passwordFormValues]);
 
   const handleUserChange = (e) => {
+    setIsUserFormSubmitted(false);
     const { name, value } = e.target;
-    setuserFormValues((prevValues) => {
+    setUserFormValues((prevValues) => {
       const updatedFormValues = {
         ...prevValues,
-        [name]: value.trim(),
+        [name]: value,
       };
       setIsUserFormChanged(
         updatedFormValues.firstName != displayName.firstName ||
           updatedFormValues.lastName != displayName.lastName,
       );
-      return updatedFormValues;
-    });
-  };
-
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setpasswordFormValues((prevValues) => {
-      const updatedFormValues = {
-        ...prevValues,
-        [name]: value,
-      };
-
       return updatedFormValues;
     });
   };
@@ -155,14 +221,18 @@ export default function Profile() {
     return false;
   };
 
-  //validate passwords
-  useEffect(() => {
-    setValidPasswords(
-      newPasswordValid &&
-        passwordFormValues.newPassword === passwordFormValues.confirmPassword,
-    );
-  }, [passwordFormValues.newPassword, passwordFormValues.confirmPassword]);
-  //TODO: refactor all colors to fit palette
+  const handlePasswordChange = (e) => {
+    setIsPasswordSubmitSuccess();
+    const { name, value } = e.target;
+    setPasswordFormValues((prevValues) => {
+      const updatedFormValues = {
+        ...prevValues,
+        [name]: value,
+      };
+      return updatedFormValues;
+    });
+  };
+
   return (
     <div className="full-page-component user-info flex h-full w-full flex-grow px-28 py-20">
       <div className="w-half flex-1">
@@ -192,7 +262,6 @@ export default function Profile() {
               onClick={toggleEditFirstName}
               className="edit-button mr-56"
             >
-              {/* TODO change colors to custom color palette */}
               <FontAwesomeIcon
                 className={`w-4 ${isEditingFirstName ? "text-custom-red" : "text-custom-blue"}`}
                 icon={isEditingFirstName ? faXmark : faPenToSquare}
@@ -253,6 +322,22 @@ export default function Profile() {
           >
             Save
           </button>
+          {isUserFormSubmitted && (
+            <div className="w-fit rounded-md bg-custom-green-light px-3 py-2 text-custom-green-dark">
+              🎉 Successfully updated name
+            </div>
+          )}
+          {userSubmissionError && (
+            <div className="w-fit rounded-md bg-custom-red-light px-3 py-2">
+              <span>
+                <FontAwesomeIcon
+                  className="mr-2"
+                  icon={faTriangleExclamation}
+                />
+                {userSubmissionError}
+              </span>
+            </div>
+          )}
         </form>
       </div>
 
@@ -266,7 +351,7 @@ export default function Profile() {
         </div>
 
         <form onSubmit={handlePasswordSubmit} className="w-full space-y-9">
-          <div className="entry">
+          {/* <div className="entry">
             <label htmlFor="currentPassword" className="password-label">
               <strong>Current Password: </strong>
             </label>
@@ -275,9 +360,11 @@ export default function Profile() {
               type="password"
               id="currentPassword"
               name="currentPassword"
+              value={passwordFormValues.currentPassword}
+              onChange={handlePasswordChange}
               required
             ></input>
-          </div>
+          </div> */}
           <div className="entry">
             <label htmlFor="newPassword" className="password-label">
               <strong>New Password: </strong>
@@ -287,6 +374,7 @@ export default function Profile() {
               type="password"
               id="newPassword"
               name="newPassword"
+              value={passwordFormValues.newPassword}
               onChange={handlePasswordChange}
               autoComplete="off"
               required
@@ -302,34 +390,54 @@ export default function Profile() {
               type="password"
               id="confirmPassword"
               name="confirmPassword"
+              value={passwordFormValues.confirmPassword}
               onChange={handlePasswordChange}
               autoComplete="off"
               required
             ></input>
           </div>
-
           <button
             type="submit"
             className={`rounded-full p-2 px-4 text-custom-white ${
-              validPasswords
+              isValidPasswords
                 ? "bg-custom-blue hover:bg-custom-blue-dark"
                 : "bg-custom-disable"
             }`}
-            disabled={!validPasswords}
+            disabled={!isValidPasswords}
           >
             Reset
           </button>
-          <div className="text-custom-red">
-            {passwordFormValues.newPassword.length > 0 && !newPasswordValid && (
-              <>
-                <span>Invalid Password</span>
-                <br />
-              </>
-            )}
+          {isPasswordSubmitSuccess && (
+            <div className="w-fit rounded-md bg-custom-green-light px-3 py-2 text-custom-green-dark">
+              🎉 Successfully changed password
+            </div>
+          )}
+          {passwordSubmissionError && (
+            <div className="w-fit rounded-md bg-custom-red-light px-3 py-2">
+              <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
+              {passwordSubmissionError}
+            </div>
+          )}
+          <div className="flex flex-col text-custom-red">
+            {passwordFormValues.newPassword.length > 0 &&
+              !isNewPasswordValid && (
+                <span className="w-fit rounded-md bg-custom-red-light px-3 py-2 text-custom-red">
+                  <FontAwesomeIcon
+                    className="mr-2"
+                    icon={faCircleExclamation}
+                  />
+                  Invalid password
+                </span>
+              )}
             {!(
               passwordFormValues.newPassword ===
               passwordFormValues.confirmPassword
-            ) && <span>Passwords do not match</span>}
+            ) && (
+              <span className="w-fit rounded-md bg-custom-red-light px-3 py-2 text-custom-red">
+                <FontAwesomeIcon className="mr-2" icon={faCircleExclamation} />
+                Passwords do not match
+              </span>
+            )}
           </div>
         </form>
       </div>
