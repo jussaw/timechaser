@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.timechaser.dto.AddRoleDto;
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
+import com.timechaser.dto.ProjectDto;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
@@ -59,7 +60,18 @@ public class UserController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(userDto);
 	}
-
+	
+	
+	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
+	@GetMapping("/all")
+    public ResponseEntity<List<UserDto>> findAllUsers() {
+    	logger.info("Received request to get all users");
+    	
+    	List<UserDto> projectDtos = userService.findAll();
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(projectDtos);
+    }
+	
 	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {

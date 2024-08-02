@@ -13,7 +13,7 @@ import com.timechaser.repository.TimesheetRepository;
 
 @Service
 public class TimesheetService {
-    Logger logger = LoggerFactory.getLogger(AuthorizationService.class);
+    Logger logger = LoggerFactory.getLogger(Timesheet.class);
 	
 	private final TimesheetRepository timesheetRepository;
 	
@@ -23,7 +23,7 @@ public class TimesheetService {
 
     @Transactional
     public TimesheetDto create(TimesheetDto timesheetDto) {
-        logger.info("Creating project with id {}", timesheetDto.getId());
+        logger.info("Creating timesheet with id {}", timesheetDto.getId());
 
         try {
             Timesheet timesheet = TimesheetMapper.toEntity(timesheetDto);

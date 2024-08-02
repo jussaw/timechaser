@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -126,8 +125,8 @@ public class ProjectServiceTest {
 	
     @Test
     void ProjectService_FindAll_Success() {
-        List<Project> roles = Arrays.asList(project);
-        when(projectRepository.findAll()).thenReturn(roles);
+        List<Project> projects = Arrays.asList(project);
+        when(projectRepository.findAll()).thenReturn(projects);
         
         List<ProjectDto> result = projectService.findAll();
         
