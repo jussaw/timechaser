@@ -13,7 +13,7 @@ import com.timechaser.repository.TimesheetRepository;
 
 @Service
 public class TimesheetService {
-    Logger logger = LoggerFactory.getLogger(Timesheet.class);
+    Logger logger = LoggerFactory.getLogger(TimesheetService.class);
 	
 	private final TimesheetRepository timesheetRepository;
 	
