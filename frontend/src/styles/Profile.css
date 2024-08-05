@@ -1,8 +1,8 @@
 .user-label {
-  @apply w-28;
+  @apply w-28 font-semibold;
 }
 .password-label {
-  @apply w-44;
+  @apply w-44 font-semibold;
 }
 .entry {
   @apply flex items-center;
