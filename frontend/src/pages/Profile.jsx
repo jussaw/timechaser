@@ -240,7 +240,7 @@ export default function Profile() {
         <h1 className="items-center pb-7 text-4xl font-bold">
           Welcome, {displayName.firstName} {displayName.lastName}
         </h1>
-        <div className="pb-10">Reports to: {supervisor.name}</div>
+        <div className="pb-8">Reports to: {supervisor.name}</div>
         <form onSubmit={handleUserSubmit} className="w-full space-y-9">
           <div className="entry">
             <label htmlFor="firstName" className="user-label">
