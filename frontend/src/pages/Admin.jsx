@@ -306,7 +306,59 @@ export default function Admin() {
           </span>
         )}
         {isSubmissionSuccess && (
-          <div className="bg-custom-green-light text-custom-green-dark w-fit rounded-md px-3 py-2">
+          <div className="w-fit rounded-md bg-custom-green-light px-3 py-2 text-custom-green-dark">
+            🎉 Successfully created user: {submissionUsername}
+          </div>
+        )}
+      </form>
+
+      <h1 className="text-2xl font-semibold">Delete User</h1>
+      <form
+        className="flex flex-grow flex-col justify-start space-y-8"
+        onSubmit={handleSubmit}
+      >
+        <div className="flex w-full flex-col space-y-8">
+          <div className="admin-label-input-error">
+            <div className="admin-label-input">
+              <label className="admin-label" htmlFor="confirmPassword">
+                User ID:
+              </label>
+              <input
+                className={"admin-input"}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+              />
+            </div>
+          </div>
+        </div>
+        <button
+          className={`w-fit rounded-full p-2 px-8 text-custom-white ${
+            isFormValid
+              ? "bg-custom-blue hover:bg-custom-blue-dark"
+              : "bg-custom-disable"
+          }`}
+          type="submit"
+          disabled={!isFormValid}
+        >
+          Create
+        </button>
+        {focusedField && !isFormDataValid[focusedField] && (
+          <span className="admin-error">
+            <FontAwesomeIcon className="mr-2" icon={faCircleExclamation} />
+            {formErrors[focusedField]}
+          </span>
+        )}
+        {submissionError && (
+          <span className="admin-error">
+            <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
+            {submissionError}
+          </span>
+        )}
+        {isSubmissionSuccess && (
+          <div className="w-fit rounded-md bg-custom-green-light px-3 py-2 text-custom-green-dark">
             🎉 Successfully created user: {submissionUsername}
           </div>
         )}
