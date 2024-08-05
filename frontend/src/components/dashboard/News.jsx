@@ -50,7 +50,7 @@ export default function News() {
       </h1>
       <div
         ref={scrollRef}
-        className="m-6 flex h-44 overflow-y-scroll scroll-auto rounded-3xl bg-gray-200 p-4 px-6 text-start text-lg font-medium shadow-inner scrollbar-none"
+        className="mx-6 my-4 flex h-48 overflow-y-scroll scroll-auto rounded-3xl bg-gray-200 px-6 py-2 text-start text-lg font-medium shadow-inner scrollbar-none"
       >
         {news || "No message from manager"}
       </div>
