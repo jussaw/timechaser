@@ -235,16 +235,16 @@ export default function Profile() {
   };
 
   return (
-    <div className="full-page-component user-info flex h-full w-full flex-grow px-28 py-20">
+    <div className="full-page-component flex flex-grow flex-col justify-start space-y-8 p-12">
       <div className="w-half flex-1">
-        <h1 className="items-center pb-5 text-2xl font-semibold">
+        <h1 className="items-center pb-7 text-4xl font-bold">
           Welcome, {displayName.firstName} {displayName.lastName}
         </h1>
-        <div className="pb-10">Reports to: {supervisor.name}</div>
+        <div className="pb-8">Reports to: {supervisor.name}</div>
         <form onSubmit={handleUserSubmit} className="w-full space-y-9">
           <div className="entry">
             <label htmlFor="firstName" className="user-label">
-              <strong>First Name: </strong>
+              <span>First Name: </span>
             </label>
             <input
               ref={firstNameInputRef}
@@ -271,7 +271,7 @@ export default function Profile() {
           </div>
           <div className="entry">
             <label htmlFor="lastName" className="user-label">
-              <strong>Last Name: </strong>
+              <span>Last Name: </span>
             </label>
             <input
               ref={lastNameInputRef}
@@ -298,13 +298,13 @@ export default function Profile() {
           </div>
           <div className="entry">
             <label htmlFor="username" className="user-label">
-              <strong>Username: </strong>
+              <span>Username: </span>
             </label>
             <span className="data border-custom-white">{username}</span>
           </div>
           <div className="entry">
             <label className="user-label">
-              <strong>Time: </strong>
+              <span>Time: </span>
             </label>
             <span className="data border-custom-white">
               {currentTime.toLocaleTimeString()}
@@ -312,7 +312,7 @@ export default function Profile() {
           </div>
           <div className="entry">
             <label className="user-label">
-              <strong>Time zone: </strong>
+              <span>Time zone: </span>
             </label>
             <span className="data border-custom-white">{timeZone}</span>
           </div>
@@ -354,7 +354,7 @@ export default function Profile() {
         <form onSubmit={handlePasswordSubmit} className="w-full space-y-9">
           <div className="entry">
             <label htmlFor="newPassword" className="password-label">
-              <strong>New Password: </strong>
+              <span>New Password: </span>
             </label>
             <input
               className="data w-32 border-custom-black"
@@ -370,7 +370,7 @@ export default function Profile() {
 
           <div className="entry">
             <label htmlFor="confirmPassword" className="password-label">
-              <strong>Confirm Password: </strong>
+              <span>Confirm Password: </span>
             </label>
             <input
               className="data w-32 border-custom-black"
