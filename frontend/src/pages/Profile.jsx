@@ -92,7 +92,11 @@ export default function Profile() {
       isNewPasswordValid &&
         passwordFormValues.newPassword === passwordFormValues.confirmPassword,
     );
-  }, []);
+  }, [
+    passwordFormValues.newPassword,
+    passwordFormValues.confirmPassword,
+    isNewPasswordValid,
+  ]);
 
   //password validation
   useEffect(() => {
