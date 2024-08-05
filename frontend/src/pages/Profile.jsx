@@ -235,7 +235,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="full-page-component flex flex-grow flex-col justify-start space-y-8 p-12">
+    <div className="full-page-component flex flex-grow flex-col justify-start space-y-8 p-12 text-lg">
       <div className="w-half flex-1">
         <h1 className="items-center pb-5 text-4xl font-bold">
           Welcome, {displayName.firstName} {displayName.lastName}
