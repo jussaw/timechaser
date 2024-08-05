@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-export default function NewsFromCompany() {
+export default function News() {
   const [news, setNews] = useState(null);
   const scrollRef = useRef(null);
 
@@ -50,7 +50,7 @@ export default function NewsFromCompany() {
       </h1>
       <div
         ref={scrollRef}
-        className="scrollbar-none m-6 flex h-44 overflow-y-scroll scroll-auto rounded-3xl bg-gray-200 p-4 px-6 text-start text-lg font-medium shadow-inner"
+        className="m-6 flex h-44 overflow-y-scroll scroll-auto rounded-3xl bg-gray-200 p-4 px-6 text-start text-lg font-medium shadow-inner scrollbar-none"
       >
         {news || "No message from manager"}
       </div>
