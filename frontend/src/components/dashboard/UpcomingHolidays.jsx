@@ -1,6 +1,6 @@
 import React from "react";
-import { holidayList } from "./Holiday";
-import Holiday from "./Holiday";
+import { holidayList } from "../Holiday";
+import Holiday from "../Holiday";
 
 export default function UpcomingHolidays() {
   const today = new Date();
