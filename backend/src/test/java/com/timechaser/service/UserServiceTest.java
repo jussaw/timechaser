@@ -1,9 +1,9 @@
 package com.timechaser.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -11,6 +11,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,12 +28,14 @@ import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
+import com.timechaser.dto.UserDto;
 import com.timechaser.entity.Role;
 import com.timechaser.entity.User;
 import com.timechaser.exception.CreateException;
 import com.timechaser.exception.NotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.exception.UserUpdatePasswordException;
+import com.timechaser.mapper.UserMapper;
 import com.timechaser.repository.RoleRepository;
 import com.timechaser.repository.UserRepository;
 
@@ -54,6 +57,7 @@ public class UserServiceTest {
 	private UpdateUserDetailsRequest updateUserDetailsRequest;
 	private UpdateUserPasswordRequest updateUserPasswordRequest;
 	private User user;
+	private UserDto userDto;
 	private Role role;
 	private Optional<User> optionalUser;
 	private Optional<Role> optionalRole;
@@ -72,7 +76,9 @@ public class UserServiceTest {
 		user.setId(1L);
 		user.setPto(120);
 		user.setFirstName(createUserRequest.getFirstName());
-		user.setLastName(createUserRequest.getLastName());		
+		user.setLastName(createUserRequest.getLastName());	
+		
+		userDto = UserMapper.toDto(user);
 
 		optionalUser = Optional.of(new User(createUserRequest));
 
@@ -264,6 +270,20 @@ public class UserServiceTest {
         verify(userRepository, times(1)).findById(user.getId());
         verify(passwordEncoder, times(1)).encode(updateUserPasswordRequest.getPassword());
         verify(userRepository, times(1)).save(user);
+	}
+	
+	@Test
+	void UserService_FindAll_Success() {
+		List<User> users = Arrays.asList(user);
+		when(userRepository.findAll()).thenReturn(users);
+		
+		List<UserDto> result = userService.findAll();
+		
+		assertNotNull(result);
+
+        assertEquals(1, result.size());
+        assertEquals(userDto.getId(),  result.get(0).getId());
+        assertEquals(userDto.getUsername(), result.get(0).getUsername());
 	}
 	
 	@Test

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.SQLDelete;
@@ -36,15 +36,14 @@ public class TimesheetEntry extends Auditable{
 	@GeneratedValue(strategy  = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
-	@MapsId("timesheet_id")
 	@JoinColumn(name = "timesheet_id")
 	private Timesheet timesheet;
 	@Column(nullable = false)
 	private LocalDate date;
-	@Column(scale=2)
+	@Column(scale=2, nullable = false)
 	private BigDecimal hoursWorked;
 	
-	@OneToMany(mappedBy = "timesheetEntry")
+	@OneToMany(mappedBy = "timesheetEntry", cascade = CascadeType.ALL)
 	private Set<TimesheetEntryProject> timeSheetEntryProjects;
 	
 }
