@@ -4,7 +4,7 @@ import {
   getSundayOfCurrentWeek,
   getDateAfterXDays,
   getWelcomeFormattedDate,
-} from "../utils/DateHelper";
+} from "../../utils/DateHelper";
 
 export default function Welcome() {
   // TODO: Replace firstName with what is in AuthContext
