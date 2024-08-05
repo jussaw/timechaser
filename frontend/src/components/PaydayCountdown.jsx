@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSackDollar } from "@fortawesome/free-solid-svg-icons";
 
 export default function PaydayCountdown() {
-  const { authData, setAuthData } = useContext(AuthContext);
+  const { authData, setauthdata } = useContext(AuthContext);
   const [days, setDays] = useState(10);
 
   // TODO: setDays from API call

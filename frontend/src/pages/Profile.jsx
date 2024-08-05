@@ -11,7 +11,7 @@ import axiosInstance from "../config/axiosConfig";
 import { AuthContext, useAuth } from "../context/AuthContext";
 
 export default function Profile() {
-  const { authData, setauthdata } = useContext(AuthContext);
+  const { authData, setAuthData } = useContext(AuthContext);
 
   const [displayName, setDisplayName] = useState({
     firstName: "",
@@ -23,12 +23,11 @@ export default function Profile() {
     lastName: "",
   });
   const [username, setUsername] = useState("");
-  const [isUserFormSubmitted, setIsUserFormSubmitted] = useState();
-  const [userSubmissionError, setUserSubmissionError] = useState();
+  const [isUserFormSubmitSuccess, setIsUserFormSubmitSuccess] = useState(false);
+  const [userSubmissionError, setUserSubmissionError] = useState(null);
 
   //password reset fields
   const [passwordFormValues, setPasswordFormValues] = useState({
-    // currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
@@ -69,7 +68,7 @@ export default function Profile() {
 
   useEffect(() => {
     setUsername(authData.user.username);
-  });
+  }, []);
 
   //timer update logic for time zone
   useEffect(() => {
@@ -77,7 +76,6 @@ export default function Profile() {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       setTimeZone(tz);
     } catch (error) {
-      console.error("Can't get the time zone", error);
       setTimeZone("Unknown");
     }
     //update clock every second
@@ -94,11 +92,15 @@ export default function Profile() {
       isNewPasswordValid &&
         passwordFormValues.newPassword === passwordFormValues.confirmPassword,
     );
-  }, [
-    passwordFormValues.newPassword,
-    passwordFormValues.confirmPassword,
-    isNewPasswordValid,
-  ]);
+  }, []);
+
+  //password validation
+  useEffect(() => {
+    const passwordRegex =
+      /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()\-[\]~_+{}=;:'",<.>/?\\|`]).{8,}$/;
+    const isPasswordValid = passwordRegex.test(passwordFormValues.newPassword);
+    setIsNewPasswordValid(isPasswordValid);
+  }, [passwordFormValues]);
 
   //update first name field
   const toggleEditFirstName = () => {
@@ -118,9 +120,10 @@ export default function Profile() {
 
   const handleUserSubmit = (e) => {
     e.preventDefault();
+    setIsUserFormSubmitSuccess(true);
+    setUserSubmissionError(null);
     userFormValues.firstName = userFormValues.firstName.trim();
     userFormValues.lastName = userFormValues.lastName.trim();
-    setDisplayName(userFormValues);
     //If fields were being edited, disable edit mode after saving
     if (isEditingFirstName || isEditingLastName) {
       setIsEditingFirstName(false);
@@ -133,9 +136,16 @@ export default function Profile() {
         lastName: userFormValues.lastName,
       })
       .then(() => {
-        authData.user.firstName = userFormValues.firstName;
-        authData.user.lastName = userFormValues.lastName;
-        setIsUserFormSubmitted(true);
+        setAuthData((prevAuthData) => ({
+          ...prevAuthData,
+          user: {
+            ...prevAuthData.user,
+            firstName: userFormValues.firstName,
+            lastName: userFormValues.lastName,
+          },
+        }));
+        setDisplayName(userFormValues);
+        setIsUserFormSubmitSuccess(true);
       })
       .catch((error) => {
         setUserSubmissionError(mapErrorCode(error));
@@ -147,19 +157,14 @@ export default function Profile() {
       switch (error.response.status) {
         case 400:
           return "Fields don't meet requirements";
-          break;
         case 403:
           return "Session expired";
-          break;
         case 404:
           return "User does not exist";
-          break;
         case 500:
           return "Internal Server Error";
-          break;
         default:
           return "Other Error";
-          break;
       }
     } else {
       return "Server Offline";
@@ -168,36 +173,27 @@ export default function Profile() {
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
+    setIsPasswordSubmitSuccess(false);
+    setPasswordSubmissionError(null);
     axiosInstance
       .put(`/user/${authData.user.id}/password`, {
         password: passwordFormValues.newPassword,
       })
       .then(() => {
         setPasswordFormValues({
-          // currentPassword: "",
           newPassword: "",
           confirmPassword: "",
         });
 
         setIsPasswordSubmitSuccess(true);
-        console.log("yay it worked");
       })
       .catch((error) => {
-        setIsPasswordSubmitSuccess(false);
         setPasswordSubmissionError(mapErrorCode(error));
       });
   };
 
-  //password validation
-  useEffect(() => {
-    const passwordRegex =
-      /^(?=.*[0-9])(?=.*[!@#$%^&!@*])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,}$/;
-    const isPasswordValid = passwordRegex.test(passwordFormValues.newPassword);
-    setIsNewPasswordValid(isPasswordValid);
-  }, [passwordFormValues]);
-
   const handleUserChange = (e) => {
-    setIsUserFormSubmitted(false);
+    setIsUserFormSubmitSuccess(false);
     const { name, value } = e.target;
     setUserFormValues((prevValues) => {
       const updatedFormValues = {
@@ -216,8 +212,9 @@ export default function Profile() {
     if (
       userFormValues.firstName.trim() !== "" &&
       userFormValues.lastName.trim() !== ""
-    )
+    ) {
       return true;
+    }
     return false;
   };
 
@@ -322,7 +319,7 @@ export default function Profile() {
           >
             Save
           </button>
-          {isUserFormSubmitted && (
+          {isUserFormSubmitSuccess && (
             <div className="w-fit rounded-md bg-custom-green-light px-3 py-2 text-custom-green-dark">
               🎉 Successfully updated name
             </div>
@@ -351,20 +348,6 @@ export default function Profile() {
         </div>
 
         <form onSubmit={handlePasswordSubmit} className="w-full space-y-9">
-          {/* <div className="entry">
-            <label htmlFor="currentPassword" className="password-label">
-              <strong>Current Password: </strong>
-            </label>
-            <input
-              className="data w-32 border-custom-black"
-              type="password"
-              id="currentPassword"
-              name="currentPassword"
-              value={passwordFormValues.currentPassword}
-              onChange={handlePasswordChange}
-              required
-            ></input>
-          </div> */}
           <div className="entry">
             <label htmlFor="newPassword" className="password-label">
               <strong>New Password: </strong>
@@ -418,7 +401,7 @@ export default function Profile() {
               {passwordSubmissionError}
             </div>
           )}
-          <div className="flex flex-col text-custom-red">
+          <div className="flex flex-col space-y-1 text-custom-red">
             {passwordFormValues.newPassword.length > 0 &&
               !isNewPasswordValid && (
                 <span className="w-fit rounded-md bg-custom-red-light px-3 py-2 text-custom-red">
