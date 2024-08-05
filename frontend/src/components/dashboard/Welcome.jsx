@@ -1,25 +1,34 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext, useAuth } from "../../context/AuthContext";
 import {
   getSundayOfCurrentWeek,
   getDateAfterXDays,
   getWelcomeFormattedDate,
+  getWeekNumberAndYear,
+  getFirstAndLastDayOfWeek,
 } from "../../utils/DateHelper";
 
 export default function Welcome() {
-  // TODO: Replace firstName with what is in AuthContext
-  const [firstName, setFirstName] = useState("Bob");
+  const { authData, setAuthData } = useContext(AuthContext);
+  const [firstName, setFirstName] = useState(authData.user.firstName);
   // TODO: Replace totalHours from API call
   const [workedHours, setWorkedHours] = useState(16);
-  // TODO: Repace weekEndDate and weekStartDate with API call
-  const [weekStartDate, setWeekStartDate] = useState();
-  const [weekEndDate, setWeekEndDate] = useState();
+  const [weekStartDate, setWeekStartDate] = useState(null);
+  const [weekEndDate, setWeekEndDate] = useState(null);
 
   useEffect(() => {
-    const sunday = getSundayOfCurrentWeek();
-    setWeekStartDate(getWelcomeFormattedDate(sunday));
-    setWeekEndDate(getWelcomeFormattedDate(getDateAfterXDays(sunday, 7)));
+    // const sunday = getSundayOfCurrentWeek();
+    // setWeekStartDate(getWelcomeFormattedDate(sunday));
+    // setWeekEndDate(getWelcomeFormattedDate(getDateAfterXDays(sunday, 7)));
+    const { weekNumber, year } = getWeekNumberAndYear(new Date());
+    const { startDate, endDate } = getFirstAndLastDayOfWeek(weekNumber, year);
+    setWeekStartDate(getWelcomeFormattedDate(startDate));
+    setWeekEndDate(getWelcomeFormattedDate(endDate));
   }, []);
+
+  useEffect(() => {
+    setFirstName(authData.user.firstName);
+  }, [authData.user.firstName]);
 
   return (
     <div className="dashboard-component flex h-3/6 w-full flex-grow">
@@ -28,6 +37,8 @@ export default function Welcome() {
           Welcome, {firstName} 👋
         </div>
         <div className="items-start text-xl">
+          {console.log(weekStartDate)}
+          {console.log(weekEndDate)}
           {weekStartDate} - {weekEndDate}
         </div>
       </div>
