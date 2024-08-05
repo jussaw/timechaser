@@ -5,13 +5,12 @@ import { faMoon } from "@fortawesome/free-solid-svg-icons";
 
 export default function PtoRemaining() {
   const { authData, setAuthData } = useContext(AuthContext);
-  const [hours, setHours] = useState(10);
+  const [hours, setHours] = useState(null);
 
   //TODO: retrieve pto from APi call
   useEffect(() => {
-    if (authData) {
-    }
-  }, [authData]);
+    setHours(authData.user.pto);
+  }, []);
 
   return (
     <div className="dashboard-component flex w-full items-center justify-center bg-custom-white">
