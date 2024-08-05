@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Profile.css";
 import axiosInstance from "../config/axiosConfig";
-import { AuthContext, useAuth } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Profile() {
   const { authData, setAuthData } = useContext(AuthContext);
@@ -109,17 +109,11 @@ export default function Profile() {
   //update first name field
   const toggleEditFirstName = () => {
     setIsEditingFirstName((prevIsEditingFirstName) => !prevIsEditingFirstName);
-    if (!isEditingFirstName) {
-      setTimeout(() => firstNameInputRef.current.focus(), 0);
-    }
   };
 
   //update last name field
   const toggleEditLastName = () => {
     setIsEditingLastName((prevIsEditingLastName) => !prevIsEditingLastName);
-    if (!isEditingLastName) {
-      setTimeout(() => lastNameInputRef.current.focus(), 0);
-    }
   };
 
   const handleUserSubmit = (e) => {
@@ -248,7 +242,7 @@ export default function Profile() {
             </label>
             <input
               ref={firstNameInputRef}
-              className={`data mr-2 w-32 ${isEditingFirstName ? "border-custom-black" : "border-custom-white"}`}
+              className={`data mr-2 w-32 ${isEditingFirstName ? "input" : "border-custom-white"}`}
               type="text"
               id="firstName"
               name="firstName"
@@ -275,7 +269,7 @@ export default function Profile() {
             </label>
             <input
               ref={lastNameInputRef}
-              className={`data mr-2 w-32 ${isEditingLastName ? "border-custom-black" : "border-custom-white"}`}
+              className={`data mr-2 w-32 ${isEditingLastName ? "input" : "border-custom-white"}`}
               type="text"
               id="lastName"
               name="lastName"
@@ -357,7 +351,7 @@ export default function Profile() {
               <span>New Password: </span>
             </label>
             <input
-              className="data w-32 border-custom-black"
+              className="data input w-32"
               type="password"
               id="newPassword"
               name="newPassword"
@@ -373,7 +367,7 @@ export default function Profile() {
               <span>Confirm Password: </span>
             </label>
             <input
-              className="data w-32 border-custom-black"
+              className="data input w-32"
               type="password"
               id="confirmPassword"
               name="confirmPassword"
