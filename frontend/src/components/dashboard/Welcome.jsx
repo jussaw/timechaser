@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext, useAuth } from "../../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import {
-  getSundayOfCurrentWeek,
-  getDateAfterXDays,
   getWelcomeFormattedDate,
   getWeekNumberAndYear,
   getFirstAndLastDayOfWeek,
@@ -10,6 +8,7 @@ import {
 
 export default function Welcome() {
   const { authData, setAuthData } = useContext(AuthContext);
+
   const [firstName, setFirstName] = useState(authData.user.firstName);
   // TODO: Replace totalHours from API call
   const [workedHours, setWorkedHours] = useState(16);
@@ -17,9 +16,6 @@ export default function Welcome() {
   const [weekEndDate, setWeekEndDate] = useState(null);
 
   useEffect(() => {
-    // const sunday = getSundayOfCurrentWeek();
-    // setWeekStartDate(getWelcomeFormattedDate(sunday));
-    // setWeekEndDate(getWelcomeFormattedDate(getDateAfterXDays(sunday, 7)));
     const { weekNumber, year } = getWeekNumberAndYear(new Date());
     const { startDate, endDate } = getFirstAndLastDayOfWeek(weekNumber, year);
     setWeekStartDate(getWelcomeFormattedDate(startDate));
@@ -37,8 +33,6 @@ export default function Welcome() {
           Welcome, {firstName} 👋
         </div>
         <div className="items-start text-xl">
-          {console.log(weekStartDate)}
-          {console.log(weekEndDate)}
           {weekStartDate} - {weekEndDate}
         </div>
       </div>
