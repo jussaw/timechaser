@@ -8,7 +8,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +36,7 @@ import com.timechaser.dto.AddRoleDto;
 import com.timechaser.dto.CreateUserRequest;
 import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
+import com.timechaser.dto.UserDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
 import com.timechaser.entity.User;
@@ -75,6 +79,7 @@ class UserControllerTest {
 	
     private AddRoleDto addRoleDto;
     private RoleDto roleDto;
+	private UserDto userDto;
 
     @BeforeEach
     void setup() {
@@ -85,7 +90,14 @@ class UserControllerTest {
         request.setLastName("Last");
         request.setPassword("password");
         request.setUsername("username");
-        
+
+		userDto = new UserDto();
+		userDto.setId(1L);
+		userDto.setUsername("A");
+		userDto.setFirstName("John");
+		userDto.setLastName("Doe");
+		userDto.setPto(3);
+
         addRoleDto = new AddRoleDto();
         addRoleDto.setRoleId(1L);
         
@@ -371,4 +383,22 @@ class UserControllerTest {
 	    response.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
 
+	@Test
+    void UserController_FindAllUsers_ReturnOk() throws Exception {
+        List<UserDto> userDtos = Arrays.asList(userDto);
+        when(userService.findAll()).thenReturn(userDtos);
+
+        ResultActions response = mockMvc.perform(get("/user/all")
+                .contentType(MediaType.APPLICATION_JSON));
+
+		String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(userDtos);
+		System.out.println(json);
+
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", CoreMatchers.is(userDto.getId().intValue())))
+                .andExpect(jsonPath("$[0].username", CoreMatchers.is(userDto.getUsername())))
+				.andExpect(jsonPath("$[0].firstName", CoreMatchers.is(userDto.getFirstName())))
+				.andExpect(jsonPath("$[0].lastName", CoreMatchers.is(userDto.getLastName())))
+				.andExpect(jsonPath("$[0].pto", CoreMatchers.is(userDto.getPto())));
+    }
 }
