@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Profile.css";
 import axiosInstance from "../config/axiosConfig";
-import { AuthContext, useAuth } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Profile() {
   const { authData, setAuthData } = useContext(AuthContext);
@@ -109,17 +109,11 @@ export default function Profile() {
   //update first name field
   const toggleEditFirstName = () => {
     setIsEditingFirstName((prevIsEditingFirstName) => !prevIsEditingFirstName);
-    if (!isEditingFirstName) {
-      setTimeout(() => firstNameInputRef.current.focus(), 0);
-    }
   };
 
   //update last name field
   const toggleEditLastName = () => {
     setIsEditingLastName((prevIsEditingLastName) => !prevIsEditingLastName);
-    if (!isEditingLastName) {
-      setTimeout(() => lastNameInputRef.current.focus(), 0);
-    }
   };
 
   const handleUserSubmit = (e) => {
@@ -235,20 +229,20 @@ export default function Profile() {
   };
 
   return (
-    <div className="full-page-component flex flex-grow flex-col justify-start space-y-8 p-12 text-lg">
+    <div className="full-page-component flex flex-grow flex-col justify-start space-y-8 p-12">
       <div className="w-half flex-1">
-        <h1 className="items-center pb-5 text-4xl font-bold">
+        <h1 className="items-center pb-7 text-4xl font-bold">
           Welcome, {displayName.firstName} {displayName.lastName}
         </h1>
-        <div className="pb-10">Reports to: {supervisor.name}</div>
+        <div className="pb-8">Reports to: {supervisor.name}</div>
         <form onSubmit={handleUserSubmit} className="w-full space-y-9">
           <div className="entry">
             <label htmlFor="firstName" className="user-label">
-              <strong>First Name: </strong>
+              <span>First Name: </span>
             </label>
             <input
               ref={firstNameInputRef}
-              className={`data mr-2 w-32 ${isEditingFirstName ? "border-custom-black" : "border-custom-white"}`}
+              className={`data mr-2 w-32 ${isEditingFirstName ? "input" : "border-custom-white"}`}
               type="text"
               id="firstName"
               name="firstName"
@@ -271,11 +265,11 @@ export default function Profile() {
           </div>
           <div className="entry">
             <label htmlFor="lastName" className="user-label">
-              <strong>Last Name: </strong>
+              <span>Last Name: </span>
             </label>
             <input
               ref={lastNameInputRef}
-              className={`data mr-2 w-32 ${isEditingLastName ? "border-custom-black" : "border-custom-white"}`}
+              className={`data mr-2 w-32 ${isEditingLastName ? "input" : "border-custom-white"}`}
               type="text"
               id="lastName"
               name="lastName"
@@ -298,13 +292,13 @@ export default function Profile() {
           </div>
           <div className="entry">
             <label htmlFor="username" className="user-label">
-              <strong>Username: </strong>
+              <span>Username: </span>
             </label>
             <span className="data border-custom-white">{username}</span>
           </div>
           <div className="entry">
             <label className="user-label">
-              <strong>Time: </strong>
+              <span>Time: </span>
             </label>
             <span className="data border-custom-white">
               {currentTime.toLocaleTimeString()}
@@ -312,7 +306,7 @@ export default function Profile() {
           </div>
           <div className="entry">
             <label className="user-label">
-              <strong>Time zone: </strong>
+              <span>Time zone: </span>
             </label>
             <span className="data border-custom-white">{timeZone}</span>
           </div>
@@ -350,83 +344,94 @@ export default function Profile() {
           Password must be at least 8 characters long and contain at least one
           number, one special character, and one uppercase letter.
         </div>
+        <div className="flex flex-row">
+          <div className="flex flex-col">
+            <form onSubmit={handlePasswordSubmit} className="w-full space-y-8">
+              <div className="entry">
+                <label htmlFor="newPassword" className="password-label">
+                  <span>New Password: </span>
+                </label>
+                <input
+                  className="data input w-32"
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  value={passwordFormValues.newPassword}
+                  onChange={handlePasswordChange}
+                  autoComplete="off"
+                  required
+                ></input>
+              </div>
 
-        <form onSubmit={handlePasswordSubmit} className="w-full space-y-9">
-          <div className="entry">
-            <label htmlFor="newPassword" className="password-label">
-              <strong>New Password: </strong>
-            </label>
-            <input
-              className="data w-32 border-custom-black"
-              type="password"
-              id="newPassword"
-              name="newPassword"
-              value={passwordFormValues.newPassword}
-              onChange={handlePasswordChange}
-              autoComplete="off"
-              required
-            ></input>
+              <div className="entry">
+                <label htmlFor="confirmPassword" className="password-label">
+                  <span>Confirm Password: </span>
+                </label>
+                <input
+                  className="data input w-32"
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={passwordFormValues.confirmPassword}
+                  onChange={handlePasswordChange}
+                  autoComplete="off"
+                  required
+                ></input>
+              </div>
+              <button
+                type="submit"
+                className={`rounded-full p-2 px-4 text-custom-white ${
+                  isValidPasswords
+                    ? "bg-custom-blue hover:bg-custom-blue-dark"
+                    : "bg-custom-disable"
+                }`}
+                disabled={!isValidPasswords}
+              >
+                Reset
+              </button>
+            </form>
           </div>
-
-          <div className="entry">
-            <label htmlFor="confirmPassword" className="password-label">
-              <strong>Confirm Password: </strong>
-            </label>
-            <input
-              className="data w-32 border-custom-black"
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={passwordFormValues.confirmPassword}
-              onChange={handlePasswordChange}
-              autoComplete="off"
-              required
-            ></input>
-          </div>
-          <button
-            type="submit"
-            className={`rounded-full p-2 px-4 text-custom-white ${
-              isValidPasswords
-                ? "bg-custom-blue hover:bg-custom-blue-dark"
-                : "bg-custom-disable"
-            }`}
-            disabled={!isValidPasswords}
-          >
-            Reset
-          </button>
-          {isPasswordSubmitSuccess && (
-            <div className="w-fit rounded-md bg-custom-green-light px-3 py-2 text-custom-green-dark">
-              🎉 Successfully changed password
-            </div>
-          )}
-          {passwordSubmissionError && (
-            <div className="w-fit rounded-md bg-custom-red-light px-3 py-2">
-              <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
-              {passwordSubmissionError}
-            </div>
-          )}
-          <div className="flex flex-col space-y-1 text-custom-red">
-            {passwordFormValues.newPassword.length > 0 &&
-              !isNewPasswordValid && (
-                <span className="w-fit rounded-md bg-custom-red-light px-3 py-2 text-custom-red">
+          <div className="mx-14 flex flex-col">
+            {isPasswordSubmitSuccess && (
+              <div className="mb-7 h-fit w-fit rounded-md bg-custom-green-light px-3 py-1 text-custom-green-dark">
+                🎉 Successfully changed password
+              </div>
+            )}
+            {passwordSubmissionError && (
+              <div className="h-fit w-fit rounded-md bg-custom-red-light px-3 py-1">
+                <FontAwesomeIcon
+                  className="mr-2"
+                  icon={faTriangleExclamation}
+                />
+                {passwordSubmissionError}
+              </div>
+            )}
+            <div className="flex flex-col space-y-1 text-custom-red">
+              {passwordFormValues.newPassword.length > 0 &&
+                !isNewPasswordValid && (
+                  <span className="mb-6 w-fit rounded-md bg-custom-red-light px-3 py-1 text-custom-red">
+                    <FontAwesomeIcon
+                      className="mr-2"
+                      icon={faCircleExclamation}
+                    />
+                    Invalid password
+                  </span>
+                )}
+              {!(
+                passwordFormValues.newPassword ===
+                passwordFormValues.confirmPassword
+              ) && (
+                <span className="w-fit rounded-md bg-custom-red-light px-3 py-1 text-custom-red">
                   <FontAwesomeIcon
                     className="mr-2"
                     icon={faCircleExclamation}
                   />
-                  Invalid password
+                  Passwords do not match
                 </span>
               )}
-            {!(
-              passwordFormValues.newPassword ===
-              passwordFormValues.confirmPassword
-            ) && (
-              <span className="w-fit rounded-md bg-custom-red-light px-3 py-2 text-custom-red">
-                <FontAwesomeIcon className="mr-2" icon={faCircleExclamation} />
-                Passwords do not match
-              </span>
-            )}
+            </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

@@ -1,12 +1,15 @@
 .user-label {
-  @apply w-28;
+  @apply w-28 text-lg font-semibold;
 }
 .password-label {
-  @apply w-44;
+  @apply w-44 text-lg font-semibold;
 }
 .entry {
   @apply flex items-center;
 }
 .data {
-  @apply rounded-xl border-2 border-solid bg-custom-white px-2;
+  @apply rounded-xl bg-custom-white px-2;
+}
+.input {
+  @apply outline-none ring-1 ring-custom-blue;
 }

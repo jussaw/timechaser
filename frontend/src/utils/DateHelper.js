@@ -49,3 +49,36 @@ export const getSundayOfCurrentWeek = () => {
 
   return sunday;
 };
+
+export const getFirstAndLastDayOfWeek = (weekNumber, year) => {
+  let startDate = new Date(year, 0, 1);
+  let dayOfWeek = startDate.getDay();
+  let firstMondayOffset = dayOfWeek === 0 ? 1 : 8 - dayOfWeek;
+
+  startDate = new Date(year, 0, 1 + firstMondayOffset + (weekNumber - 2) * 7);
+  let endDate = new Date(startDate);
+
+  endDate.setDate(startDate.getDate() + 6);
+
+  return {
+    startDate,
+    endDate,
+  };
+};
+
+export const getWeekNumberAndYear = (date) => {
+  const inputDate = new Date(date);
+  inputDate.setDate(inputDate.getDate() + 3 - ((inputDate.getDay() + 6) % 7));
+
+  const firstDayOfYear = new Date(inputDate.getFullYear(), 0, 1);
+  const daysSinceFirstDayOfYear = Math.floor(
+    (inputDate - firstDayOfYear) / (24 * 60 * 60 * 1000),
+  );
+
+  const weekNumber = Math.ceil((daysSinceFirstDayOfYear + 1) / 7);
+
+  return {
+    weekNumber,
+    year: inputDate.getFullYear(),
+  };
+};

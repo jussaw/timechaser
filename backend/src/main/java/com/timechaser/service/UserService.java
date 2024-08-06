@@ -15,6 +15,7 @@ import com.timechaser.dto.CreateUserResponse;
 import com.timechaser.dto.RoleDto;
 import com.timechaser.dto.UpdateUserDetailsRequest;
 import com.timechaser.dto.UpdateUserPasswordRequest;
+import com.timechaser.dto.UserDto;
 import com.timechaser.entity.Role;
 import com.timechaser.entity.User;
 import com.timechaser.exception.CreateException;
@@ -22,6 +23,7 @@ import com.timechaser.exception.NotFoundException;
 import com.timechaser.exception.UserUpdateDetailsException;
 import com.timechaser.exception.UserUpdatePasswordException;
 import com.timechaser.mapper.RoleMapper;
+import com.timechaser.mapper.UserMapper;
 import com.timechaser.repository.RoleRepository;
 import com.timechaser.repository.UserRepository;
 
@@ -147,6 +149,16 @@ public class UserService {
 		Optional<User> user = userRepository.findById(id);
 		
 		return user;
+	}
+	
+	public List<UserDto> findAll() {
+		logger.info("Getting all users");
+		
+		List<User> users = userRepository.findAll();
+		
+		return users.stream()
+				.map(UserMapper::toDto)
+				.collect(Collectors.toList());
 	}
 	
 	public Optional<User> findByUsername(String username){
