@@ -42,8 +42,9 @@ public class TimesheetEntry extends Auditable{
 	private LocalDate date;
 	@Column(scale=2, nullable = false)
 	private BigDecimal hoursWorked;
+	@ManyToOne
+	@JoinColumn(name="project_id")
+	private Project project;
 	
-	@OneToMany(mappedBy = "timesheetEntry", cascade = CascadeType.ALL)
-	private Set<TimesheetEntryProject> timeSheetEntryProjects;
 	
 }
