@@ -36,9 +36,9 @@ public class ProjectController {
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
     }
-    
 
-    @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
+    @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN) " +
+            "|| hasRole(T(com.timechaser.enums.UserRoles).MANAGER)")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectDto projectDto) {
 
@@ -48,47 +48,46 @@ public class ProjectController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(projectDto);
     }
-    
+
     @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProjectDto> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectDto projectDto) {
-    	logger.info("Received request to update project with id: {}");
-    	
-    	projectDto = projectService.update(projectDto, id);
-    	
-    	return ResponseEntity.status(HttpStatus.OK).build();
+        logger.info("Received request to update project with id: {}");
+
+        projectDto = projectService.update(projectDto, id);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
-    
 
     @GetMapping("/{id}")
-	public ResponseEntity<ProjectDto> findProjectById(@PathVariable Long id){
-		logger.info("Received request to get project by ID: {}", id);
-		
-		Optional<Project> projectOptional = projectService.findById(id);
-		
-		ProjectDto response = projectOptional
-		        .map(ProjectMapper::toDto)
-		        .orElseThrow(() -> new NotFoundException("Project not found with ID: " + id));
+    public ResponseEntity<ProjectDto> findProjectById(@PathVariable Long id) {
+        logger.info("Received request to get project by ID: {}", id);
 
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
-    
+        Optional<Project> projectOptional = projectService.findById(id);
+
+        ProjectDto response = projectOptional
+                .map(ProjectMapper::toDto)
+                .orElseThrow(() -> new NotFoundException("Project not found with ID: " + id));
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).ADMIN)")
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteProject(@PathVariable("id") Long id) {
-		logger.info("Received request to delete project with ID {}", id);
-		
-		projectService.deleteById(id);
-		
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-	}	
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProject(@PathVariable("id") Long id) {
+        logger.info("Received request to delete project with ID {}", id);
+
+        projectService.deleteById(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
     @GetMapping("/all")
     public ResponseEntity<List<ProjectDto>> findAllProjects() {
-    	logger.info("Received request to get all projects");
-    	
-    	List<ProjectDto> projectDtos = projectService.findAll();
-    	
-    	return ResponseEntity.status(HttpStatus.OK).body(projectDtos);
+        logger.info("Received request to get all projects");
+
+        List<ProjectDto> projectDtos = projectService.findAll();
+
+        return ResponseEntity.status(HttpStatus.OK).body(projectDtos);
     }
 }
