@@ -33,7 +33,4 @@ public class Project extends Auditable{
 	private Long id;
 	@Column(nullable = false, unique = true)
 	private String name;
-	
-	@OneToMany(mappedBy = "project")
-	private Set<TimesheetEntryProject> timesheetEntryProjects;
 }
