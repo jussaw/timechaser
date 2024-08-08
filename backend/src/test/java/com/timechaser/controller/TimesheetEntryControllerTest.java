@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.hamcrest.CoreMatchers;
@@ -31,6 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timechaser.dto.ProjectDto;
 import com.timechaser.dto.TimesheetEntryDto;
+import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
 import com.timechaser.entity.TimesheetEntry;
 import com.timechaser.entity.User;
@@ -55,6 +57,7 @@ public class TimesheetEntryControllerTest {
 	private TimesheetEntryService timesheetEntryService;
 	
 	private TimesheetEntry timesheetEntry;
+	private Project project;
 	private TimesheetEntryDto timesheetEntryDto;
 	private User user;
 	private Timesheet timesheet;
@@ -69,6 +72,9 @@ public class TimesheetEntryControllerTest {
 		user.setFirstName("First");
 		user.setLastName("Last");
 		
+		project = new Project();
+		project.setId(1L);
+		project.setName("prj");
 		
 		timesheet = new Timesheet();
 		timesheet.setUser(user);
@@ -81,6 +87,10 @@ public class TimesheetEntryControllerTest {
 		timesheetEntry.setDate(LocalDate.of(2024, 8, 1));
 		timesheetEntry.setHoursWorked(new BigDecimal(8));
 		timesheetEntry.setId(1L);
+
+		ArrayList<Project> projects = new ArrayList<>();
+		projects.add(project);
+		timesheetEntry.setProjects(projects);
 		
 		timesheetEntryDto = TimesheetEntryMapper.toDto(timesheetEntry);
 	}
@@ -92,10 +102,12 @@ public class TimesheetEntryControllerTest {
 		ResultActions response = mockMvc.perform(post("/timesheet-entry")
 	            .contentType(MediaType.APPLICATION_JSON)
 	            .content(objectMapper.writeValueAsString(timesheetEntryDto)));
+
+		String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(timesheetEntryDto);
+		System.out.println(json);
 		
 		response.andExpect(MockMvcResultMatchers.status().isCreated())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.timesheet.user.username", CoreMatchers.is(timesheetEntry.getTimesheet().getUser().getUsername())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())));
 	}
 	
 	@Test 

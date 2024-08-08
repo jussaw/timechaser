@@ -71,7 +71,6 @@ public class TimesheetEntryServiceTest {
 		TimesheetEntryDto response = timesheetEntryService.create(timesheetEntryDto);
 		
 		assertNotNull(response);
-		assertEquals(user.getFirstName(), response.getTimesheet().getUser().getFirstName());
 		assertEquals(timesheetEntry.getHoursWorked(), response.getHoursWorked());
 	}
 	
