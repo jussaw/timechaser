@@ -2,6 +2,8 @@ package com.timechaser.entity;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+@JsonIgnoreProperties({"deleted", "createdAt", "updatedAt"})
 @SQLDelete(sql = "UPDATE project SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 @Setter
