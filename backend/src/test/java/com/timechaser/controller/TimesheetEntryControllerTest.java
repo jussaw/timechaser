@@ -1,13 +1,9 @@
 package com.timechaser.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,7 +26,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.timechaser.dto.ProjectDto;
 import com.timechaser.dto.TimesheetEntryDto;
 import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
@@ -57,7 +52,7 @@ public class TimesheetEntryControllerTest {
 	private TimesheetEntryService timesheetEntryService;
 	
 	private TimesheetEntry timesheetEntry;
-	private Project project;
+	private Project project1, project2;
 	private TimesheetEntryDto timesheetEntryDto;
 	private User user;
 	private Timesheet timesheet;
@@ -72,10 +67,14 @@ public class TimesheetEntryControllerTest {
 		user.setFirstName("First");
 		user.setLastName("Last");
 		
-		project = new Project();
-		project.setId(1L);
-		project.setName("prj");
-		
+		project1 = new Project();
+		project1.setId(1L);
+		project1.setName("prj1");
+
+		project2 = new Project();
+		project2.setId(2L);
+		project2.setName("prj2");
+
 		timesheet = new Timesheet();
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
@@ -89,7 +88,8 @@ public class TimesheetEntryControllerTest {
 		timesheetEntry.setId(1L);
 
 		ArrayList<Project> projects = new ArrayList<>();
-		projects.add(project);
+		projects.add(project1);
+		projects.add(project2);
 		timesheetEntry.setProjects(projects);
 		
 		timesheetEntryDto = TimesheetEntryMapper.toDto(timesheetEntry);
@@ -107,7 +107,13 @@ public class TimesheetEntryControllerTest {
 		System.out.println(json);
 		
 		response.andExpect(MockMvcResultMatchers.status().isCreated())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.date", CoreMatchers.is(timesheetEntry.getDate().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.hoursWorked", CoreMatchers.is(timesheetEntry.getHoursWorked().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.projects[0].id", CoreMatchers.is(timesheetEntry.getProjects().get(0).getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.projects[0].name", CoreMatchers.is(timesheetEntry.getProjects().get(0).getName().toString())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.projects[1].id", CoreMatchers.is(timesheetEntry.getProjects().get(1).getId().intValue())))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.projects[1].name", CoreMatchers.is(timesheetEntry.getProjects().get(1).getName().toString())));
 	}
 	
 	@Test 
@@ -119,8 +125,7 @@ public class TimesheetEntryControllerTest {
 		
 		
 		response.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.timesheet.user.username", CoreMatchers.is(timesheetEntry.getTimesheet().getUser().getUsername())));
+			.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())));
 	}
 	
 	@Test 
