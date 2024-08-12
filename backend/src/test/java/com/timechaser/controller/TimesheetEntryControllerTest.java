@@ -138,5 +138,4 @@ public class TimesheetEntryControllerTest {
         response.andExpect(status().isNoContent());
     }
 
-    
 }

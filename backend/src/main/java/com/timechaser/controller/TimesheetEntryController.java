@@ -60,7 +60,8 @@ public class TimesheetEntryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
-	@PreAuthorize("@authorizationService.isAdminOrSelf(#id)")
+	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).EMPLOYEE) " + 
+			"|| hasRole(T(com.timechaser.enums.UserRoles).MANAGER)")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTimesheetEntry(@PathVariable("id") Long id) {
         logger.info("Received request to delete project with ID {}", id);
