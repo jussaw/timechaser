@@ -33,6 +33,7 @@ import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
 import com.timechaser.entity.TimesheetEntry;
 import com.timechaser.entity.User;
+import com.timechaser.enums.TimesheetStatus;
 import com.timechaser.enums.UserRoles;
 import com.timechaser.mapper.TimesheetEntryMapper;
 import com.timechaser.service.TimesheetEntryService;
@@ -70,10 +71,12 @@ public class TimesheetEntryControllerTest {
 		user.setLastName("Last");
 		
 		timesheet = new Timesheet();
+		timesheet.setId(1L);
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
-		timesheet.setWeekNumber(20);
-		timesheet.setTotalHours(new BigDecimal(40));
+		timesheet.setWeekNumber(4);
+		timesheet.setTotalHours(new BigDecimal("4"));
+		timesheet.setStatus(TimesheetStatus.PENDING);
 		
 		project = new Project();
 		project.setId(1L);
