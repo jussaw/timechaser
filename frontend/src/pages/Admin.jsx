@@ -63,6 +63,7 @@ export default function Admin() {
     event.preventDefault();
     setDeleteError(null);
     setSelectedUser(selectedDeleteOption.label);
+
     axiosInstance
       .delete(`user/${selectedDeleteOption.value}`)
       .then(() => {
@@ -295,17 +296,16 @@ export default function Admin() {
     }
   };
 
-  //TODO: confirm with backend what response codes for findAll endpoint
   const mapGetAllErrorCode = (error) => {
     if (error.response) {
       switch (error.response.status) {
         case 500:
         default:
-          setSubmissionError("Internal Server Error");
+          setDeleteError("Internal Get Error");
           break;
       }
     } else {
-      setSubmissionError("Server Offline");
+      setDeleteError("Server Offline");
     }
   };
 
@@ -366,7 +366,7 @@ export default function Admin() {
             label: `${formData.firstName} ${formData.lastName}`,
           },
         ]);
-        //reset role dropdown to default 'select...' option
+        //reset role dropdown to default 'select...'
         setSelectedCreateOption(null);
       })
       .catch((error) => {
@@ -574,10 +574,10 @@ export default function Admin() {
               🎉 Successfully deleted user {selectedUser}
             </div>
           )}
-          {submissionError && (
+          {deleteError && (
             <span className="admin-error">
               <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
-              {submissionError}
+              {deleteError}
             </span>
           )}
         </form>
