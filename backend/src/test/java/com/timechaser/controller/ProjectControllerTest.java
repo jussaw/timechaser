@@ -32,7 +32,6 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timechaser.dto.ProjectDto;
 import com.timechaser.entity.Project;
-import com.timechaser.entity.User;
 import com.timechaser.enums.UserRoles;
 import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.ProjectMapper;

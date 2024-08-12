@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,7 @@ import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
 import com.timechaser.entity.TimesheetEntry;
 import com.timechaser.entity.User;
+import com.timechaser.entity.Project;
 import com.timechaser.exception.CreateException;
 import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.TimesheetEntryMapper;
@@ -38,6 +40,7 @@ public class TimesheetEntryServiceTest {
 	private TimesheetEntryService timesheetEntryService;
 	
 	private TimesheetEntry timesheetEntry;
+	private Project project1, project2;
 	private TimesheetEntryDto timesheetEntryDto;
 	private User user;
 	private Timesheet timesheet;
@@ -49,8 +52,17 @@ public class TimesheetEntryServiceTest {
 		user.setUsername("testuser");
 		user.setPassword("password");
 		user.setFirstName("First");
-		user.setLastName("Last");		
+		user.setLastName("Last");
 		
+		project1 = new Project();
+		project1.setId(1L);
+		project1.setName("prj1");
+
+		project2 = new Project();
+		project2.setId(2L);
+		project2.setName("prj2");
+
+
 		timesheet = new Timesheet();
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
@@ -76,7 +88,8 @@ public class TimesheetEntryServiceTest {
 		TimesheetEntryDto response = timesheetEntryService.create(timesheetEntryDto);
 		
 		assertNotNull(response);
-		assertEquals(user.getFirstName(), response.getTimesheet().getUser().getFirstName());
+		assertEquals(timesheetEntry.getId(), response.getId());
+		assertEquals(timesheetEntry.getDate(), response.getDate());
 		assertEquals(timesheetEntry.getHoursWorked(), response.getHoursWorked());
 	}
 	

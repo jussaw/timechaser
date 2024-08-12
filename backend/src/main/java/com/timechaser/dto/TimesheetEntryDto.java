@@ -2,6 +2,7 @@ package com.timechaser.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -23,8 +24,9 @@ public class TimesheetEntryDto {
 	private Timesheet timesheet;
 	@NotNull(message = "Project is a required field")
 	private Project project; 
+
 	@NotNull(message = "Date is a required field")
 	private LocalDate date;
 	@NotNull(message = "Hours worked is a required field")
-	private BigDecimal hoursWorked; 
+	private BigDecimal hoursWorked;
 }

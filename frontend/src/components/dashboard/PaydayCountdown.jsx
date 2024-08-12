@@ -28,6 +28,7 @@ export default function PaydayCountdown() {
 // Hardcoded payday is 15th and 30th of every month
 const daysUntilNextPayday = () => {
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const day = today.getDate();
   const month = today.getMonth();
   const year = today.getFullYear();
