@@ -54,7 +54,6 @@ public class TimesheetEntryControllerTest {
 	private TimesheetEntryService timesheetEntryService;
 	
 	private TimesheetEntry timesheetEntry;
-	private Project project1, project2;
 	private TimesheetEntryDto timesheetEntryDto;
 	private User user;
 	private Timesheet timesheet;
@@ -70,14 +69,6 @@ public class TimesheetEntryControllerTest {
 		user.setFirstName("First");
 		user.setLastName("Last");
 		
-		project1 = new Project();
-		project1.setId(1L);
-		project1.setName("prj1");
-
-		project2 = new Project();
-		project2.setId(2L);
-		project2.setName("prj2");
-
 		timesheet = new Timesheet();
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
