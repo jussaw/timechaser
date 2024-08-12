@@ -10,6 +10,13 @@ import Select from "react-select";
 
 export default function Admin() {
   const [allUsers, setAllUsers] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const roleOptions = [
+    { value: "1", label: "Admin" },
+    { value: "2", label: "Manager" },
+    { value: "3", label: "Employee" },
+  ];
 
   const [formData, setformData] = useState({
     role: "",
@@ -27,6 +34,7 @@ export default function Admin() {
     password: false,
     confirmPassword: false,
   });
+  const [selectedCreateOption, setSelectedCreateOption] = useState(null);
   const [isFormValid, setIsFormValid] = useState(false);
   const [submissionError, setSubmissionError] = useState(null);
   const [submissionUsername, setSubmissionUsername] = useState(null);
@@ -34,27 +42,131 @@ export default function Admin() {
   const [focusedField, setFocusedField] = useState("");
 
   //delete form fields
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedDeleteOption, setSelectedDeleteOption] = useState(null);
+  const [isDeleteSuccess, setIsDeleteSuccess] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
 
   const handleDeleteChange = (option) => {
-    setSelectedOption(option);
+    setSelectedDeleteOption(option);
+  };
+
+  const handleRoleChange = (option) => {
+    setformData({
+      ...formData,
+      role: option.label,
+      id: option.value,
+    });
+    setSelectedCreateOption(option);
   };
 
   const handleDeleteSubmit = (event) => {
     event.preventDefault();
-    console.log("Selected option:", selectedOption);
-    console.log("Selected option:", selectedOption.value);
+    setDeleteError(null);
+    setSelectedUser(selectedDeleteOption.label);
     axiosInstance
-      .delete(`user/${selectedOption.value}`)
-      .then(() => {})
+      .delete(`user/${selectedDeleteOption.value}`)
+      .then(() => {
+        setAllUsers((prevOptions) =>
+          prevOptions.filter(
+            (option) => option.value !== selectedDeleteOption.value,
+          ),
+        );
+        setSelectedDeleteOption(null);
+        setIsDeleteSuccess(true);
+      })
       .catch((error) => {
         mapDeleteErrorCode(error);
-        console.error("Error user creation", error.message);
       });
     // Perform your submit action here
   };
 
-  const customStyles = {
+  const customCreateStylesValid = {
+    control: (provided, state) => ({
+      ...provided,
+      width: "14rem", // equivalent to w-56
+      borderRadius: "9999px", // equivalent to rounded-full
+      borderColor: "#EF4444",
+      backgroundColor: "#F3F4F6", // equivalent to bg-custom-white
+      padding: "0 0.25rem",
+      fontSize: "1.125rem", // equivalent to text-lg
+      boxShadow: state.isFocused ? "0 0 0 2px rgba(239, 68, 68, 1)" : "none", // focus:ring-2 focus:ring-custom-blue
+      outline: "none", // focus:outline-none
+      height: "2.5rem", // Adjust height to match other form fields
+      display: "flex", // Ensure proper vertical alignment
+      alignItems: "center", // Center align the content vertically
+    }),
+    menu: (provided) => ({
+      ...provided,
+      borderRadius: "0.375rem", // default rounded corners for menu
+      marginTop: "0.2rem", // default margin for menu
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      padding: 0, // default padding for menu list
+    }),
+    option: (provided) => ({
+      ...provided,
+      padding: "0.5rem 1rem", // default padding for options
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: "#000", // default color for single value
+      height: "100%", // Make sure it takes full height of the control
+      display: "flex",
+      alignItems: "center", // Center align the selected value vertically
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: "#6B7280", // Tailwind's gray-500 for placeholder color (adjust as needed)
+      display: "flex",
+      alignItems: "center",
+    }),
+  };
+
+  const customCreateStylesInvalid = {
+    control: (provided, state) => ({
+      ...provided,
+      width: "14rem", // equivalent to w-56
+      borderRadius: "9999px", // equivalent to rounded-full
+      borderColor: "#3B82F6", // equivalent to border-custom-blue
+      backgroundColor: "#F3F4F6", // equivalent to bg-custom-white
+      padding: "0 0.25rem",
+      fontSize: "1.125rem", // equivalent to text-lg
+      boxShadow: state.isFocused ? "0 0 0 2px rgba(59, 130, 246, 0.5)" : "none", // focus:ring-2 focus:ring-custom-blue
+      outline: "none", // focus:outline-none
+      height: "2.5rem", // Adjust height to match other form fields
+      display: "flex", // Ensure proper vertical alignment
+      alignItems: "center", // Center align the content vertically
+    }),
+    menu: (provided) => ({
+      ...provided,
+      borderRadius: "0.375rem", // default rounded corners for menu
+      marginTop: "0.2rem", // default margin for menu
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      padding: 0, // default padding for menu list
+    }),
+    option: (provided) => ({
+      ...provided,
+      padding: "0.5rem 1rem", // default padding for options
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: "#000", // default color for single value
+      height: "100%", // Make sure it takes full height of the control
+      display: "flex",
+      alignItems: "center", // Center align the selected value vertically
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: "#6B7280", // Tailwind's gray-500 for placeholder color (adjust as needed)
+      display: "flex",
+      alignItems: "center",
+    }),
+  };
+
+  const customDeleteStyles = {
     control: (provided, state) => ({
       ...provided,
       width: "14rem", // equivalent to w-56
@@ -142,13 +254,10 @@ export default function Admin() {
           value: user.id, // Use unique identifier as the value
           label: `${user.firstName} ${user.lastName}`,
         }));
-        console.log("hello");
-        console.log(formattedOptions);
         setAllUsers(formattedOptions);
       })
       .catch((error) => {
         mapGetAllErrorCode(error);
-        console.error("Error user creation", error.message);
       });
   }, []);
 
@@ -190,9 +299,7 @@ export default function Admin() {
   const mapGetAllErrorCode = (error) => {
     if (error.response) {
       switch (error.response.status) {
-        case 404:
-          setSubmissionError("No users found");
-          break;
+        case 500:
         default:
           setSubmissionError("Internal Server Error");
           break;
@@ -206,21 +313,21 @@ export default function Admin() {
     if (error.response) {
       switch (error.response.status) {
         case 400:
-          setSubmissionError("Invalid option selected");
+          setDeleteError("Invalid option selected");
           break;
         case 404:
-          setSubmissionError("User does not exist");
+          setDeleteError("User does not exist");
           break;
         default:
-          setSubmissionError("Internal Server Error");
+          setDeleteError("Internal Server Error");
           break;
       }
     } else {
-      setSubmissionError("Server Offline");
+      setDeleteError("Server Offline");
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleCreateSubmit = (e) => {
     e.preventDefault();
     setSubmissionError(null);
     setIsSubmissionSuccess(false);
@@ -233,12 +340,11 @@ export default function Admin() {
         lastName: formData.lastName.trim(),
       })
       .then((response) => {
-        console.log("Successful user creation");
         const newUserId = response.data.id;
 
         axiosInstance
           .post(`/user/${newUserId}/role`, {
-            roleId: parseInt(formData.role),
+            roleId: parseInt(formData.id),
           })
           .then(() => {
             setSubmissionUsername(formData.username);
@@ -251,227 +357,231 @@ export default function Admin() {
               password: "",
               confirmPassword: "",
             });
-          })
-          .catch((error) => {
-            console.error("Error role assignment", error);
           });
+        //update delete users list to show new user
+        setAllUsers((prevUsers) => [
+          ...prevUsers,
+          {
+            value: newUserId,
+            label: `${formData.firstName} ${formData.lastName}`,
+          },
+        ]);
+        //reset role dropdown to default 'select...' option
+        setSelectedCreateOption(null);
       })
       .catch((error) => {
         mapCreateErrorCode(error);
-        console.error("Error user creation", error.message);
       });
   };
 
   return (
-    <div className="full-page-component flex flex-grow flex-col justify-start space-y-8 p-12">
-      <h1 className="text-4xl font-bold">Create User</h1>
-      <form
-        className="flex flex-grow flex-col justify-start space-y-8"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex w-full flex-col space-y-8">
-          <div className="admin-label-input-error">
-            <div className="admin-label-input">
-              <label className="admin-label" htmlFor="role">
-                Role:
-              </label>
-              <select
-                className={
-                  isFormDataValid["role"]
-                    ? "admin-input"
-                    : "admin-input-invalid"
-                }
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              >
-                <option label="" value=""></option>
-                <option label="Admin" value="1">
-                  Admin
-                </option>
-                <option label="Manager" value="2">
-                  Manager
-                </option>
-                <option label="Employee" value="3">
-                  User
-                </option>
-              </select>
-            </div>
-          </div>
-          <div className="admin-label-input-error">
-            <div className="admin-label-input">
-              <label className="admin-label" htmlFor="firstName">
-                First Name:
-              </label>
-              <input
-                className={
-                  isFormDataValid["firstName"]
-                    ? "admin-input"
-                    : "admin-input-invalid"
-                }
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              />
-            </div>
-          </div>
-          <div className="admin-label-input-error">
-            <div className="admin-label-input">
-              <label className="admin-label" htmlFor="lastName">
-                Last Name:
-              </label>
-              <input
-                className={
-                  isFormDataValid["lastName"]
-                    ? "admin-input"
-                    : "admin-input-invalid"
-                }
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              />
-            </div>
-          </div>
-          <div className="admin-label-input-error">
-            <div className="admin-label-input">
-              <label className="admin-label" htmlFor="username">
-                Username:
-              </label>
-              <input
-                className={
-                  isFormDataValid["username"]
-                    ? "admin-input"
-                    : "admin-input-invalid"
-                }
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              />
-            </div>
-          </div>
-          <div className="admin-label-input-error">
-            <div className="admin-label-input">
-              <label className="admin-label" htmlFor="password">
-                Password:
-              </label>
-              <input
-                className={
-                  isFormDataValid["password"]
-                    ? "admin-input"
-                    : "admin-input-invalid"
-                }
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              />
-            </div>
-          </div>
-          <div className="admin-label-input-error">
-            <div className="admin-label-input">
-              <label className="admin-label" htmlFor="confirmPassword">
-                Confirm Password:
-              </label>
-              <input
-                className={
-                  isFormDataValid["confirmPassword"]
-                    ? "admin-input"
-                    : "admin-input-invalid"
-                }
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-              />
-            </div>
-          </div>
-        </div>
-        <button
-          className={`w-fit rounded-full p-2 px-8 text-custom-white ${
-            isFormValid
-              ? "bg-custom-blue hover:bg-custom-blue-dark"
-              : "bg-custom-disable"
-          }`}
-          type="submit"
-          disabled={!isFormValid}
+    <div className="full-page-component flex flex-grow">
+      <div className="flex w-1/2 flex-col space-y-8 p-12">
+        <h1 className="text-4xl font-bold">Create User</h1>
+        <form
+          className="flex flex-grow flex-col justify-start space-y-8"
+          onSubmit={handleCreateSubmit}
         >
-          Create
-        </button>
-        {focusedField && !isFormDataValid[focusedField] && (
-          <span className="admin-error">
-            <FontAwesomeIcon className="mr-2" icon={faCircleExclamation} />
-            {formErrors[focusedField]}
-          </span>
-        )}
-        {submissionError && (
-          <span className="admin-error">
-            <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
-            {submissionError}
-          </span>
-        )}
-        {isSubmissionSuccess && (
-          <div className="w-fit rounded-md bg-custom-green-light px-3 py-2 text-custom-green-dark">
-            🎉 Successfully created user: {submissionUsername}
-          </div>
-        )}
-      </form>
-
-      <h1 className="text-2xl font-semibold">Delete User</h1>
-      <form
-        className="flex flex-grow flex-col justify-start space-y-8"
-        onSubmit={handleDeleteSubmit}
-      >
-        <div className="flex w-full flex-col space-y-8">
-          <div className="admin-label-input-error">
-            <div className="admin-label-input">
-              <label className="admin-label" htmlFor="deleteUser">
-                User ID:
-              </label>
-              <Select
-                id="deleteUser"
-                options={allUsers}
-                styles={customStyles}
-                name="deleteUser"
-                value={selectedOption}
-                onChange={handleDeleteChange}
-              />
+          <div className="flex w-full flex-col space-y-8">
+            <div className="admin-label-input-error">
+              <div className="admin-label-input">
+                <label className="admin-label" htmlFor="role">
+                  Role:
+                </label>
+                <Select
+                  id="role"
+                  options={roleOptions}
+                  styles={
+                    isFormDataValid["role"]
+                      ? customCreateStylesInvalid
+                      : customCreateStylesValid
+                  }
+                  name="role"
+                  value={selectedCreateOption}
+                  onChange={handleRoleChange}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              </div>
+            </div>
+            <div className="admin-label-input-error">
+              <div className="admin-label-input">
+                <label className="admin-label" htmlFor="firstName">
+                  First Name:
+                </label>
+                <input
+                  className={
+                    isFormDataValid["firstName"]
+                      ? "admin-input"
+                      : "admin-input-invalid"
+                  }
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              </div>
+            </div>
+            <div className="admin-label-input-error">
+              <div className="admin-label-input">
+                <label className="admin-label" htmlFor="lastName">
+                  Last Name:
+                </label>
+                <input
+                  className={
+                    isFormDataValid["lastName"]
+                      ? "admin-input"
+                      : "admin-input-invalid"
+                  }
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              </div>
+            </div>
+            <div className="admin-label-input-error">
+              <div className="admin-label-input">
+                <label className="admin-label" htmlFor="username">
+                  Username:
+                </label>
+                <input
+                  className={
+                    isFormDataValid["username"]
+                      ? "admin-input"
+                      : "admin-input-invalid"
+                  }
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              </div>
+            </div>
+            <div className="admin-label-input-error">
+              <div className="admin-label-input">
+                <label className="admin-label" htmlFor="password">
+                  Password:
+                </label>
+                <input
+                  className={
+                    isFormDataValid["password"]
+                      ? "admin-input"
+                      : "admin-input-invalid"
+                  }
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              </div>
+            </div>
+            <div className="admin-label-input-error">
+              <div className="admin-label-input">
+                <label className="admin-label" htmlFor="confirmPassword">
+                  Confirm Password:
+                </label>
+                <input
+                  className={
+                    isFormDataValid["confirmPassword"]
+                      ? "admin-input"
+                      : "admin-input-invalid"
+                  }
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <button
-          className={`w-fit rounded-full p-2 px-8 text-custom-white ${
-            selectedOption
-              ? "bg-custom-blue hover:bg-custom-blue-dark"
-              : "bg-custom-disable"
-          }`}
-          type="submit"
-          disabled={!selectedOption}
+          <button
+            className={`w-fit rounded-full p-2 px-8 text-custom-white ${
+              isFormValid
+                ? "bg-custom-blue hover:bg-custom-blue-dark"
+                : "bg-custom-disable"
+            }`}
+            type="submit"
+            disabled={!isFormValid}
+          >
+            Create
+          </button>
+          {focusedField && !isFormDataValid[focusedField] && (
+            <span className="admin-error">
+              <FontAwesomeIcon className="mr-2" icon={faCircleExclamation} />
+              {formErrors[focusedField]}
+            </span>
+          )}
+          {submissionError && (
+            <span className="admin-error">
+              <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
+              {submissionError}
+            </span>
+          )}
+          {isSubmissionSuccess && (
+            <div className="w-fit rounded-md bg-custom-green-light px-3 py-2 text-custom-green-dark">
+              🎉 Successfully created user: {submissionUsername}
+            </div>
+          )}
+        </form>
+      </div>
+      <div className="flex w-1/2 flex-col space-y-8 p-12">
+        <h1 className="text-4xl font-bold">Delete User</h1>
+        <form
+          className="flex flex-grow flex-col justify-start space-y-8"
+          onSubmit={handleDeleteSubmit}
         >
-          Delete
-        </button>
-
-        {submissionError && (
-          <span className="admin-error">
-            <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
-            {submissionError}
-          </span>
-        )}
-      </form>
+          <div className="flex w-full flex-col space-y-8">
+            <div className="admin-label-input-error">
+              <div className="admin-label-input">
+                <label className="admin-label" htmlFor="deleteUser">
+                  User ID:
+                </label>
+                <Select
+                  id="deleteUser"
+                  options={allUsers}
+                  styles={customDeleteStyles}
+                  name="deleteUser"
+                  value={selectedDeleteOption}
+                  onChange={handleDeleteChange}
+                />
+              </div>
+            </div>
+          </div>
+          <button
+            className={`w-fit rounded-full p-2 px-8 text-custom-white ${
+              selectedDeleteOption
+                ? "bg-custom-blue hover:bg-custom-blue-dark"
+                : "bg-custom-disable"
+            }`}
+            type="submit"
+            disabled={!selectedDeleteOption}
+          >
+            Delete
+          </button>
+          {isDeleteSuccess && (
+            <div className="w-fit rounded-md bg-custom-green-light px-3 py-2 text-custom-green-dark">
+              🎉 Successfully deleted user {selectedUser}
+            </div>
+          )}
+          {submissionError && (
+            <span className="admin-error">
+              <FontAwesomeIcon className="mr-2" icon={faTriangleExclamation} />
+              {submissionError}
+            </span>
+          )}
+        </form>
+      </div>
     </div>
   );
 }
