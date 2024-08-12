@@ -2,17 +2,17 @@ package com.timechaser.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -42,9 +42,11 @@ public class TimesheetEntry extends Auditable{
 	private LocalDate date;
 	@Column(scale=2, nullable = false)
 	private BigDecimal hoursWorked;
-	@ManyToOne
-	@JoinColumn(name="project_id")
-	private Project project;
-	
-	
+	@ManyToMany
+    @JoinTable(
+        name = "timesheet_entry_project",
+        joinColumns = @JoinColumn(name = "timesheet_entry_id"),
+        inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    private List<Project> projects;
 }
