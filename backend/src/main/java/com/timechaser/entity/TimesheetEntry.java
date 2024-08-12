@@ -35,16 +35,18 @@ public class TimesheetEntry extends Auditable{
 	@Id
 	@GeneratedValue(strategy  = GenerationType.IDENTITY)
 	private Long id;
+	
 	@ManyToOne
 	@JoinColumn(name = "timesheet_id")
 	private Timesheet timesheet;
+	
 	@Column(nullable = false)
 	private LocalDate date;
+	
 	@Column(scale=2, nullable = false)
-	private BigDecimal hoursWorked;
+	private BigDecimal hoursWorked;	
+	
 	@ManyToOne
 	@JoinColumn(name="project_id")
 	private Project project;
-	
-	
 }

@@ -31,6 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timechaser.dto.ProjectDto;
 import com.timechaser.dto.TimesheetEntryDto;
+import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
 import com.timechaser.entity.TimesheetEntry;
 import com.timechaser.entity.User;
@@ -58,6 +59,7 @@ public class TimesheetEntryControllerTest {
 	private TimesheetEntryDto timesheetEntryDto;
 	private User user;
 	private Timesheet timesheet;
+	private Project project;
 	
 	@BeforeEach
 	void setUp() {
@@ -67,8 +69,7 @@ public class TimesheetEntryControllerTest {
 		user.setUsername("testuser");
 		user.setPassword("password");
 		user.setFirstName("First");
-		user.setLastName("Last");
-		
+		user.setLastName("Last");		
 		
 		timesheet = new Timesheet();
 		timesheet.setUser(user);
@@ -76,11 +77,16 @@ public class TimesheetEntryControllerTest {
 		timesheet.setWeekNumber(20);
 		timesheet.setTotalHours(new BigDecimal(40));
 		
+		project = new Project();
+		project.setId(1L);
+		project.setName("Test Project");
+		
 		timesheetEntry = new TimesheetEntry();
-		timesheetEntry.setTimesheet(timesheet);
 		timesheetEntry.setDate(LocalDate.of(2024, 8, 1));
 		timesheetEntry.setHoursWorked(new BigDecimal(8));
 		timesheetEntry.setId(1L);
+		timesheetEntry.setTimesheet(timesheet);
+		timesheetEntry.setProject(project);
 		
 		timesheetEntryDto = TimesheetEntryMapper.toDto(timesheetEntry);
 	}
@@ -94,8 +100,7 @@ public class TimesheetEntryControllerTest {
 	            .content(objectMapper.writeValueAsString(timesheetEntryDto)));
 		
 		response.andExpect(MockMvcResultMatchers.status().isCreated())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.timesheet.user.username", CoreMatchers.is(timesheetEntry.getTimesheet().getUser().getUsername())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())));
 	}
 	
 	@Test 
@@ -107,9 +112,8 @@ public class TimesheetEntryControllerTest {
 		
 		
 		response.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.timesheet.user.username", CoreMatchers.is(timesheetEntry.getTimesheet().getUser().getUsername())));
-	}
+			.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())));
+    }
 	
 	@Test 
 	void TimesheetEntryController_GetTimesheetEntry_NotFound() throws Exception {

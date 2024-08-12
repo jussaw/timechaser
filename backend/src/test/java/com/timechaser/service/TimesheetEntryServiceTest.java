@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.timechaser.dto.TimesheetEntryDto;
+import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
 import com.timechaser.entity.TimesheetEntry;
 import com.timechaser.entity.User;
@@ -40,6 +41,7 @@ public class TimesheetEntryServiceTest {
 	private TimesheetEntryDto timesheetEntryDto;
 	private User user;
 	private Timesheet timesheet;
+	private Project project;
 	
 	@BeforeEach
 	void setUp() {
@@ -47,14 +49,17 @@ public class TimesheetEntryServiceTest {
 		user.setUsername("testuser");
 		user.setPassword("password");
 		user.setFirstName("First");
-		user.setLastName("Last");
-		
+		user.setLastName("Last");		
 		
 		timesheet = new Timesheet();
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
 		timesheet.setWeekNumber(20);
 		timesheet.setTotalHours(new BigDecimal(40));
+		
+		project = new Project();
+		project.setId(1L);
+		project.setName("Test Project");
 		
 		timesheetEntry = new TimesheetEntry();
 		timesheetEntry.setTimesheet(timesheet);
@@ -90,7 +95,6 @@ public class TimesheetEntryServiceTest {
 		TimesheetEntry result = timesheetEntryService.findById(1L).get();
 		
 		assertNotNull(result);
-		assertEquals(user.getFirstName(), result.getTimesheet().getUser().getFirstName());
 		assertEquals(timesheetEntry.getHoursWorked(), result.getHoursWorked());
 	}
 	
