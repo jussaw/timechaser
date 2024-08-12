@@ -78,7 +78,6 @@ export default function Admin() {
       .catch((error) => {
         mapDeleteErrorCode(error);
       });
-    // Perform your submit action here
   };
 
   const customCreateStylesValid = {
@@ -93,8 +92,8 @@ export default function Admin() {
       boxShadow: state.isFocused ? "0 0 0 2px rgba(239, 68, 68, 1)" : "none", // focus:ring-2 focus:ring-custom-blue
       outline: "none", // focus:outline-none
       height: "2.5rem", // Adjust height to match other form fields
-      display: "flex", // Ensure proper vertical alignment
-      alignItems: "center", // Center align the content vertically
+      display: "flex",
+      alignItems: "center",
     }),
     menu: (provided) => ({
       ...provided,
@@ -112,13 +111,13 @@ export default function Admin() {
     singleValue: (provided) => ({
       ...provided,
       color: "#000", // default color for single value
-      height: "100%", // Make sure it takes full height of the control
+      height: "100%",
       display: "flex",
-      alignItems: "center", // Center align the selected value vertically
+      alignItems: "center",
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: "#6B7280", // Tailwind's gray-500 for placeholder color (adjust as needed)
+      color: "#6B7280", // Tailwind's gray-500 for placeholder color
       display: "flex",
       alignItems: "center",
     }),
@@ -127,41 +126,41 @@ export default function Admin() {
   const customCreateStylesInvalid = {
     control: (provided, state) => ({
       ...provided,
-      width: "14rem", // equivalent to w-56
-      borderRadius: "9999px", // equivalent to rounded-full
-      borderColor: "#3B82F6", // equivalent to border-custom-blue
-      backgroundColor: "#F3F4F6", // equivalent to bg-custom-white
+      width: "14rem",
+      borderRadius: "9999px",
+      borderColor: "#3B82F6",
+      backgroundColor: "#F3F4F6",
       padding: "0 0.25rem",
-      fontSize: "1.125rem", // equivalent to text-lg
-      boxShadow: state.isFocused ? "0 0 0 2px rgba(59, 130, 246, 0.5)" : "none", // focus:ring-2 focus:ring-custom-blue
-      outline: "none", // focus:outline-none
-      height: "2.5rem", // Adjust height to match other form fields
-      display: "flex", // Ensure proper vertical alignment
-      alignItems: "center", // Center align the content vertically
+      fontSize: "1.125rem",
+      boxShadow: state.isFocused ? "0 0 0 2px rgba(59, 130, 246, 0.5)" : "none",
+      outline: "none",
+      height: "2.5rem",
+      display: "flex",
+      alignItems: "center",
     }),
     menu: (provided) => ({
       ...provided,
-      borderRadius: "0.375rem", // default rounded corners for menu
-      marginTop: "0.2rem", // default margin for menu
+      borderRadius: "0.375rem",
+      marginTop: "0.2rem",
     }),
     menuList: (provided) => ({
       ...provided,
-      padding: 0, // default padding for menu list
+      padding: 0,
     }),
     option: (provided) => ({
       ...provided,
-      padding: "0.5rem 1rem", // default padding for options
+      padding: "0.5rem 1rem",
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: "#000", // default color for single value
-      height: "100%", // Make sure it takes full height of the control
+      color: "#000",
+      height: "100%",
       display: "flex",
-      alignItems: "center", // Center align the selected value vertically
+      alignItems: "center",
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: "#6B7280", // Tailwind's gray-500 for placeholder color (adjust as needed)
+      color: "#6B7280",
       display: "flex",
       alignItems: "center",
     }),
@@ -170,41 +169,41 @@ export default function Admin() {
   const customDeleteStyles = {
     control: (provided, state) => ({
       ...provided,
-      width: "14rem", // equivalent to w-56
-      borderRadius: "9999px", // equivalent to rounded-full
-      borderColor: "#3B82F6", // equivalent to border-custom-blue
-      backgroundColor: "#F3F4F6", // equivalent to bg-custom-white
+      width: "14rem",
+      borderRadius: "9999px",
+      borderColor: "#3B82F6",
+      backgroundColor: "#F3F4F6",
       padding: "0 0.25rem",
-      fontSize: "1.125rem", // equivalent to text-lg
-      boxShadow: state.isFocused ? "0 0 0 2px rgba(59, 130, 246, 0.5)" : "none", // focus:ring-2 focus:ring-custom-blue
-      outline: "none", // focus:outline-none
-      height: "2.5rem", // Adjust height to match other form fields
-      display: "flex", // Ensure proper vertical alignment
-      alignItems: "center", // Center align the content vertically
+      fontSize: "1.125rem",
+      boxShadow: state.isFocused ? "0 0 0 2px rgba(59, 130, 246, 0.5)" : "none",
+      outline: "none",
+      height: "2.5rem",
+      display: "flex",
+      alignItems: "center",
     }),
     menu: (provided) => ({
       ...provided,
-      borderRadius: "0.375rem", // default rounded corners for menu
-      marginTop: "0.2rem", // default margin for menu
+      borderRadius: "0.375rem",
+      marginTop: "0.2rem",
     }),
     menuList: (provided) => ({
       ...provided,
-      padding: 0, // default padding for menu list
+      padding: 0,
     }),
     option: (provided) => ({
       ...provided,
-      padding: "0.5rem 1rem", // default padding for options
+      padding: "0.5rem 1rem",
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: "#000", // default color for single value
-      height: "100%", // Make sure it takes full height of the control
+      color: "#000",
+      height: "100%",
       display: "flex",
-      alignItems: "center", // Center align the selected value vertically
+      alignItems: "center",
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: "#6B7280", // Tailwind's gray-500 for placeholder color (adjust as needed)
+      color: "#6B7280",
       display: "flex",
       alignItems: "center",
     }),
@@ -252,7 +251,7 @@ export default function Admin() {
       .get("/user/all")
       .then((response) => {
         const formattedOptions = response.data.map((user) => ({
-          value: user.id, // Use unique identifier as the value
+          value: user.id,
           label: `${user.firstName} ${user.lastName}`,
         }));
         setAllUsers(formattedOptions);
