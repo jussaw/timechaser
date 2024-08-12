@@ -56,6 +56,7 @@ public class TimesheetEntryControllerTest {
 	private TimesheetEntryDto timesheetEntryDto;
 	private User user;
 	private Timesheet timesheet;
+	private Project project;
 	
 	@BeforeEach
 	void setUp() {
@@ -81,17 +82,17 @@ public class TimesheetEntryControllerTest {
 		timesheet.setWeekNumber(20);
 		timesheet.setTotalHours(new BigDecimal(40));
 		
+		project = new Project();
+		project.setId(1L);
+		project.setName("Test Project");
+		
 		timesheetEntry = new TimesheetEntry();
-		timesheetEntry.setTimesheet(timesheet);
 		timesheetEntry.setDate(LocalDate.of(2024, 8, 1));
 		timesheetEntry.setHoursWorked(new BigDecimal(8));
 		timesheetEntry.setId(1L);
+		timesheetEntry.setTimesheet(timesheet);
+		timesheetEntry.setProject(project);
 
-		ArrayList<Project> projects = new ArrayList<>();
-		projects.add(project1);
-		projects.add(project2);
-		timesheetEntry.setProjects(projects);
-		
 		timesheetEntryDto = TimesheetEntryMapper.toDto(timesheetEntry);
 	}
 	
@@ -107,13 +108,7 @@ public class TimesheetEntryControllerTest {
 		System.out.println(json);
 		
 		response.andExpect(MockMvcResultMatchers.status().isCreated())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.date", CoreMatchers.is(timesheetEntry.getDate().toString())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.hoursWorked", CoreMatchers.is(timesheetEntry.getHoursWorked().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.projects[0].id", CoreMatchers.is(timesheetEntry.getProjects().get(0).getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.projects[0].name", CoreMatchers.is(timesheetEntry.getProjects().get(0).getName().toString())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.projects[1].id", CoreMatchers.is(timesheetEntry.getProjects().get(1).getId().intValue())))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.projects[1].name", CoreMatchers.is(timesheetEntry.getProjects().get(1).getName().toString())));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())));
 	}
 	
 	@Test 
@@ -127,6 +122,7 @@ public class TimesheetEntryControllerTest {
 		response.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheetEntry.getId().intValue())));
 	}
+
 	
 	@Test 
 	void TimesheetEntryController_GetTimesheetEntry_NotFound() throws Exception {

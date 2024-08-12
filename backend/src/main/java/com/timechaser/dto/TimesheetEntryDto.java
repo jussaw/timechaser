@@ -20,9 +20,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TimesheetEntryDto {
 	private Long id;
+	@NotNull(message = "Timesheet is a required field")
+	private Timesheet timesheet;
+	@NotNull(message = "Project is a required field")
+	private Project project; 
+
 	@NotNull(message = "Date is a required field")
 	private LocalDate date;
 	@NotNull(message = "Hours worked is a required field")
 	private BigDecimal hoursWorked;
-	private List<Project> projects;
 }

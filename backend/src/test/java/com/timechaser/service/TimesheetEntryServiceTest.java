@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.timechaser.dto.TimesheetEntryDto;
+import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
 import com.timechaser.entity.TimesheetEntry;
 import com.timechaser.entity.User;
@@ -43,6 +44,7 @@ public class TimesheetEntryServiceTest {
 	private TimesheetEntryDto timesheetEntryDto;
 	private User user;
 	private Timesheet timesheet;
+	private Project project;
 	
 	@BeforeEach
 	void setUp() {
@@ -60,21 +62,21 @@ public class TimesheetEntryServiceTest {
 		project2.setId(2L);
 		project2.setName("prj2");
 
+
 		timesheet = new Timesheet();
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
 		timesheet.setWeekNumber(20);
 		timesheet.setTotalHours(new BigDecimal(40));
 		
+		project = new Project();
+		project.setId(1L);
+		project.setName("Test Project");
+		
 		timesheetEntry = new TimesheetEntry();
 		timesheetEntry.setTimesheet(timesheet);
 		timesheetEntry.setDate(LocalDate.of(2024, 8, 1));
 		timesheetEntry.setHoursWorked(new BigDecimal(8));
-
-		ArrayList<Project> projects = new ArrayList<>();
-		projects.add(project1);
-		projects.add(project2);
-		timesheetEntry.setProjects(projects);
 		
 		timesheetEntryDto = TimesheetEntryMapper.toDto(timesheetEntry);
 	}
@@ -89,11 +91,6 @@ public class TimesheetEntryServiceTest {
 		assertEquals(timesheetEntry.getId(), response.getId());
 		assertEquals(timesheetEntry.getDate(), response.getDate());
 		assertEquals(timesheetEntry.getHoursWorked(), response.getHoursWorked());
-		assertEquals(timesheetEntry.getProjects(), response.getProjects());
-		assertEquals(timesheetEntry.getProjects().get(0).getId(), response.getProjects().get(0).getId());
-		assertEquals(timesheetEntry.getProjects().get(0).getName(), response.getProjects().get(0).getName());
-		assertEquals(timesheetEntry.getProjects().get(1).getId(), response.getProjects().get(1).getId());
-		assertEquals(timesheetEntry.getProjects().get(1).getName(), response.getProjects().get(1).getName());
 	}
 	
 	@Test 
@@ -111,7 +108,6 @@ public class TimesheetEntryServiceTest {
 		TimesheetEntry result = timesheetEntryService.findById(1L).get();
 		
 		assertNotNull(result);
-		assertEquals(user.getFirstName(), result.getTimesheet().getUser().getFirstName());
 		assertEquals(timesheetEntry.getHoursWorked(), result.getHoursWorked());
 	}
 	

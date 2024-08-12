@@ -7,18 +7,20 @@ public class TimesheetEntryMapper {
 	public static TimesheetEntry toEntity(TimesheetEntryDto timesheetEntryDto) {
 		return TimesheetEntry.builder()
 				.id(timesheetEntryDto.getId())
-				.projects(timesheetEntryDto.getProjects())
 				.date(timesheetEntryDto.getDate())
 				.hoursWorked(timesheetEntryDto.getHoursWorked())
+				.project(timesheetEntryDto.getProject())
+				.timesheet(timesheetEntryDto.getTimesheet())
 				.build();
 	}
 	
 	public static TimesheetEntryDto toDto(TimesheetEntry timesheetEntry) {
 		return TimesheetEntryDto.builder()
 				.id(timesheetEntry.getId())
-				.projects(timesheetEntry.getProjects())
 				.date(timesheetEntry.getDate())
 				.hoursWorked(timesheetEntry.getHoursWorked())
+				.project(timesheetEntry.getProject())
+				.timesheet(timesheetEntry.getTimesheet())
 				.build();
 	}
 }
