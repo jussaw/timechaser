@@ -87,49 +87,50 @@ export default function SideBar() {
       }
     >
       <div className="w-full">
-        {!roles.isAdmin && (
-          <>
-            <Link
-              className="flex h-20 w-full items-center justify-start px-4 py-16"
-              to="/dashboard"
-            >
-              <FontAwesomeIcon
-                className="text-4xl text-custom-blue"
-                icon={faClockRotateLeft}
-              />
-              <div className="pl-2 text-3xl font-bold">TimeChaser</div>
-            </Link>
-            <Link
-              className={
-                renderDarkDashboard ? "sidebar-button-dark" : "sidebar-button"
-              }
-              to="/dashboard"
-            >
-              <FontAwesomeIcon className="sidebar-icon" icon={faChartColumn} />
-              <div className="sidebar-button-icon"> Dashboard</div>
-            </Link>
-            <Link
-              className={
-                renderDarkTimesheet ? "sidebar-button-dark" : "sidebar-button"
-              }
-              to="/timesheet"
-            >
-              <FontAwesomeIcon className="sidebar-icon" icon={faStopwatch} />
-              <div className="sidebar-button-icon"> Timesheet</div>
-            </Link>
-            <Link
-              className={
-                renderDarkHolidays ? "sidebar-button-dark" : "sidebar-button"
-              }
-              to="/holidays"
-            >
-              <FontAwesomeIcon
-                className="sidebar-icon"
-                icon={faUmbrellaBeach}
-              />
-              <div className="sidebar-button-icon"> Holidays</div>
-            </Link>
-          </>
+        <Link
+          className="flex h-20 w-full items-center justify-start px-4 py-16"
+          to={roles.isAdmin ? "/admin" : "/dashboard"}
+        >
+          <FontAwesomeIcon
+            className="text-4xl text-custom-blue"
+            icon={faClockRotateLeft}
+          />
+          <div className="pl-2 text-3xl font-bold">TimeChaser</div>
+        </Link>
+        {(roles.isManager || roles.isEmployee) && (
+          <Link
+            className={
+              renderDarkDashboard ? "sidebar-button-dark" : "sidebar-button"
+            }
+            to="/dashboard"
+          >
+            <FontAwesomeIcon className="sidebar-icon" icon={faChartColumn} />
+            <div className="sidebar-button-icon"> Dashboard</div>
+          </Link>
+        )}
+
+        {(roles.isManager || roles.isEmployee) && (
+          <Link
+            className={
+              renderDarkTimesheet ? "sidebar-button-dark" : "sidebar-button"
+            }
+            to="/timesheet"
+          >
+            <FontAwesomeIcon className="sidebar-icon" icon={faStopwatch} />
+            <div className="sidebar-button-icon"> Timesheet</div>
+          </Link>
+        )}
+
+        {(roles.isManager || roles.isEmployee) && (
+          <Link
+            className={
+              renderDarkHolidays ? "sidebar-button-dark" : "sidebar-button"
+            }
+            to="/holidays"
+          >
+            <FontAwesomeIcon className="sidebar-icon" icon={faUmbrellaBeach} />
+            <div className="sidebar-button-icon"> Holidays</div>
+          </Link>
         )}
 
         {roles.isManager && (
@@ -149,27 +150,15 @@ export default function SideBar() {
           </Link>
         )}
         {roles.isAdmin && (
-          <>
-            <Link
-              className="flex h-20 w-full items-center justify-start px-4 py-16"
-              to="/admin"
-            >
-              <FontAwesomeIcon
-                className="text-4xl text-custom-blue"
-                icon={faClockRotateLeft}
-              />
-              <div className="pl-2 text-3xl font-bold">TimeChaser</div>
-            </Link>
-            <Link
-              className={
-                renderDarkAdmin ? "sidebar-button-dark" : "sidebar-button"
-              }
-              to="/admin"
-            >
-              <FontAwesomeIcon className="sidebar-icon" icon={faUserTie} />
-              <div className="sidebar-button-icon"> Admin</div>
-            </Link>
-          </>
+          <Link
+            className={
+              renderDarkAdmin ? "sidebar-button-dark" : "sidebar-button"
+            }
+            to="/admin"
+          >
+            <FontAwesomeIcon className="sidebar-icon" icon={faUserTie} />
+            <div className="sidebar-button-icon"> Admin</div>
+          </Link>
         )}
         <Link
           className={
