@@ -27,7 +27,11 @@ export default function Login() {
 
   useEffect(() => {
     if (authData) {
-      navigate("/dashboard");
+      if (authData.roles[0].id === 1) {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     }
   }, [authData, navigate]);
 
@@ -71,13 +75,11 @@ export default function Login() {
         },
       )
       .then((response) => {
-        const decodedToken = jwtDecode(response.data.token);
         setAuthData((prevAuthData) => ({
           ...prevAuthData,
           ...response.data,
           tokenExpiration: jwtDecode(response.data.token).exp,
         }));
-        navigate("/dashboard");
       })
       .catch((error) => {
         mapErrorCode(error);
