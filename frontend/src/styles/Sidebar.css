@@ -1,5 +1,5 @@
 .sidebar-button {
-  @apply mb-2 flex h-14 w-full items-center rounded-full px-6 hover:shadow-md;
+  @apply mb-2 flex h-14 w-full items-center rounded-full px-6 hover:shadow-md active:shadow-inner;
 }
 
 .sidebar-button-dark {
