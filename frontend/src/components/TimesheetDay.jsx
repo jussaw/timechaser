@@ -84,12 +84,12 @@ export default function TimesheetDay(props) {
               <div className="flex w-full flex-row justify-between p-2">
                 <div className="w-1/12 text-start">{project.hours}</div>
                 <div className="w-10/12 text-center">{project.project}</div>
-                <div className="text-custom-red w-1/12 text-end">
+                <div className="w-1/12 text-end text-custom-red">
                   <FontAwesomeIcon icon={faMinus} />
                 </div>
               </div>
               <div className="flex justify-center">
-                <hr className="via-custom-black w-11/12 border-t-2 bg-gradient-to-r from-custom-white to-transparent px-2" />
+                <hr className="w-11/12 border-t-2 bg-gradient-to-r from-custom-white via-custom-black to-transparent px-2" />
               </div>
             </li>
           ))}
@@ -118,7 +118,7 @@ export default function TimesheetDay(props) {
                   />
                   <button
                     onClick={handleMinusClick}
-                    className="text-custom-red ml-2 w-1/12 items-center text-end"
+                    className="ml-2 w-1/12 items-center text-end text-custom-red"
                   >
                     <FontAwesomeIcon icon={faXmark} />
                   </button>
