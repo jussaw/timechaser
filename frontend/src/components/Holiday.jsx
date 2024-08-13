@@ -66,8 +66,8 @@ export default function Holiday(props) {
     <div
       className={
         props.holiday === "Christmas" || props.holiday === "LaborDay"
-          ? "relative h-28 w-80 overflow-hidden rounded-lg bg-cover bg-center bg-no-repeat text-custom-black"
-          : "relative h-28 w-80 overflow-hidden rounded-lg bg-cover bg-center bg-no-repeat text-custom-white"
+          ? "relative h-28 w-80 overflow-hidden rounded-lg bg-cover bg-center bg-no-repeat text-custom-black shadow-2xl"
+          : "relative h-28 w-80 overflow-hidden rounded-lg bg-cover bg-center bg-no-repeat text-custom-white shadow-2xl"
       }
       style={{
         backgroundImage: `url(${holidayList[props.holiday].image})`,
