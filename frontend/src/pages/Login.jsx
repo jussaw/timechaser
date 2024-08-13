@@ -75,7 +75,6 @@ export default function Login() {
         },
       )
       .then((response) => {
-        const decodedToken = jwtDecode(response.data.token);
         setAuthData((prevAuthData) => ({
           ...prevAuthData,
           ...response.data,
