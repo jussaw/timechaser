@@ -9,7 +9,7 @@ import {
 export default function Welcome() {
   const { authData, setAuthData } = useContext(AuthContext);
 
-  const [firstName, setFirstName] = useState(authData.user.firstName);
+  const [firstName, setFirstName] = useState("");
   // TODO: Replace totalHours from API call
   const [workedHours, setWorkedHours] = useState(16);
   const [weekStartDate, setWeekStartDate] = useState(null);
@@ -23,8 +23,10 @@ export default function Welcome() {
   }, []);
 
   useEffect(() => {
-    setFirstName(authData.user.firstName);
-  }, [authData.user.firstName]);
+    if (authData.user.firstName) {
+      setFirstName(authData.user.firstName);
+    }
+  }, [authData]);
 
   return (
     <div className="dashboard-component flex h-3/6 w-full flex-grow">
