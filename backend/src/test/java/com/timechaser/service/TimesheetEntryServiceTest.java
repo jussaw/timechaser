@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -54,15 +56,6 @@ public class TimesheetEntryServiceTest {
 		user.setFirstName("First");
 		user.setLastName("Last");
 		
-		project1 = new Project();
-		project1.setId(1L);
-		project1.setName("prj1");
-
-		project2 = new Project();
-		project2.setId(2L);
-		project2.setName("prj2");
-
-
 		timesheet = new Timesheet();
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
@@ -75,6 +68,7 @@ public class TimesheetEntryServiceTest {
 		
 		timesheetEntry = new TimesheetEntry();
 		timesheetEntry.setTimesheet(timesheet);
+		timesheetEntry.setProject(project);
 		timesheetEntry.setDate(LocalDate.of(2024, 8, 1));
 		timesheetEntry.setHoursWorked(new BigDecimal(8));
 		
@@ -113,11 +107,17 @@ public class TimesheetEntryServiceTest {
 	
 	@Test 
 	void TimesheetEntry_findById_NotExist() {
-		when(timesheetEntryRepository.findById(2L)).thenThrow(new NotFoundException("Timesheet entry was not found"));
+		when(timesheetEntryRepository.findById(1L)).thenThrow(new NotFoundException("Timesheet entry was not found"));
 		
-		assertThatThrownBy(() ->  timesheetEntryService.findById(2L))
+		assertThatThrownBy(() ->  timesheetEntryService.findById(1L))
 		.isInstanceOf(NotFoundException.class);
 	}
 	
+	@Test
+	void TimesheetEntry_Delete_Success() {
+		timesheetEntryService.deleteById(1L);
+		verify(timesheetEntryRepository, times(1)).deleteById(1L);
+	}
 	
+    
 }

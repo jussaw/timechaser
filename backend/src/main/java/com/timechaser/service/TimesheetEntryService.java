@@ -39,8 +39,15 @@ public class TimesheetEntryService {
 		}
 	}
 	
-	 public Optional<TimesheetEntry> findById(Long id) {
+	public Optional<TimesheetEntry> findById(Long id) {
 	    	logger.info("Attempting to retrieve timesheet entry with id: {}", id);
 	    	return timesheetEntryRepository.findById(id);
 	    }
+	 
+	@Transactional
+    public void deleteById(Long id) {
+		logger.info("Deleting Timesheet Entry with ID: {}", id);
+		
+        timesheetEntryRepository.deleteById(id);
+    }
 }

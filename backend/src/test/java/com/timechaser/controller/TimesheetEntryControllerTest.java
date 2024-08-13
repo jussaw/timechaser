@@ -2,8 +2,10 @@ package com.timechaser.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,6 +33,7 @@ import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
 import com.timechaser.entity.TimesheetEntry;
 import com.timechaser.entity.User;
+import com.timechaser.enums.TimesheetStatus;
 import com.timechaser.enums.UserRoles;
 import com.timechaser.mapper.TimesheetEntryMapper;
 import com.timechaser.service.TimesheetEntryService;
@@ -52,7 +55,6 @@ public class TimesheetEntryControllerTest {
 	private TimesheetEntryService timesheetEntryService;
 	
 	private TimesheetEntry timesheetEntry;
-	private Project project1, project2;
 	private TimesheetEntryDto timesheetEntryDto;
 	private User user;
 	private Timesheet timesheet;
@@ -68,19 +70,13 @@ public class TimesheetEntryControllerTest {
 		user.setFirstName("First");
 		user.setLastName("Last");
 		
-		project1 = new Project();
-		project1.setId(1L);
-		project1.setName("prj1");
-
-		project2 = new Project();
-		project2.setId(2L);
-		project2.setName("prj2");
-
 		timesheet = new Timesheet();
+		timesheet.setId(1L);
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
-		timesheet.setWeekNumber(20);
-		timesheet.setTotalHours(new BigDecimal(40));
+		timesheet.setWeekNumber(4);
+		timesheet.setTotalHours(new BigDecimal("4"));
+		timesheet.setStatus(TimesheetStatus.PENDING);
 		
 		project = new Project();
 		project.setId(1L);
@@ -133,4 +129,13 @@ public class TimesheetEntryControllerTest {
 		
 		response.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
+	
+	@Test
+    void ProjectController_DeleteTimesheetEntryById_ReturnNoContent() throws Exception {
+        ResultActions response = mockMvc.perform(delete("/timesheet-entry/1")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        response.andExpect(status().isNoContent());
+    }
+
 }
