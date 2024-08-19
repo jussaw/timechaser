@@ -22,10 +22,10 @@ export default function Submission(props) {
   return (
     <div className="flex flex-grow flex-col items-center space-y-4">
       <div className="universal-component-style flex flex-col items-center justify-center space-y-2 px-10 py-4 text-center text-3xl font-bold">
-        <h1 className="">
+        <h1>
           {props.submission.firstName} {props.submission.lastName}
         </h1>
-        <h1 className="">
+        <h1>
           {getDateRange(props.submission.weekOfYear, props.submission.year)}
         </h1>
       </div>

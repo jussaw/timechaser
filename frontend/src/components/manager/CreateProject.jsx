@@ -45,7 +45,6 @@ export default function CreateProject() {
     e.preventDefault();
     setSubmissionError(null);
     setIsSubmissionSuccess(false);
-    console.log("Sending POST");
 
     axiosInstance
       .post("/project", {
@@ -80,7 +79,6 @@ export default function CreateProject() {
             className="w-60 rounded-full border border-custom-blue bg-custom-white px-3 py-1"
             type="text"
             name="project"
-            value={project}
             onChange={handleChange}
           />
         </div>

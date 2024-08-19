@@ -17,7 +17,7 @@ export default function SubmissionDay(props) {
     <div className="flex h-full flex-col items-center rounded-xl shadow-lg">
       <div className="flex w-full flex-col rounded-t-xl bg-custom-blue py-2 text-center text-lg text-custom-white">
         <h2 className="font-semibold">{props.submissionDay.day}</h2>
-        <h2 className="">{props.submissionDay.date}</h2>
+        <h2>{props.submissionDay.date}</h2>
         <hr className="border-t-1 m-1 border-custom-white" />
         <div className="flex flex-row justify-between p-2 pb-0">
           <FontAwesomeIcon icon={faClock} className="w-2/12 text-center" />
