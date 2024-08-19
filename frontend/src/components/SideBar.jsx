@@ -28,7 +28,7 @@ export default function SideBar() {
 
   //TODO: get managerPendingSubmissions count from API call
   const [managerPendingSubmissionsCount, setManagerPendingSubmissionsCount] =
-    useState(1);
+    useState(3);
 
   const renderDarkDashboard = location.pathname === "/dashboard";
   const renderDarkTimesheet = location.pathname === "/timesheet";

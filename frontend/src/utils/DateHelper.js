@@ -82,3 +82,8 @@ export const getWeekNumberAndYear = (date) => {
     year: inputDate.getFullYear(),
   };
 };
+
+export const getDateRange = (weekOfYear, year) => {
+  const { startDate, endDate } = getFirstAndLastDayOfWeek(weekOfYear, year);
+  return `${getFormattedDate(startDate)} - ${getFormattedDate(endDate)}`;
+};
