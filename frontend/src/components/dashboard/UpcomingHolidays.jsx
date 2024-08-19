@@ -20,7 +20,7 @@ export default function UpcomingHolidays() {
       </h1>
       <div className="m-6 flex h-full justify-center space-x-12">
         {upcomingHolidays.map((holiday, index) => (
-          <Holiday key={index} holiday={holiday.name} />
+          <Holiday key={index} holiday={holiday.key} />
         ))}
       </div>
     </div>
