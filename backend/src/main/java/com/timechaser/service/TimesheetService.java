@@ -14,12 +14,12 @@ import com.timechaser.repository.TimesheetRepository;
 @Service
 public class TimesheetService {
     Logger logger = LoggerFactory.getLogger(TimesheetService.class);
-	
-	private final TimesheetRepository timesheetRepository;
-	
-	public TimesheetService(TimesheetRepository timesheetRepository) {
-		this.timesheetRepository = timesheetRepository;
-	}
+
+    private final TimesheetRepository timesheetRepository;
+
+    public TimesheetService(TimesheetRepository timesheetRepository) {
+        this.timesheetRepository = timesheetRepository;
+    }
 
     @Transactional
     public TimesheetDto create(TimesheetDto timesheetDto) {
@@ -34,5 +34,12 @@ public class TimesheetService {
             logger.error("Error occured while creating timesheet with id {}", timesheetDto.getId());
             throw new CreateException("Failed to create timesheet", e);
         }
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        logger.info("Deleting timesheet with id {}", id);
+
+        timesheetRepository.deleteById(id);
     }
 }
