@@ -22,7 +22,7 @@ public class TimesheetController {
         this.timesheetService = timesheetService;
     }
 
-    @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).EMPLOYEE)")
+    @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).EMPLOYEE) || hasRole(T(com.timechaser.enums.UserRoles).EMPLOYEE)")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TimesheetDto> createTimesheet(@Valid @RequestBody TimesheetDto timesheetDto) {
 
@@ -31,5 +31,16 @@ public class TimesheetController {
         timesheetDto = timesheetService.create(timesheetDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(timesheetDto);
+    }
+
+    @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).EMPLOYEE)" +
+            " || hasRole(T(com.timechaser.enums.UserRoles).MANAGER)")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTimesheet(@PathVariable("id") Long id) {
+        logger.info("Received request to delete timesheet with ID {}", id);
+
+        timesheetService.deleteById(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

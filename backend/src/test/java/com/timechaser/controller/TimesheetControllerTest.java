@@ -2,7 +2,10 @@ package com.timechaser.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,6 +22,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -73,22 +77,30 @@ public class TimesheetControllerTest {
 	}
 
 	@Test
-    void TimesheetController_CreateTimesheet_ReturnCreated() throws Exception {
-        when(timesheetService.create(any(TimesheetDto.class))).thenReturn(timesheetDto);
+	void TimesheetController_CreateTimesheet_ReturnCreated() throws Exception {
+		when(timesheetService.create(any(TimesheetDto.class))).thenReturn(timesheetDto);
 
-        ResultActions response = mockMvc.perform(post("/timesheet")
-            .contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(timesheetDto)));
+		ResultActions response = mockMvc.perform(post("/timesheet")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(timesheetDto)));
 
-            response.andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.id", CoreMatchers.is(timesheetDto.getId().intValue())))
-                    .andExpect(jsonPath("$.user.firstName", CoreMatchers.is(timesheetDto.getUser().getFirstName())))
-					.andExpect(jsonPath("$.user.lastName", CoreMatchers.is(timesheetDto.getUser().getLastName())))
-					.andExpect(jsonPath("$.user.id", CoreMatchers.is(timesheetDto.getUser().getId().intValue())))
-					.andExpect(jsonPath("$.user.username", CoreMatchers.is(timesheetDto.getUser().getUsername())))
-					.andExpect(jsonPath("$.year", CoreMatchers.is(timesheetDto.getYear())))
-					.andExpect(jsonPath("$.weekNumber", CoreMatchers.is(timesheetDto.getWeekNumber())))
-					.andExpect(jsonPath("$.totalHours", CoreMatchers.is(timesheetDto.getTotalHours().intValue())))
-					.andExpect(jsonPath("$.status", CoreMatchers.is(timesheetDto.getStatus().toString())));
-    }
+		response.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.id", CoreMatchers.is(timesheetDto.getId().intValue())))
+				.andExpect(jsonPath("$.user.firstName", CoreMatchers.is(timesheetDto.getUser().getFirstName())))
+				.andExpect(jsonPath("$.user.lastName", CoreMatchers.is(timesheetDto.getUser().getLastName())))
+				.andExpect(jsonPath("$.user.id", CoreMatchers.is(timesheetDto.getUser().getId().intValue())))
+				.andExpect(jsonPath("$.user.username", CoreMatchers.is(timesheetDto.getUser().getUsername())))
+				.andExpect(jsonPath("$.year", CoreMatchers.is(timesheetDto.getYear())))
+				.andExpect(jsonPath("$.weekNumber", CoreMatchers.is(timesheetDto.getWeekNumber())))
+				.andExpect(jsonPath("$.totalHours", CoreMatchers.is(timesheetDto.getTotalHours().intValue())))
+				.andExpect(jsonPath("$.status", CoreMatchers.is(timesheetDto.getStatus().toString())));
+	}
+
+	@Test
+	void TimeSheetConroller_DeleteTimesheetById_Success() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/timesheet/1")
+				.contentType(MediaType.APPLICATION_JSON));
+
+		response.andExpect(MockMvcResultMatchers.status().isNoContent());
+	}
 }
