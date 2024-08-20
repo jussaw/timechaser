@@ -26,15 +26,18 @@ public class TimesheetEntryService {
 	
 	@Transactional
 	public TimesheetEntryDto create(TimesheetEntryDto timesheetEntryDto) {
-		logger.info("Creating timesheet entry with id {}", timesheetEntryDto.getId());
+		logger.info("Saving timesheet entry");
 		
+		Long id = null;
 		try {
 			TimesheetEntry timesheetEntry = TimesheetEntryMapper.toEntity(timesheetEntryDto);
 			timesheetEntry = timesheetEntryRepository.save(timesheetEntry);
 			
+			id = timesheetEntry.getId();
+			logger.info("Saved timesheet entry with id {}", id);
 			return TimesheetEntryMapper.toDto(timesheetEntry);
-		} catch (Exception e) {
-			logger.error("Error occured while creating timesheet entry with id {}", timesheetEntryDto.getId());
+		} catch (Exception e) {			
+			logger.error("Error occured while creating timesheet entry with id {}", id);
 			throw new CreateException("Failed to create timesheet entry", e);
 		}
 	}

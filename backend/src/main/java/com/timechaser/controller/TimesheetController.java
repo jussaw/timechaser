@@ -25,11 +25,11 @@ public class TimesheetController {
     @PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).EMPLOYEE) || hasRole(T(com.timechaser.enums.UserRoles).EMPLOYEE)")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TimesheetDto> createTimesheet(@Valid @RequestBody TimesheetDto timesheetDto) {
-
-        logger.info("Received request to create timesheet with id {}", timesheetDto.getId());
+        logger.info("Received request to create timesheet");
 
         timesheetDto = timesheetService.create(timesheetDto);
 
+        logger.info("Created timesheet with id {}", timesheetDto.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(timesheetDto);
     }
 
