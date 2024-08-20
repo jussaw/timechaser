@@ -34,14 +34,15 @@ public class TimesheetEntryController {
 		this.timesheetEntryService = timesheetEntryService;
 	}
 	
-	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).EMPLOYEE) " + 
-	"|| hasRole(T(com.timechaser.enums.UserRoles).MANAGER)")
+	@PreAuthorize("hasRole(T(com.timechaser.enums.UserRoles).EMPLOYEE) " +
+			"|| hasRole(T(com.timechaser.enums.UserRoles).MANAGER)")
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TimesheetEntryDto> createTimesheetEntry(@Valid @RequestBody TimesheetEntryDto timesheetEntryDto){
-		logger.info("Received request to create timesheet entry with id {}", timesheetEntryDto.getId());
+		logger.info("Received request to create timesheet entry");		
 		
-		timesheetEntryDto = timesheetEntryService.create(timesheetEntryDto);
+		timesheetEntryDto = timesheetEntryService.create(timesheetEntryDto);	
 		
+		logger.info("Created timesheet entry with id {}", timesheetEntryDto.getId());
 		return ResponseEntity.status(HttpStatus.CREATED).body(timesheetEntryDto);
 	}
 

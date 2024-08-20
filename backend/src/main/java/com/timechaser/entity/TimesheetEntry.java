@@ -37,7 +37,7 @@ public class TimesheetEntry extends Auditable{
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "timesheet_id")
+	@JoinColumn(name = "timesheet_id", nullable=false)
 	private Timesheet timesheet;
 	
 	@Column(nullable = false)
@@ -47,6 +47,6 @@ public class TimesheetEntry extends Auditable{
 	private BigDecimal hoursWorked;	
 	
 	@ManyToOne
-	@JoinColumn(name="project_id")
+	@JoinColumn(name="project_id", nullable=false)
 	private Project project;
 }
