@@ -10,7 +10,7 @@
 
 The software supports three different user roles:
 
-- **Admins**: Create users and assign them to projects.
+- **Admins**: Create/manage users and create projects.
 - **Managers**: Approve timesheets of their assigned employees and log their own time.
 - **Employees**: Log their time in the timesheet.
 
