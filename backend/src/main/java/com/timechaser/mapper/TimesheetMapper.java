@@ -2,6 +2,7 @@ package com.timechaser.mapper;
 
 import com.timechaser.dto.TimesheetDto;
 import com.timechaser.entity.Timesheet;
+import com.timechaser.entity.User;
 
 public class TimesheetMapper {
     public static Timesheet toEntity(TimesheetDto timesheetDto) {
@@ -10,7 +11,6 @@ public class TimesheetMapper {
             .user(timesheetDto.getUser())
             .year(timesheetDto.getYear())
             .weekNumber(timesheetDto.getWeekNumber())
-            .totalHours(timesheetDto.getTotalHours())
             .status(timesheetDto.getStatus())
             .build();
     }
@@ -18,10 +18,9 @@ public class TimesheetMapper {
     public static TimesheetDto toDto(Timesheet timesheet) {
         return TimesheetDto.builder()
             .id(timesheet.getId())
-            .user(timesheet.getUser())
+            .user(new User(timesheet.getUser().getId()))
             .year(timesheet.getYear())
             .weekNumber(timesheet.getWeekNumber())
-            .totalHours(timesheet.getTotalHours())
             .status(timesheet.getStatus())
             .build();
     }

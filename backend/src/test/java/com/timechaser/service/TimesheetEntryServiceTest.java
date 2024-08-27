@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +23,6 @@ import com.timechaser.dto.TimesheetEntryDto;
 import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
 import com.timechaser.entity.TimesheetEntry;
-import com.timechaser.entity.User;
-import com.timechaser.entity.Project;
 import com.timechaser.exception.CreateException;
 import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.TimesheetEntryMapper;
@@ -42,29 +39,17 @@ public class TimesheetEntryServiceTest {
 	private TimesheetEntryService timesheetEntryService;
 	
 	private TimesheetEntry timesheetEntry;
-	private Project project1, project2;
 	private TimesheetEntryDto timesheetEntryDto;
-	private User user;
 	private Timesheet timesheet;
 	private Project project;
 	
 	@BeforeEach
 	void setUp() {
-		user = new User();
-		user.setUsername("testuser");
-		user.setPassword("password");
-		user.setFirstName("First");
-		user.setLastName("Last");
-		
 		timesheet = new Timesheet();
-		timesheet.setUser(user);
-		timesheet.setYear(2024);
-		timesheet.setWeekNumber(20);
-		timesheet.setTotalHours(new BigDecimal(40));
+		timesheet.setId(1L);
 		
 		project = new Project();
 		project.setId(1L);
-		project.setName("Test Project");
 		
 		timesheetEntry = new TimesheetEntry();
 		timesheetEntry.setTimesheet(timesheet);

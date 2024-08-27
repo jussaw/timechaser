@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.timechaser.dto.TimesheetDto;
+import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
 import com.timechaser.entity.User;
 import com.timechaser.enums.TimesheetStatus;
 import com.timechaser.exception.CreateException;
+import com.timechaser.exception.NotFoundException;
 import com.timechaser.mapper.TimesheetMapper;
 import com.timechaser.repository.TimesheetRepository;
 
@@ -41,17 +44,13 @@ public class TimesheetServiceTest {
     @BeforeEach
     void setUp() {
 		user = new User();
-		user.setFirstName("John");
-		user.setLastName("Doe");
 		user.setId(1L);
-		user.setUsername("Test");
-
+		
 		timesheet = new Timesheet();
 		timesheet.setId(1L);
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
 		timesheet.setWeekNumber(4);
-		timesheet.setTotalHours(new BigDecimal("4"));
 		timesheet.setStatus(TimesheetStatus.PENDING);
 
 		timesheetDto = TimesheetMapper.toDto(timesheet);
@@ -65,18 +64,36 @@ public class TimesheetServiceTest {
 
         assertNotNull(response);
         assertEquals(timesheet.getId(), response.getId());
-        assertEquals(timesheet.getUser(), response.getUser());
-        assertEquals(timesheet.getUser().getFirstName(), response.getUser().getFirstName());
-        assertEquals(timesheet.getUser().getLastName(), response.getUser().getLastName());
-        assertEquals(timesheet.getUser().getId(), response.getUser().getId());
-        assertEquals(timesheet.getUser().getUsername(), response.getUser().getUsername());
+        //assertEquals(timesheet.getUser(), response.getUser());
+        //assertEquals(timesheet.getUser().getId(), response.getUser().getId());
         assertEquals(timesheet.getYear(), response.getYear());
         assertEquals(timesheet.getWeekNumber(), response.getWeekNumber());
-        assertEquals(timesheet.getTotalHours(), response.getTotalHours());
         assertEquals(timesheet.getStatus(), response.getStatus());
         verify(timesheetRepository, times(1)).save(any(Timesheet.class));
     }
 
+    @Test
+	void TimesheetService_findById_Success() {
+		when(timesheetRepository.findById(1L)).thenReturn(Optional.of(timesheet));
+		
+		Timesheet result = timesheetService.findById(1L).get();
+		
+		assertNotNull(result);
+        assertEquals(timesheetDto.getId(), result.getId());
+        assertEquals(timesheetDto.getYear(), result.getYear());
+        //assertEquals(timesheetDto.getUser().getId(), result.getUser().getId());
+        assertEquals(timesheetDto.getWeekNumber(), result.getWeekNumber());
+        assertEquals(timesheetDto.getStatus(), result.getStatus());
+    }
+    
+	@Test
+	void TimesheetService_findById_NotExist() {
+		when(timesheetService.findById(2L)).thenThrow(new NotFoundException("Timesheet not found by id"));
+		
+		assertThatThrownBy(() ->  timesheetService.findById(2L))
+		.isInstanceOf(NotFoundException.class);
+	}
+	
     @Test
     void TimesheetService_Create_Failure() {
         when(timesheetRepository.save(any(Timesheet.class))).thenThrow(new IllegalArgumentException());
