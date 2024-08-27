@@ -1,6 +1,5 @@
 package com.timechaser.entity;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -19,6 +18,8 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+//import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+//import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.timechaser.enums.TimesheetStatus;
 
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -46,11 +48,9 @@ public class Timesheet extends Auditable {
 	private Integer year;
 	@Column(nullable = false)
 	private Integer weekNumber;
-	@Column(scale = 2)
-	private BigDecimal totalHours;
 	@Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TimesheetStatus status = TimesheetStatus.PENDING;
+    private TimesheetStatus status;
 
 	@OneToMany(mappedBy = "timesheet", cascade = CascadeType.ALL)
     private List<TimesheetEntry> timesheetEntries;

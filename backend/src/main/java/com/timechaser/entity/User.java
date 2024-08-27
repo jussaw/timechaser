@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+//import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+//import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.timechaser.dto.CreateUserRequest;
 
 import lombok.AllArgsConstructor;
@@ -34,6 +36,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Builder
 public class User extends Auditable {
 	@Id
@@ -59,7 +62,7 @@ public class User extends Auditable {
     private Set<Role> roles = new HashSet<>();
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Timesheet> timesheets;
+	private Set<Timesheet> timesheets;
 	
 	public User(CreateUserRequest request) {
 		this.username = request.getUsername();
@@ -68,4 +71,8 @@ public class User extends Auditable {
 		this.lastName = request.getLastName();
 	}
 	
+	// For creating stub Users by the mapper (to prevent circular referencing)
+	public User(Long id) {
+		this.id = id;
+	}
 }

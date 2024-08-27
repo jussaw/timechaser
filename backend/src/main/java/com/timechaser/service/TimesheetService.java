@@ -2,10 +2,14 @@ package com.timechaser.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.timechaser.dto.TimesheetDto;
+import com.timechaser.entity.Project;
 import com.timechaser.entity.Timesheet;
 import com.timechaser.exception.CreateException;
 import com.timechaser.mapper.TimesheetMapper;
@@ -45,4 +49,13 @@ public class TimesheetService {
 
         timesheetRepository.deleteById(id);
     }
+    
+    public Optional<Timesheet> findById(Long id) {
+        logger.info("Finding Timesheet with id: {}", id);
+
+        Optional<Timesheet> timesheet = timesheetRepository.findById(id);
+        
+        return timesheet;
+    }    
+    
 }

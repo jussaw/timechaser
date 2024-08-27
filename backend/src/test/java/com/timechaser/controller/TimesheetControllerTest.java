@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,17 +61,13 @@ public class TimesheetControllerTest {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
 		user = new User();
-		user.setFirstName("John");
-		user.setLastName("Doe");
-		user.setId(1L);
-		user.setUsername("Test");
-
+		user.setId(2L);
+		
 		timesheet = new Timesheet();
 		timesheet.setId(1L);
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
 		timesheet.setWeekNumber(4);
-		timesheet.setTotalHours(new BigDecimal("4"));
 		timesheet.setStatus(TimesheetStatus.PENDING);
 
 		timesheetDto = TimesheetMapper.toDto(timesheet);
@@ -83,17 +80,27 @@ public class TimesheetControllerTest {
 		ResultActions response = mockMvc.perform(post("/timesheet")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(timesheetDto)));
-
+		
 		response.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.id", CoreMatchers.is(timesheetDto.getId().intValue())))
-				.andExpect(jsonPath("$.user.firstName", CoreMatchers.is(timesheetDto.getUser().getFirstName())))
-				.andExpect(jsonPath("$.user.lastName", CoreMatchers.is(timesheetDto.getUser().getLastName())))
 				.andExpect(jsonPath("$.user.id", CoreMatchers.is(timesheetDto.getUser().getId().intValue())))
-				.andExpect(jsonPath("$.user.username", CoreMatchers.is(timesheetDto.getUser().getUsername())))
 				.andExpect(jsonPath("$.year", CoreMatchers.is(timesheetDto.getYear())))
 				.andExpect(jsonPath("$.weekNumber", CoreMatchers.is(timesheetDto.getWeekNumber())))
-				.andExpect(jsonPath("$.totalHours", CoreMatchers.is(timesheetDto.getTotalHours().intValue())))
 				.andExpect(jsonPath("$.status", CoreMatchers.is(timesheetDto.getStatus().toString())));
+	}
+
+	@Test
+	void TimesheetController_GetTimesheet_Success() throws Exception {
+	    when(timesheetService.findById(1L)).thenReturn(Optional.of(timesheet));
+
+	    ResultActions response = mockMvc.perform(get("/timesheet/1")
+	            .contentType(MediaType.APPLICATION_JSON));
+
+	    response.andExpect(MockMvcResultMatchers.status().isOk())
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(timesheet.getId().intValue())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.year", CoreMatchers.is(timesheet.getYear())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.weekNumber", CoreMatchers.is(timesheet.getWeekNumber())))
+	            .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(timesheet.getStatus().toString())));
 	}
 
 	@Test

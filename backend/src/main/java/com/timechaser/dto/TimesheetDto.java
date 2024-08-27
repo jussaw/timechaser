@@ -21,8 +21,6 @@ public class TimesheetDto {
     private Integer year;
     @NotNull(message = "Week number is a required field")
     private Integer weekNumber;
-    @NotNull(message = "Total hours is a required field")
-    private BigDecimal totalHours;
     @NotNull(message = "Timesheet status is a required field")
     private TimesheetStatus status;
 }

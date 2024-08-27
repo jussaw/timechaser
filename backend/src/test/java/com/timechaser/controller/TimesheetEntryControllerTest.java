@@ -65,17 +65,17 @@ public class TimesheetEntryControllerTest {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 		
 		user = new User();
-		user.setUsername("testuser");
-		user.setPassword("password");
-		user.setFirstName("First");
-		user.setLastName("Last");
+		user.setId(2L);
+//		user.setUsername("testuser");
+//		user.setPassword("password");
+//		user.setFirstName("First");
+//		user.setLastName("Last");
 		
 		timesheet = new Timesheet();
 		timesheet.setId(1L);
 		timesheet.setUser(user);
 		timesheet.setYear(2024);
 		timesheet.setWeekNumber(4);
-		timesheet.setTotalHours(new BigDecimal("4"));
 		timesheet.setStatus(TimesheetStatus.PENDING);
 		
 		project = new Project();
